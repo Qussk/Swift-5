@@ -95,16 +95,16 @@ a <= b | Less than or equal to operator
 ## ASCII and Unicode
 
 ![ASCII](https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F2603F94857541B3621)
+출저 : https://ndb796.tistory.com/3
 
-
-* "iOS" > "Apple" = true  (아스키, 유니코드로 계산, i가 더큼)
-* "Application" > "Steve Jobs" = false  (A가 더 큼)
-* "Swift5" <= "Swift4" = false (Swft까지 모두 동일하다가 마지막 수에서 갈림)
-* "Playground" == "Playground" = true
+* "iOS" > "Apple" = **true**  (아스키, 유니코드로 계산, i가 더큼)
+* "Application" > "Steve Jobs" = **false** (A가 더 큼)
+* "Swift5" <= "Swift4" = **false** (Swft까지 모두 동일하다가 마지막 수에서 갈림)
+* "Playground" == "Playground" **true**
 
 ## Logical Operators
 
-
+```swift
 // Logical AND Operator
 true && true  //t
 true && false //f
