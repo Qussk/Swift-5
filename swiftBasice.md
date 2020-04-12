@@ -300,7 +300,9 @@ MemoryLayout<Character>.size
 //character = " "
 ```
 
-## Typealias : 문맥상 더 적절한 이름으로 기존타입의 이름을 참조하여 사용하고 싶은 경우
+## Typealias 
+
+* 문맥상 더 적절한 이름으로 기존타입의 이름을 참조하여 사용하고 싶은 경우
 
 ```swift
 typealias Name = String
@@ -325,13 +327,6 @@ let h = Int8(12)
 let x = 10 * h // (let x = 10 * h(int8) //타입을 지정하기 이전에 계산하면 10d이 자연스레 int8로 계산되어 에러발생하지 않음
 print(x)
 ```
-
-
- 
-
-
-
-
 
 
 
