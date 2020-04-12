@@ -289,7 +289,7 @@ chooseFunction(plus: true, value: value)
 chooseFunction(plus: false, value: value)
 ```
 
-```
+```swift
 func print(name: String) {
   print(name)
 }
