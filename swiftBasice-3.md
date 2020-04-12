@@ -2,8 +2,8 @@
 
 ## Function
 
-* Functions are self-contained chunks of code that perform a specific task
-* 일련의 작업을 수행하는 코드 묶음을 식별할 수 있는 특정한 이름을 부여하여 사용하는 것
+*Functions are self-contained chunks of code that perform a specific task*
+*일련의 작업을 수행하는 코드 묶음을 식별할 수 있는 특정한 이름을 부여하여 사용하는 것*
 유형
 
   * Input 과  Output 이 모두 있는 것 (Function)
@@ -12,10 +12,12 @@
   * Input 과 Output 이 모두 없는 것
 
 ```swift 
- func 함수이름(매개의변수: 타입) -> 변경할 타입 {
+ func 함수이름(매개변수: 타입) -> 변경할 타입 {
    결과값/출력/리턴
  }
 ``` 
+
+반복문(for..in)을 이용한 메소드
 
 ```swift
 func timesTable(num: Int) {
@@ -27,8 +29,7 @@ timesTable(num: 4)
 timesTable(num: 3)
 timesTable(num: 2)
 timesTable(num: 1)
-``` 
-* 반복 처리를 위한 for..in구문
+```
 
 
 ## Functions without parameters
@@ -50,7 +51,7 @@ hello2()   // 함수를 호출한 코드가 String 타입의 값을 돌려받음
 
 ## Functions without return values
 
-**void의 표기 (모두 같은 의미)**
+*void의 표기 (모두 같은 의미)*
 
 ```swift
 func say(number: Int) {
@@ -93,7 +94,7 @@ greet(person: "Brian")
 ```
 
 ## Omit Return
-**누락해도 실행은 된다.** 
+*누락해도 실행은 된다.* 
 
 ```swift
 func addTwoNumbers(a: Int, b: Int) -> Int {
@@ -105,7 +106,7 @@ addTwoNumbers(a: 1, b: 2)
 ```
 
 ## Function Scope
-**메소드 범위**
+*메소드 범위*
 
 ```swift
 let outside = "outside"
@@ -122,7 +123,6 @@ func scope() {
 ```
 
 ## Argument Label
-
 
 ```swift
 func someFunction(first: Int, second: Int) {
@@ -191,7 +191,7 @@ func printName(inputName: String) {
 printName(inputName: "홍길동")
 ```
 
-````swift
+```swift
 func printAge(inputAge: Int){
     print(inputAge)
 }
@@ -206,7 +206,7 @@ sayToHello(to: "요요")
 ```
 
 ## Default Parameter Values
-**(불이행)아래에 값을 지정한 경우 위는 동작하지 않음** 
+*(불이행)아래에 값을 지정한 경우 위는 동작하지 않음* 
 
 ```swift
 func functionWithDefault(param: Int = 12) -> Int {
@@ -218,10 +218,10 @@ functionWithDefault(param: 6)
 
 functionWithDefault()
 // param is 12
-
+```
 
 ## Variadic Parameters
-**가변인자 파라미터**
+*가변인자 파라미터*
 
 ```swift
 //평균구하기(Int버전) 
@@ -232,7 +232,7 @@ average(num1: 1, num2: 2)
 //average(num1: 1, num2: 2, num3: 3)
 
 
-//평균 구하기(Bool이용)
+//평균 구하기(Double이용)
 func arithmeticAverage(_ numbers: Double...) -> Double {//...은 여러개의 값을 받을 수 있다는 것
   var total = 0.0
   for number in numbers {
@@ -267,7 +267,7 @@ arithmeticAverage3(1, 2, 3, and: 5)
 ```
 
 ## Nested Functions
-**외부에는 숨기고 함수 내부에서만 사용할 함수를 중첩하여 사용가능**
+*외부에는 숨기고 함수 내부에서만 사용할 함수를 중첩하여 사용가능*
 
 ```swift func chooseFunction(plus: Bool, value: Int) -> Int {
   func plusFunction(input: Int) -> Int { input + 1 }
@@ -279,7 +279,7 @@ arithmeticAverage3(1, 2, 3, and: 5)
     return minusFunction(input: value)
   }
 }
-
+```
 
 ### Answer
 
@@ -289,7 +289,7 @@ chooseFunction(plus: true, value: value)
 chooseFunction(plus: false, value: value)
 ```
 
-
+```
 func print(name: String) {
   print(name)
 }
@@ -306,7 +306,7 @@ func sayHello(to name: String) {
   print(name)
 }
 sayHello(to: "Lilly")
-
+```
 
 
 
