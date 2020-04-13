@@ -23,14 +23,14 @@ func sayToHello(to inputName: String){
 }
 sayToHello(to: "요요")
 
-//1. 이름과 나이를 입력 받아 자신을 소개하는 글을 출력하는 함수
-
 
 
 /*
-func 함수이름(매개변수: 타입) -> 반환타임 {
+func 함수이름(매개변수: 타입) -> 반환타입 {
     
 }*/
+
+
 
 
 //1. 이름과 나이를 입력 받아 자신을 소개하는 글을 출력하는 함수
@@ -107,11 +107,11 @@ revelTest(a: 65, b: 80, c: 76, d: 98)
 
 
 func revelTest2(abc: Int)-> String{
-    if abc > 90 {
+    if abc >= 90 {
     return "A"
-    } else if abc > 80 {
+    } else if abc >= 80 {
     return "B"
-    } else if abc > 70 {
+    } else if abc >= 70 {
     return "C"
     } else if abc < 69 {
     return "F"
@@ -131,15 +131,16 @@ func revelTest3(a: Int...)-> String {
     }
     var avgData = reveldata / a.count
  
-    if avgData > 90 {
+    if avgData >= 90 {
         return "A"
-    } else if avgData > 80 {
-            return "B"
-    } else if avgData > 70 {
+    } else if avgData >= 80 {
+        return "B"
+    } else if avgData >= 70 {
         return "C"
     } else {
         return "F"
     }
 }
 revelTest3(a: 95, 95, 95)
+
 
