@@ -6,6 +6,7 @@
  
 ## if Statements
 *if의 기본형*
+* if는 반드시  Bool 값 (true, false)을 사용한다.
 
 ```if 조건  { 
    실행구문
@@ -16,8 +17,7 @@ if 조건  {
   } else {
    실행구문
 }
-```
-* if는 반드시  Bool 값 (true, false)을 사용한다. 
+``` 
 
 ```swift
 // if
@@ -63,7 +63,7 @@ if temperatureInFahrenheit <= 32 {
 }
 ```
 
-###  if ~ else if   /  if 문을 2개 하는 것과 차이점?
+### if ~ else if   /  if 문을 2개 하는 것과 차이점?
 
 ```swift
 var number = 9
@@ -85,8 +85,10 @@ if number < 20 {
 ```
 
 ## switch Statements
-*switch 기본형
-*switch 문은 가능한 모든 사례를 반드시 다루어야 함 (Switch must be exhaustive)* 
+*switch 기본형*
+
+* switch 문은 가능한 모든 사례를 반드시 다루어야 한다. (Switch must be exhaustive) 
+
 ``` 
 switch 값 {
 case 비교값 1: 
@@ -100,6 +102,9 @@ default: //해당되지 않는 값 반환(else)
 ```
 
 * Without default case
+
+*default을 사용하지 않는 경우* 
+
 ```swift
 let isTrue = true
 type(of: isTrue)
@@ -113,6 +118,8 @@ case false:
 ```
 
 * Interval Matching
+
+* 범위와 매칭*
 
 ```swift 
 let approximateCount = 30
@@ -138,7 +145,8 @@ default:
 ```
 
 * Compound Cases
-* if문은 콤마(,)가 And(&&)연산인 것과 반대로 switch문은 콤마(,)가 Or(||) 연산*
+
+* if문은 콤마(,)가 And(&&)연산인 것과 반대로 switch문은 콤마(,)가 Or(||) 연산
 
 ```swift
 let someCharacter: Character = "e"
@@ -155,7 +163,9 @@ default:
 ```
 
 * value binding
+
 *x, y 좌표(x축, y축 활용)*
+
 ```swift
 let somePoint = (9, 0)
 
@@ -184,6 +194,7 @@ case let (x, y)://해당없음
 ### Question
 
 * 어떤 숫자가 주어졌을 때 짝수인지 홀수인지 출력 (switch의 where 절 이용)
+
 ```swift
 let even = 4
 switch even {
@@ -195,7 +206,7 @@ default:
 }
 ```
 
-# fallthrough 작동방식 
+* fallthrough 작동방식 
 
 ```swift
 let integerToDescribe = 3
@@ -237,6 +248,7 @@ func someFunction() {
 * 가드문은 들여쓰기를 하지 않는다. (일렬로 쭉 나열)
 
 *guard문 예시*
+
 ```swift 
 func update(age: Int) {
   guard 1...100 ~= age else { return }//종료코드
@@ -274,10 +286,10 @@ threeValues
 threeValues.0 = 5
 threeValues
 ```
-* Tuples 장점
+* Tuples의 장점
   
   * 임의의 이름과 순서 활용
-  * 타입 섞어서 이용가능 
+  * 타입 혼합하여 이용가능 
 
 * Decomposition
 
@@ -302,13 +314,13 @@ third1 //5
 ```
 
 * Named Tuple 
-  * 기본구조
+  *기본구조*
 ```swift
 let iOS: (language: String, version: String) = (language: "Swift", version: "5")
 let iOS: (language: String, version: String) = ("Swift", "5")
 let iOS = (language: "Swift", version: "5")
 ```
-  * 활용
+  *활용*
 ```swift
 let iOS = (language: "Swift", version: "5")
 
@@ -376,16 +388,18 @@ default:
 
 ### Dictionary Enumeration
 
+*기본형*
+
+```딕셔너리
+let 함수 = ["키":"값"] ```
+
 ```swift
-//딕셔너리
-//let 함수 = ["키":"값"]
 let fruits = ["A": "Apple", "B": "Banana", "C": "Cherry"]
 
 for (key, value) in fruits {
   print(key, value)
 }
 print()
-
 
 
 for element in fruits {
