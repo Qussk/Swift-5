@@ -101,7 +101,7 @@ case 비교값1, 비교값2, 비교값3 : //다중의 경우
 default: //해당되지 않는 값 반환(else) 
 ```
 
-* Without default case
+###  Without default case
 
 *default을 사용하지 않는 경우* 
 
@@ -117,9 +117,9 @@ case false:
 }
 ```
 
-* Interval Matching
+### Interval Matching
 
-* 범위와 매칭*
+*범위와 매칭*
 
 ```swift 
 let approximateCount = 30
@@ -144,7 +144,7 @@ default:
 }
 ```
 
-* Compound Cases
+### Compound Cases
 
 * if문은 콤마(,)가 And(&&)연산인 것과 반대로 switch문은 콤마(,)가 Or(||) 연산
 
@@ -162,7 +162,7 @@ default:
 }
 ```
 
-* value binding
+### value binding
 
 *x, y 좌표(x축, y축 활용)*
 
@@ -176,7 +176,7 @@ default:
   print("Not on an axis") //축에 해당하지 않는다
 }
 
-* where clause
+### where clause
 
 ```swift 
 let anotherPoint = (1, -1)
@@ -225,7 +225,7 @@ print(description)
 ```
 
 ## Early Exit
-* guard statement
+### guard statement
 * _if_문의 경우 특정 조건을 만족하면 해당 분기문을 실행하였으나, _guard_구문의 경우 조건에 맞지 않으면 바로 종료됨.  
 
 ```swift
@@ -263,7 +263,7 @@ update(age: 100)
 
 ## Tuples
 
-* Unnamed Tuple 
+### Unnamed Tuple 
 
 ```swift
 let number: Int = 10
@@ -291,7 +291,7 @@ threeValues
   * 임의의 이름과 순서 활용
   * 타입 혼합하여 이용가능 
 
-* Decomposition
+### Decomposition
 
 ```swift
 let numbers = threeNumbers
@@ -313,14 +313,14 @@ second1 //2
 third1 //5
 ```
 
-* Named Tuple 
-  *기본구조*
+### Named Tuple 
+*기본구조*
 ```swift
 let iOS: (language: String, version: String) = (language: "Swift", version: "5")
 let iOS: (language: String, version: String) = ("Swift", "5")
 let iOS = (language: "Swift", version: "5")
 ```
-  *활용*
+*활용*
 ```swift
 let iOS = (language: "Swift", version: "5")
 
