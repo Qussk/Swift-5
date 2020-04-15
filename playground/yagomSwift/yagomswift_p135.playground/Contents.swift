@@ -1,9 +1,10 @@
 import UIKit
 
+import UIKit
+
 //6.흐름제어
 //6-1 조건문
 //p.135~ p.146
-
 
 // code. 6-1 if구문 기본 구현
 let first: Int = 5
@@ -18,7 +19,6 @@ if first > second {
 }
 
 // first < second
-
 
 // code. 6-2 if구문의 다양한 구현(소괄호가 없는)
 let first1: Int = 5
@@ -35,7 +35,6 @@ if first1 > second1 {
     biggerValue = 100
 }
 print(biggerValue) //5
-
 
 // code. 6-2-2 if구문의 다양한 구현 (소괄호가 있는)
 // 조건식에서의 소괄호는 선택사항임
@@ -54,9 +53,7 @@ if (first2 > second2) {
 }
 print(biggerValue1) //5
 
-
 //code. 6-3 switch 기본 구문
-
 let integerValue: Int = 5
 
 switch integerValue {
@@ -78,7 +75,6 @@ default:
 //value == 1~10
 //value < 0 or value > 100
 
-
 //code.6-4 부동소수 타입의범위 연산을 통한 switch case구성
 let doubleValue: Double = 3.0
 
@@ -93,7 +89,6 @@ default:
 
 // 1.5 <= value <- 10.5
 // switch구문의 입력값으로 숫자 표현이 아닌 문자, 문자열, 열거형, 튜플, 범위, ㅐ턴이 적용된 타입등 다양한 타입의 값도 사용 가능합니다.
-
 
 //code. 6-5 문자열 switch case 구성
 let stringValue: String = "Liam Neeson"
@@ -112,9 +107,7 @@ default:
 
 //Liam Neeson said `i din`t know who you are
 
-
 //code. 6-6 잘못된 case 사용. ~ code.6-7 fallthrough의 사용
-
 let stringValue1: String = "Liam Neeson"
 
 switch stringValue1 {
@@ -164,7 +157,6 @@ default:
 }
 
 //code. 6-11 where을 사용하여 switch case 확장
-
 let 직급: String = "사원"
 let 연차: Int = 1
 let 인턴인가: Bool = false
@@ -186,7 +178,6 @@ default:
 
 
 //code. 6-12 열거형을 입력 값으로 받는 switch구문
-
 enum School {
     case primary, elementary, middle, high, college, universuty, graduate
 }
@@ -211,7 +202,6 @@ case.graduate:
 }
 
 //code. 6-13
-
 enum Menu {
     case chiken
     case pizza
@@ -229,9 +219,7 @@ case _: //case default:와 동일
 //Case will never be executed라는 오류발생.
 //열거형에 새로운 case는 추가 했으나 내부 코드는 수정하지 않은 경우? 오히려 case_ 의 발생여부가 있음
 //이러한 문제를 방지하기 위해 unknow속성을 사용할 수 있음
-
 //code. 6-13 차후에 Menu열거형에 추가한 case를 처리하지 않으려면 경고를 내어줄 unknown
-
 enum Menu1 {
     case chiken1
     case pizza1
@@ -250,7 +238,5 @@ case .pizza1:
 
 //위 case에 hamburger를 추가하면, 위와 같은 경고(SWitch must be exhausive)를 통해 해당 switch구문이 모든 case에 대응하지 않는 사실을 상기할 수 있습니다.
 //이처럼 논리적인 오류에 대해 도움을 받을 수 있는 @unknown case 의 케이스는 case_, default case 뿐입니다. 또 unknown 속성을 부여한 case는 swich구문의 가장 마지막 case로 작성해야합니다.
-
-
 
 
