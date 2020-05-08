@@ -66,4 +66,111 @@ if let someType = UserDefaults.standard.object(forKey: "Date") as? Date {
 }
 ```
 
+### Q. 저장하지 않은 키를 불러올 때 결과는?
+
+```swift
+UserDefaults.standard.integer(forKey: "WrongKey") //0
+UserDefaults.standard.bool(forKey: "WrongKey")    //false
+UserDefaults.standard.object(forKey: "WrongKey")  //nil
+```
+
+### 결과보기 
+
+```swift
+let userDefaults = UserDefaults.standard
+print(userDefaults)
+
+
+//저장한 값이 딕셔너리 형태로 저장되어 있음.
+print("\n---------- [ dictionaryRepresentation ] ----------\n")
+//print(userDefaults.dictionaryRepresentation())
+
+
+
+//키값만 보고싶다면.
+print("\n---------- [ keys ] ----------\n")
+//print(Array(UserDefaults.standard.dictionaryRepresentation().keys))
+
+
+//값만 보고 싶으면.
+print("\n---------- [ values ] ----------\n")
+print(Array(UserDefaults.standard.dictionaryRepresentation().values))
+
+```
+
+```
+---------- [ dictionaryRepresentation ] ----------
+
+ ["NSInterfaceStyle": macintosh, "AKLastIDMSEnvironment": 0, "DVTDeviceRunExecutableOptionREPLMode": 1, "True": 1, "AppleITunesStoreItemKinds": <__NSCFArray 0x600000ea84e0>(
+ itunes-u,
+ movie,
+ album,
+ ringtone,
+ software-update,
+ booklet,
+ tone,
+ music-video,
+ tv-episode,
+ tv-season,
+ song,
+ podcast,
+ software,
+ audiobook,
+ podcast-episode,
+ wemix,
+ eBook,
+ mix,
+ artist,
+ document
+ )
+ , "NSLanguages": <__NSSingleObjectArrayI 0x600003784340>(
+ en
+ )
+ , "Date": 2020-05-08 06:18:57 +0000, "Ten": 10, "AppleLanguages": <__NSSingleObjectArrayI 0x600003784370>(
+ en
+ )
+ , "Double Pi": 3.141592653589793]
+
+
+
+---------- [ keys ] ----------
+
+ ["DVTDeviceRunExecutableOptionREPLMode", "AppleLanguages", "NSInterfaceStyle", "Double Pi", "Ten", "AKLastIDMSEnvironment", "Date", "NSLanguages", "True", "AppleITunesStoreItemKinds"]
+
+
+---------- [ values ] ----------
+
+[2020-05-08 06:20:26 +0000, 1, 0, 3.141592653589793, macintosh, 1, <__NSCFArray 0x600001d8c1a0>(
+itunes-u,
+movie,
+album,
+ringtone,
+software-update,
+booklet,
+tone,
+music-video,
+tv-episode,
+tv-season,
+song,
+podcast,
+software,
+audiobook,
+podcast-episode,
+wemix,
+eBook,
+mix,
+artist,
+document
+)
+, 10, <__NSSingleObjectArrayI 0x600002498490>(
+en
+)
+, <__NSSingleObjectArrayI 0x6000024984a0>(
+en
+)
+]
+
+```
+
+
 
