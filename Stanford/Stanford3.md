@@ -1,5 +1,7 @@
 ## Sranford3 - Array, Dictionary, String
 
+### [[영상보기]](https://www.youtube.com/watch?v=9Q4ckFL3ak0&list=PLE0Is7fZwoLB0KbRqbDRed1QqRpNzIaPl&index=3)
+
 
 ## [Array]
 
