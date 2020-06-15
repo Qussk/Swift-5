@@ -492,6 +492,46 @@ immutableArray.enumerated()
 //무조건 2개일때 가능.
 // 2개의 값을 더하는 것. 
 ```
+ 
+- 더 줄일 수 있음(Shorthand Argument Names)
+
+```swift
+immutableArray.enumerated()
+.map(*)
+.filter({ $0 & 1 == 0 })
+.reduce(0, +)
+```
+
+### map vs compactMap
+
+- 심화예제
+
+```swift
+
+let array = ["1j", "2d", "3", "4"]
+
+let m1 = array.map({ Int($0) })
+let f1 = array.compactMap({ Int($0) })
+
+let m2 = array.map({ Int($0) })[0]
+let f2 = array.compactMap({ Int($0) })[0]
+```
+
+
+- map - stdlib/public/core/Sequence.swift
+
+![](/image/map.png)
+
+- filter - stdlib/public/core/Sequence.swift
+
+![](/image/filter.png)
+
+- swift/stdlib/public/core/FlatMap.swift
+
+![](/image/flatmap.png)
+
+
+
 
 
 
