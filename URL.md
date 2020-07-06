@@ -192,9 +192,47 @@ dataTask.resume()
 ### 우주비행사 명단 print하기
 
 data는 JSON임
+```
+// http://open-notify.org/Open-Notify-API/
+```
 
 ```swift
+let astronauts = "http://api.open-notify.org/astros.json"  // 우주비행사 정보
+let apiURL = URL(string: astronauts)!
 
+struct Astronaut {
+  let craft: String
+  let name: String
+}
+
+let dataTask = URLSession.shared.dataTask(with: apiURL) { data, response, error in
+  guard error == nil else {return print(error!)}
+  guard let response = response as? HTTPURLResponse, //HTTPURLResponse로 타입변환
+    (200..<400).contains(response.statusCode) //성공 : 200 , error 400.
+    else {return print("Invalid response")}
+  guard let data = data else {return}
+  
+  guard let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String : Any] else {
+    return
+  }
+  print(jsonObject)
+  
+  guard (jsonObject["massage"] as? String) == "success",
+    let people = jsonObject["people"] as? [[String:String]],
+    let peopleCount = jsonObject["number"] as? Int
+    else {return print("parsing error")}
+  
+  print("----[Parsing Success]----")
+  print("총 \(peopleCount)명의 우주비행사가 탑승중입니다.")
+  print("---우주 비행사 명단---")
+   people
+      .compactMap {
+        guard let craft = $0["craft"], let name = $0["name"] else { return nil }
+        return Astronaut(craft: craft, name: name)
+      }
+      .forEach { print($0) }
+  }
+  dataTask.resume()
 ```
 
 
