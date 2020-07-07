@@ -16,7 +16,7 @@
 
 ## Encoding & Decoding
 
-[ Encoding, 부호화 ]
+**[ Encoding, 부호화 ]**
 
 • 정보의 형태나 형식을 표준화, 보안, 처리 속도 향상, 저장 공간 절약 등을 위해서 목적에 맞는
 다른 형태나 형식으로 변환하는 처리 혹은 그 처리 방식.
@@ -26,7 +26,7 @@
 • A type that can encode values into a native format for external
 representation.
 
-[ Decoding, 복호화 ]
+**[ Decoding, 복호화 ]**
 
 • Encoding(부호화)된 대상을 원래의 형태로 되돌리는 일
 
@@ -44,14 +44,14 @@ representations.
 - XML을 해당 형식으로 돌림
 
 
-### Encoder 사용 code
+### [Encoder 사용 code]
 
 ![](/image/co4.png)
 
 - 데이터 변환-> 유저디폴드에 저장 -> 이상태에서 디코딩만 해주면 됨.
 
 
-### Encodeing Error 시
+### [Encodeing Error시]
 
 ```swift
 /// An error that occurs during the encoding of a value.
@@ -61,13 +61,13 @@ case invalidValue(Any, EncodingError.Context)
 }
 ```
 
-### Decoder 사용 code 
+### [Decoder 사용 code] 
 
 ![](/image/co5.png)
 
 - **try!** 형식에 안맞거나, 데이터가 없거나, 타입이 틀린경우등의 오류시. 
 
-### Decoding Error시
+### [Decoding Error시]
 
 ```swift
 /// An error that occurs during the decoding of a value.
@@ -120,7 +120,7 @@ let dog = try? JSONDecoder().decode(Dog.self, from: jsonData)
 print(dog)
 ```
 
-### Decode Manually
+### **Decode Manually**
 
 - 만약 수동으로 처리 했다면?
 ```swift
@@ -142,7 +142,7 @@ name = try values.decode(String.self, forKey: .name)
 }
 ```
 
-### Array
+### **Array**
 
 ```swift
 //Array
@@ -165,7 +165,7 @@ print(dogs)
 
 - dog.self를 array로 감싼다.
 
-### Dictionary
+### **Dictionary**
 
 ```swift
 //Dictionary
@@ -207,7 +207,7 @@ print(coordinate)
 - 컴파일러한테 직접 알려줘야 가능. 
 
 
-[Key로부터 값을 꺼내서 알려주기.] 
+### **[Key로부터 값을 꺼내서 알려주기.] **
 
 ```swift
 struct Coordinate {
@@ -244,11 +244,11 @@ Double.self, forKey: .elevation
 
 ## Container Protocols
 
-**KeyedContainer** - 딕셔너리 타입의 데이터에 사용
-**UnkeyedContainer** - 배열 타입의 데이터에 사용
-**SingleValueContainer** - 단일 값을 가진 데이터에 사용
+- **KeyedContainer** - 딕셔너리 타입의 데이터에 사용
+- **UnkeyedContainer** - 배열 타입의 데이터에 사용
+- **SingleValueContainer** - 단일 값을 가진 데이터에 사용
 
-참고* JSON은 KeyedContainer 임
+참고로 JSON은 KeyedContainer 임
 
 
 
@@ -373,6 +373,7 @@ let jsonData = """
   """.data(using: .utf8)!
 ```
 ### Basic - 1. JSONSerialization
+
 ```swift
 //1. JSONSerialization
 
@@ -422,6 +423,75 @@ if let jsonObject = try? JSONSerialization.jsonObject(with: jsonData) as? [Strin
 }
 ```
 
+### Array 
+```swift
+let jsonArrData = """
+[
+  { "name": "Tory", "age": 3 },
+  { "name": "Tory", "age": 3 },
+]
+""".data(using: .utf8)!
+```
+### Array - 1.JSONSerialization
+```swift
+struct Dog1 {
+  let name : String
+  let age : Int
+}
+
+if let json2 = try? JSONSerialization.jsonObject(with: jsonArrData) as? [[String:Any]] {
+  for i in json2 {
+    if let name = i["name"] as? String,
+      let age = i["age"] as? Int {
+      let dog = Dog1(name: name, age: age)
+      print(dog)
+  }
+}
+}
+```
+### Array - [Answer]
+```swift
+/*
+ Array
+ */
+print("\n---------- [ Array ] ----------")
+// JSONSerialization
+if let jsonObjects = try? JSONSerialization.jsonObject(with: jsonArrData) as? [[String: Any]] {
+  
+  jsonObjects
+    .compactMap { Dog(from: $0) }
+    .forEach { print("Serialization :", $0) }
+}
+
+// JSONDecoder
+if let dogs = try? JSONDecoder().decode([Dog].self, from: jsonArrData) {
+  dogs.forEach { print("Decoder :", $0) }
+}
+
+```
+
+### Dictionary - [Answer]
+
+```swift
+/*
+ Dictionary
+ */
+print("\n---------- [ Dictionary ] ----------")
+// JSONSerialization
+if let jsonObject = try? JSONSerialization.jsonObject(with: jsonDictData) as? [String: Any],
+  let data = jsonObject["data"] as? [[String: Any]] {
+  
+  data
+    .compactMap { Dog(from: $0) }
+    .forEach { print("Serialization :", $0) }
+}
+
+// JSONDecoder
+if let dogs = try? JSONDecoder().decode([String: [Dog]].self, from: jsonDictData) {
+  dogs.values.forEach { $0.forEach { print("Decoder :", $0) } }
+}
+```
+
 
 ## Change Key Names
 
@@ -438,7 +508,6 @@ let jsonData = """
   "gender": "male",
 }
 """.data(using: .utf8)!
-
 
 struct User: Decodable {
   let name: String
@@ -465,7 +534,8 @@ print(user)
 
 ## Nested Codable
 
-우주비행사 정보
+[우주비행사 정보]
+
 ```swift
 import Foundation
 
@@ -549,7 +619,7 @@ struct Coordinate {
 }
 
 ```
-### Decodable & Encodable
+### **Decodable & Encodable**
 
 ```swift
 //직접 만들어야 하는 부분
@@ -598,14 +668,14 @@ do {
 
 **참고 사이트**
 
-[decoding 링크](https://developer.apple.com/documentation/foundation/archives_and_serialization/encoding_and_decoding_custom_types) 
-[JSON Custom Types 링크](https://developer.apple.com/documentation/foundation/archives_and_serialization/using_json_with_custom_types)
+- [decoding 링크](https://developer.apple.com/documentation/foundation/archives_and_serialization/encoding_and_decoding_custom_types) 
+- [JSON Custom Types 링크](https://developer.apple.com/documentation/foundation/archives_and_serialization/using_json_with_custom_types)
 
-[Zedd - decoding](https://zeddios.tistory.com/373)
-[Zedd - CodingKey](https://zeddios.tistory.com/394)
+- [Zedd - decoding](https://zeddios.tistory.com/373)
+- [Zedd - CodingKey](https://zeddios.tistory.com/394)
+
 
 ### Color 의 경우(정확하지 않음.. 메모용)
-
 ```swift
 (...중략)
 { 
@@ -629,6 +699,6 @@ ULColor(red: data["r"], green: data["g"], blue["b"])
 //채택한 경우
 try? JSONEncoder().encode(UIColor.black)
 ```
-커스텀해서 쓰는 경우
+커스텀해서 쓰는 경우??
 
 
