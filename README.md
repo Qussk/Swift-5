@@ -38,7 +38,11 @@ let myBundle = Bundle(for: NSClassFromString("MyPrivateClass")!)
 NSBundle *main = [NSBundle mainBundle];
 NSString *resourcePath = [main pathForResource:@"Seagull" ofType:@"jpg"];
 ```
-
+*현재 프로젝트에 해당되는 이름과 타입의 파일을 가져온다.*
+```swift
+let path: Bundle.main.path(forResource: "CafeList", ofType: "json")
+//리소스 - "CafeList" ,데이터 형태 - "json타입"
+```
 
 
 
