@@ -1,13 +1,16 @@
-# Swift-5
+# Swift-5.0
+
 
 - [x] You can refer to it through the playground
 - [x] You can use swift
 - [x] Now Submit to Swift
 
 
-### ios List
-- [ios Fonts](http://iosfonts.com/)
 
+### ios List
+- [Objective-C 와swift차이](#Objective-C 와 swift차이)
+- [ios Fonts](http://iosfonts.com/)
+ 
 
 
 ### Swift List
@@ -30,8 +33,13 @@
 ## Language house(in Swift)
 
 
-
-
+## [들어가기]
+### Objective-C 와swift차이 
+- swift는 ios8에 개발에 사용됨.
+- swift는 타입 추정, 타입 세이프가 제공됨.(명시할 필요 없어짐)
+- swift는 isEqual메서드를 이용할 필요없이 == 연산자만으로 비교가능.
+- swift는 switch문으로 분기가 가능함. objective-c는 if문으로 처리해야했음. 
+- swift는 Generic타입 제공. 
 
 ## [기타] 
 
