@@ -8,7 +8,7 @@
 
 
 ### ios List
-- [Objective-C 와swift차이](#Objective-C)
+- [Objective-C 와swift차이](#Objective-C와swift차이 )
 - [ios Fonts](http://iosfonts.com/)
  
 
@@ -35,7 +35,7 @@
 
 ## [들어가기]
 
-### Objective-C 와swift차이 
+### Objective-C와swift차이 
 
 - swift는 ios8에 개발에 사용됨.
 - swift는 타입 추정, 타입 세이프가 제공됨.(명시할 필요 없어짐)
