@@ -8,7 +8,7 @@
 
 
 ### ios List
-- [Objective-C 와swift차이](#Objective-C 와 swift차이)
+- [Objective-C 와swift차이](#Objective-C)
 - [ios Fonts](http://iosfonts.com/)
  
 
