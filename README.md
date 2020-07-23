@@ -158,7 +158,9 @@ self.height = height
 }
 ```
 - 자식클래스(Rectangle)에는 designated가 잘 되어있으나, 부모클래스(Base)인 someProperty에 대한 designated가 없음. 그럼에도 오류나지 않는 이유는? 어차피 생성자가 1개 이기 때문.. 1개 인경우 **super.init()** 가 자동 호출되어 표현할 필요 없음. 부모클래스에서 init이 여러 개인 경우 자식 쪽에 super.init() 써줘야함.   
+
 **override init**
+
 - 생성자도 일반 함수처럼 override이용하여 덮어 쓸 수 있음. 
 ```swift
 class Human { //부모
