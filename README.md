@@ -17,9 +17,7 @@
 **[문법]**
 
 **[]**
-
-
-**[기타]**
+- [initializer](#initializer)
 - [MVC](#MVC)
 - [bundle](#bundle) 
 
@@ -45,6 +43,120 @@
 
 ## [기타] 
 
+
+### initializer(생성자)
+swift의 객체는 사용하기 전 모든 저장 프로퍼티에 대해 초기화 필수
+  - 초기값 지정
+  - 옵셔널 타입 - nil값으로 초기화
+  - 초기값이 없고, 옵셔널 타입이 아닌 프로퍼티에 대해서는 초기화 메서드에서 설정 
+  
+*designated initializer(지정생성자)*
+모든 프로퍼티(객체)를 초기화 시키는 생성자
+- 클래스에 반드시 1개이상 필요
+- 단독으로 초기화 가능 
+- (모든 초기화값을 끝낸다)
+
+*convenience initializer(편의생성자)*
+일부만 처리한 뒤 다른 생성자에게 나머지 부분 위임
+- 단독으로 모두 초기화 불가
+- 중복되는 초기화 코드 줄이기위해 사용
+- 초기화가 끝나야만 접근가능(designated initialize인 self.init() )아래에 작성
+- (모든 초기화값을 끝내지는 않음. 하지만 최종적으로 designated에 접근(프로퍼티 불러와)하여 마무리지음.)
+**convenience init -> designated init -> overwrite**
+```swift
+convenience init(xPosition: Int){
+self.init() <- init호출.
+self.xPosition = xPosition <- 단독처리할 것 호출 
+}
+```
+**convenience init -> designated init**
+```swift
+convenience init(width: Int, height: Int, cornerRedius: Int){
+self.init(width: width, height: height, xPosition:10, yPosition:30, cornerRadius: conrnerRedius) -> designated initializer를 부를 때 값을 변경할 수도 있음.  
+}
+```
+**convenience init -> convenience init**
+```swift
+convenience init(cornerRadius: Int){
+self.init(width: 20, height: 20, cornerRadius: cornerRadius)
+}
+```
+- 초기화 과정은 (convenience -> convenience -> ... -> designated (최종) 순서로 동작. designated -> designated는 호출불가)
+
+**failable initializer**
+- 생성시 실패할 수도 있음. 
+- 인스턴스 생성시 특정 조건을 만족하지 않으면 객체를 생성하지 않음.
+- 생성이 되면 옵셔널 타입을 반환, 생성실패시 nil반환
+```swift
+class Person{
+let name: String 
+let age: Int
+
+init?(name: String, age: Int){
+guard age > 0 else {return nil} //실패하면 nil반환
+self.name = name                //성공하면 초기화
+self.age = age
+ }
+}
+
+//failable initializer
+if let person = Person(nmae: "James", age : 20) {
+person
+} //person
+
+if let person = Person(name: "James", age : -5) {
+person
+} else {
+"Failed"
+}//Failed
+```
+**Super class initializing**
+자식클래스에서 부모클래스를 호출할때는 designated를 써야함
+- 서브 클래스는 자기 자신 이외에 수퍼 클래스의 저장 프로퍼티까지 초기화 해야함
+- 서브 클래스는 수퍼 클래스의 지정 생성자(designated initializer) 호출 필요 (convenience는 호출 불가)
+- 수퍼 클래스의 지정 생성자가 기본 init 함수 하나만 있을 경우는 별도로 작성하지 않아도 자동으로 **super.init()**메서드 호출
+- 생성자가 여러 개인 경우, 어떤 초기화 메서드를 선택해야 할지 알 수 없으므로 선택해주지 않으면 오류. 이 때는 서브 클래스에서 수퍼 클래스의 생성자를 명시적으로 선택해주어야 함. 
+편의 생성자(convenience initializer)와는 무관
+```swift
+class Base {
+var someProperty: String
+
+init(){
+someProperty = "someProperty"
+}
+
+//1-0.designated 추가시
+//init(_ avlue: String){
+//self.someProperty = "someProperty"
+}
+convenience init(someProperty: String){
+self.init()
+self.someProperty = someProperty
+}
+}
+
+class Rectangle : Base { //자식
+var width : Int
+var heigth : Int
+
+override init()
+width = 10
+height = 5
+
+//1-1.
+//super.init() //수퍼 클래스의 지정 생성자가 기본 생성자 하나만 있을 경우 자동 호출  
+//super.init("생성자 내에서 수퍼 클래스의 편의 생성자 호출 시 오류") 
+
+init(width: Int, height: Int) {
+self.width = width
+self.height = height
+//1-3.
+//super.init() 둘중에 하나 선택하라고 오류남. 
+}
+}
+```
+- 자식클래스(Rectangle)에는 designated가 잘 되어있으나, 부모클래스(Base)인 someProperty에 대한 designated가 없음. 그럼에도 오류나지 않는 이유는? 어차피 생성자가 1개 이기 때문.. 1개 인경우 **super.init()** 가 자동 호출되어 표현할 필요 없음. 부모클래스에서 init이 여러 개인 경우 자식 쪽에 super.init() 써줘야함.   
+*override init*
 
 ### MVC 
 
