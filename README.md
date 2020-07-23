@@ -50,32 +50,34 @@ swift의 객체는 사용하기 전 모든 저장 프로퍼티에 대해 초기�
   - 옵셔널 타입 - nil값으로 초기화
   - 초기값이 없고, 옵셔널 타입이 아닌 프로퍼티에 대해서는 초기화 메서드에서 설정 
   
-*designated initializer(지정생성자)*
+**designated initializer(지정생성자)**
+
 모든 프로퍼티(객체)를 초기화 시키는 생성자
 - 클래스에 반드시 1개이상 필요
 - 단독으로 초기화 가능 
 - (모든 초기화값을 끝낸다)
 
-*convenience initializer(편의생성자)*
+**convenience initializer(편의생성자)**
+
 일부만 처리한 뒤 다른 생성자에게 나머지 부분 위임
 - 단독으로 모두 초기화 불가
 - 중복되는 초기화 코드 줄이기위해 사용
 - 초기화가 끝나야만 접근가능(designated initialize인 self.init() )아래에 작성
 - (모든 초기화값을 끝내지는 않음. 하지만 최종적으로 designated에 접근(프로퍼티 불러와)하여 마무리지음.)
-**convenience init -> designated init -> overwrite**
+*convenience init -> designated init -> overwrite*
 ```swift
 convenience init(xPosition: Int){
 self.init() <- init호출.
 self.xPosition = xPosition <- 단독처리할 것 호출 
 }
 ```
-**convenience init -> designated init**
+*convenience init -> designated init*
 ```swift
 convenience init(width: Int, height: Int, cornerRedius: Int){
 self.init(width: width, height: height, xPosition:10, yPosition:30, cornerRadius: conrnerRedius) -> designated initializer를 부를 때 값을 변경할 수도 있음.  
 }
 ```
-**convenience init -> convenience init**
+*convenience init -> convenience init*
 ```swift
 convenience init(cornerRadius: Int){
 self.init(width: 20, height: 20, cornerRadius: cornerRadius)
@@ -156,7 +158,60 @@ self.height = height
 }
 ```
 - 자식클래스(Rectangle)에는 designated가 잘 되어있으나, 부모클래스(Base)인 someProperty에 대한 designated가 없음. 그럼에도 오류나지 않는 이유는? 어차피 생성자가 1개 이기 때문.. 1개 인경우 **super.init()** 가 자동 호출되어 표현할 필요 없음. 부모클래스에서 init이 여러 개인 경우 자식 쪽에 super.init() 써줘야함.   
-*override init*
+**override init**
+- 생성자도 일반 함수처럼 override이용하여 덮어 쓸 수 있음. 
+```swift
+class Human { //부모
+var name: String
+
+//1-2.그냥 사용시 충돌가능
+init(){
+self.name = "홍길동"
+}
+init(name : String){
+self.name = name
+ }
+}
+
+class Student : Human { //자식 //1-1.Student가 Human을 상속받고 있으니까. 그냥 init쓰면 위 부모의 designated와 충돌함.  
+var school: String
+
+//1-0.override init 쓰는 이유 
+override init() {
+self.school = "University"
+  
+ super.init() //두 개의 지정 생성자 중 하나 호출
+ //super.init(name:"이순신")
+}
+
+//각각하기.
+//2-1.이 메서드를 사용하고
+init(school: String){ //school만 받아서 
+self.school = school  //자기 자신을 초기화 하고
+super.init()          //부모 클래스를 초기화 하겠다. 
+
+}
+
+//수퍼 클래스의 지정 생성자 오버라이드와 편의 생성자 기능 동시 사용 가능
+convenience override init(name:String) {  //2-0.똑같은 이름의 생성자를 사용하면서도 convenience을 사용할 수 있는 경우.
+self.init(school: "Univ")
+self.name = name //2-2.name은 덮어 쓰고 있는 구조. 
+//2-3. 많이 쓰이는 구조는 아님 ㅎㅎ..
+ }
+}
+
+let student1 = Student()
+let srudent2 = Student(name: "철수")
+let student3 = Student(school: "higt school")
+
+//값출력시
+student1.school  //University
+seudent1.name    //홍길동
+
+```
+- 자기 자신부터 초기화 하는 건 항상 같음. 
+- 상속받았을 때, 생성자의 같은 이름을 가진 생성자를 바꿔주고 싶을때는 override를 해줘야함. 
+
 
 ### MVC 
 
