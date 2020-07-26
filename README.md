@@ -20,6 +20,7 @@
 - [initializer](#initializer)
 - [MVC](#MVC)
 - [bundle](#bundle) 
+- [Nib/Xib](#Nib/Xib)
 
 
   - [보여지는 텍스트](#이동할위치의텍스트)
@@ -227,6 +228,7 @@ Model View Controller
 
 
 ### Bundle 
+
 번들 오브젝트는 번들 구조, 사용자 환경설정, 사용 가능한 현지화 및 기타 관련 요소를 고려하여 항목을 찾기 위한 단일 인터페이스 제공. 앱 내부, 다른 위치의 번들에서 리소스할 수 있음.
 
 **[번들객체 사용시 일반적 패턴]**
@@ -253,6 +255,20 @@ NSString *resourcePath = [main pathForResource:@"Seagull" ofType:@"jpg"];
 let path: Bundle.main.path(forResource: "CafeList", ofType: "json")
 //리소스 - "CafeList" ,데이터 형태 - "json타입"
 ```
+
+### Nib/Xib
+
+**nib** : Next Interface Builder의 약자 (바이너리 binary)
+**xib** : Xml Interface Builder의 약자 (xml기반)
+
+- nib와 xib는 기능적으로 거의 동일함.
+- xib가 "플랫파일"에 저장된다는 점이 다름
+(flat file: 플랫파일은 아무런 구조적 상호관계가 없는 레코드들이 들어 있는 파일)
+- xib는 bundle이 아닌 플랫파일이기 때문에, SCM(source control management: 소스제어관리)시스템에 비해 쉽게 처리가능. (바이너리로 저장하지 않고 xml 형태로 저장하기 때문에 수정된 부분을 알 수 있어서 파일 관리가 아닌 소스코드로 관리가 가능해짐)
+- 빌드시, xib가 앱에 포함될 nib로 컴파일되면서 사용됨. (xib를 컴파일하면 nib가 만들어짐)
+- nib를 사용하지 않는 이유는 바이너리므로 nib파일과 함께 SVN사용시 문제발생. 그래서 xib가 nib를 대신함
+- nib는 diff를 수행할 수 없고, 바이너리 파일로 처리해야하기 때문에 효율성이 떨어진다고 판단
+
 
 
 
