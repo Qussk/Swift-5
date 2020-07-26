@@ -65,6 +65,7 @@ swift의 객체는 사용하기 전 모든 저장 프로퍼티에 대해 초기�
 - 중복되는 초기화 코드 줄이기위해 사용
 - 초기화가 끝나야만 접근가능(designated initialize인 self.init() )아래에 작성
 - (모든 초기화값을 끝내지는 않음. 하지만 최종적으로 designated에 접근(프로퍼티 불러와)하여 마무리지음.)
+
 *convenience init -> designated init -> overwrite*
 ```swift
 convenience init(xPosition: Int){
@@ -259,6 +260,7 @@ let path: Bundle.main.path(forResource: "CafeList", ofType: "json")
 ### Nib/Xib
 
 **nib** : Next Interface Builder의 약자 (바이너리 binary)
+
 **xib** : Xml Interface Builder의 약자 (xml기반)
 
 - nib와 xib는 기능적으로 거의 동일함.
