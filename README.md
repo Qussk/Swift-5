@@ -20,7 +20,7 @@
 - [initializer](#initializer)
 - [MVC](#MVC)
 - [bundle](#bundle) 
-- [Nib/Xib](#Nib/Xib)
+- [Nib/Xib](#nib)
 
 
   - [보여지는 텍스트](#이동할위치의텍스트)
