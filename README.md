@@ -17,11 +17,10 @@
 **[문법]**
 
 - [then(with: 전수열)](#then)
-- [mutable/Immutable](#mutable)
-
 
 **[]**
 
+- [mutable/Immutable](#mutable)
 - [initializer](#initializer)
 - [MVC](#MVC)
 - [bundle](#bundle) 
@@ -135,7 +134,7 @@ extension Then where Self: AnyObject {
 - self의 type은 imageView()
 - return 은 imageView를 반환하게 됨.
 
-
+***
 ### mutable
 
 **mutable(뮤터블)** 
@@ -330,6 +329,7 @@ seudent1.name    //홍길동
 - 자기 자신부터 초기화 하는 건 항상 같음. 
 - 상속받았을 때, 생성자의 같은 이름을 가진 생성자를 바꿔주고 싶을때는 override를 해줘야함. 
 
+***
 
 ### MVC 
 
@@ -341,6 +341,7 @@ Model View Controller
 모델과 뷰는 절대 서로 직접적인 수신호를 주고 받지 않고 컨트롤러를 통해서 함.
 장점은 어플의 새로운 버전을 만들때 다른 테마 등의 데이터 변경 용이. 
 
+***
 
 ### Bundle 
 
