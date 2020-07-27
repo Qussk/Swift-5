@@ -16,6 +16,7 @@
 ### Swift List
 **[문법]**
 
+- [then(with: 전수열)](#then)
 **[]**
 - [initializer](#initializer)
 - [MVC](#MVC)
@@ -42,8 +43,97 @@
 - swift는 switch문으로 분기가 가능함. objective-c는 if문으로 처리해야했음. 
 - swift는 Generic타입 제공. 
 
-## [기타] 
 
+## [문법]
+
+### then
+- ios개발자 전수열님이 만든 라이브러리.
+- [https://github.com/devxoul/Then](https://github.com/devxoul/Then)
+
+*UIView*
+```siwft
+/*
+보통의 예
+ private let backImage : UIImageView = {
+   let i = UIImageView()
+   i.contentMode = .scaleAspectFill
+ return i
+ }()
+  
+  private let backImage : UIImageView = {
+     $0.contentMode = .scaleAspectFill
+   return $0
+  
+  위 형태를 then으로 처리 -> 클로져화
+ */
+
+private let backgroundImageView = UIImageView(frame: .screenBounds).then {
+  $0.image = UIImage(named: "sunny")
+  $0.contentMode = .scaleAspectFill
+}
+
+private let blurView = UIVisualEffectView(frame: .screenBounds).then {
+  $0.effect = UIBlurEffect(style: .dark)
+}
+
+private let topInfoView = UIView()
+private let locationLabel = UILabel().then {
+  $0.textColor = .white
+  $0.textAlignment = .center
+  $0.font = .systemFont(ofSize: 18, weight: .black)
+}
+private let timeLabel = UILabel().then {
+  $0.textColor = .white
+  $0.textAlignment = .center
+  $0.font = .systemFont(ofSize: 12, weight: .black)
+}
+
+let reloadButton = UIButton(type: .system).then {
+  $0.setTitle("↻", for: .normal)
+  $0.setTitleColor(.white, for: .normal)
+  $0.titleLabel?.font = .preferredFont(forTextStyle: .title1)
+  $0.alpha = 0
+}
+let tableView = UITableView().then {
+  $0.rowHeight = Layout.currentWeatherCellHeight
+  $0.tableFooterView = UIView()
+  $0.backgroundColor = .clear
+  $0.separatorColor = .white
+  $0.allowsSelection = false
+  $0.showsVerticalScrollIndicator = false
+}
+```
+- $0으로 view에 대한 내용 간단하게 처리 
+
+
+*Foundation*
+
+```swift
+import Foundation
+
+protocol Then {}
+extension NSObject: Then {}
+
+extension Then where Self: AnyObject {
+  func then(_ configure: (Self) -> Void) -> Self {
+    configure(self)
+    return self
+  }
+}
+
+```
+- 예시는 backgroundImageView로 듦.
+-  **then**을 사용시, **configure**에 **self**를 넣고, **self**를 반환한다는 뜻. 
+- 클로저의 내용은 configure -> then 이후의 **$0.어쩌구** 부분.
+
+아래
+
+- **configure(self)** 부분에 **$0**이 무엇인지 알려주어야함.
+- self의 type은 imageView()
+- return 은 imageView를 반환하게 됨.
+
+
+## [기타] 
 
 ### initializer
 swift의 객체는 사용하기 전 모든 저장 프로퍼티에 대해 초기화 필수
