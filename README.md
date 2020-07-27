@@ -23,7 +23,7 @@
 - [initializer](#initializer)
 - [MVC](#MVC)
 - [bundle](#bundle) 
-- [Nib와Xib](#nib)
+- [Nib/Xib](#Nib와Xib)
 
 
   - [보여지는 텍스트](#이동할위치의텍스트)
@@ -349,7 +349,7 @@ let path: Bundle.main.path(forResource: "CafeList", ofType: "json")
 //리소스 - "CafeList" ,데이터 형태 - "json타입"
 ```
 
-### Nib/Xib
+### Nib와Xib
  **nib** : Next Interface Builder의 약자 (바이너리 binary)
  **xib** : Xml Interface Builder의 약자 (xml기반)
 - nib와 xib는 기능적으로 거의 동일함.
