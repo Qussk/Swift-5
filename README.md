@@ -17,11 +17,13 @@
 **[문법]**
 
 - [then(with: 전수열)](#then)
+
 **[]**
+
 - [initializer](#initializer)
 - [MVC](#MVC)
 - [bundle](#bundle) 
-- [Nib/Xib](#Nib/Xib)
+- [Nib/Xib](#Nib)
 
 
   - [보여지는 텍스트](#이동할위치의텍스트)
@@ -349,9 +351,9 @@ let path: Bundle.main.path(forResource: "CafeList", ofType: "json")
 
 ### Nib/Xib
 
-**nib** : Next Interface Builder의 약자 (바이너리 binary)
+**Nib** : Next Interface Builder의 약자 (바이너리 binary)
 
-**xib** : Xml Interface Builder의 약자 (xml기반)
+**Xib** : Xml Interface Builder의 약자 (xml기반)
 
 - nib와 xib는 기능적으로 거의 동일함.
 - xib가 "플랫파일"에 저장된다는 점이 다름
