@@ -17,7 +17,7 @@
 **[문법]**
 
 - [then(with: 전수열)](#then)
-- [mutable/immutable](/mutable)
+- [mutable/immutable](#mutable)
 
 **[]**
 
