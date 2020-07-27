@@ -349,11 +349,8 @@ let path: Bundle.main.path(forResource: "CafeList", ofType: "json")
 //리소스 - "CafeList" ,데이터 형태 - "json타입"
 ```
 
-### Nib/Xib
-
-**Nib** : Next Interface Builder의 약자 (바이너리 binary)
-
-**Xib** : Xml Interface Builder의 약자 (xml기반)
+### Nib : Next Interface Builder의 약자 (바이너리 binary)
+### Xib : Xml Interface Builder의 약자 (xml기반)
 
 - nib와 xib는 기능적으로 거의 동일함.
 - xib가 "플랫파일"에 저장된다는 점이 다름
