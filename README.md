@@ -17,7 +17,8 @@
 **[문법]**
 
 - [then(with: 전수열)](#then)
-- [mutable/immutable](#mutable)
+- [mutable/Immutable](#mutable)
+
 
 **[]**
 
@@ -133,6 +134,7 @@ extension Then where Self: AnyObject {
 - **configure(self)** 부분에 **$0**이 무엇인지 알려주어야함.
 - self의 type은 imageView()
 - return 은 imageView를 반환하게 됨.
+
 
 ### mutable
 
