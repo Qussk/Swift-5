@@ -17,6 +17,7 @@
 **[문법]**
 
 - [then(with: 전수열)](#then)
+- [mutable/immutable](/mutable)
 
 **[]**
 
@@ -107,7 +108,6 @@ let tableView = UITableView().then {
 ```
 - $0으로 view에 대한 내용 간단하게 처리 
 
-
 *Foundation*
 
 ```swift
@@ -133,6 +133,26 @@ extension Then where Self: AnyObject {
 - **configure(self)** 부분에 **$0**이 무엇인지 알려주어야함.
 - self의 type은 imageView()
 - return 은 imageView를 반환하게 됨.
+
+### mutable
+
+**mutable(뮤터블)** 
+- 변경 가능한 객체 
+- 최초생성 이후에 자유롭게 값의 변경, 추가, 삭제등이 가능
+- 예시) int, float, list, 사용자 정의 클래스 
+
+**immutable(이뮤터블)**
+- 변경 불가능한 객체 
+- 최초 생성 이후에 값을 변경할 수 없다
+- 예시) tuple, string, dictionary - key
+- 이 외에 내장 타입인 숫자, 불리언 등이 포함됨. 
+
+*Swift에서 Sting은 mutable인가 immutable인가?*
+- **Objective-c에서는 String이 Class였고, Swift의 String은 Struct(구조체)임.** class 기반인 Objective-c에서는 NSString, NSMutableString처럼 애초에 mutable과 immutable의 구분이 가능했지만, Swift에서는 구조체 기반으로 Struct는 value-type이다. 따라서, Int와 같은 value와 동일하게 동작함. 
+- 위의 이유로 swift는 value-type의 객체를 let이 아닌 var로 선언할 경우 mutable함수를 통해 값을 업데이트 할 수 있으므로 mutable이고, let은 immutable인 셈. 
+- 겉보기에, struct내부의 value를 바꾸는 것처럼 보이지만, 내부적으로는 바꾸려는 value를 가지고 있는 value-type(struct)를 재셋팅 하는 것이다. 
+
+
 
 
 ## [기타] 
@@ -351,6 +371,7 @@ let path: Bundle.main.path(forResource: "CafeList", ofType: "json")
 
 ### Nib와Xib
  **nib** : Next Interface Builder의 약자 (바이너리 binary)
+ 
  **xib** : Xml Interface Builder의 약자 (xml기반)
 - nib와 xib는 기능적으로 거의 동일함.
 - xib가 "플랫파일"에 저장된다는 점이 다름
