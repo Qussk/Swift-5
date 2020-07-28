@@ -26,6 +26,10 @@
 - [bundle](#bundle) 
 - [Nib/Xib](#Nib와Xib)
 
+**[Xcode]**
+
+- [Debugging](#Debugging)
+
 
   - [보여지는 텍스트](#이동할위치의텍스트)
   - ~생략~
@@ -45,6 +49,7 @@
 - swift는 isEqual메서드를 이용할 필요없이 == 연산자만으로 비교가능.
 - swift는 switch문으로 분기가 가능함. objective-c는 if문으로 처리해야했음. 
 - swift는 Generic타입 제공. 
+- Objective-C는 class, swift는 struct 기반임. 
 
 
 ## [문법]
@@ -52,6 +57,7 @@
 ### then
 - ios개발자 전수열님이 만든 라이브러리.
 - [https://github.com/devxoul/Then](https://github.com/devxoul/Then)
+-  Swift Package Manager 이용. 
 
 *UIView*
 ```siwft
@@ -371,6 +377,7 @@ NSString *resourcePath = [main pathForResource:@"Seagull" ofType:@"jpg"];
 let path: Bundle.main.path(forResource: "CafeList", ofType: "json")
 //리소스 - "CafeList" ,데이터 형태 - "json타입"
 ```
+***
 
 ### Nib와Xib
  **nib** : Next Interface Builder의 약자 (바이너리 binary)
@@ -385,5 +392,73 @@ let path: Bundle.main.path(forResource: "CafeList", ofType: "json")
 - nib는 diff를 수행할 수 없고, 바이너리 파일로 처리해야하기 때문에 효율성이 떨어진다고 판단
 
 
+## [Xcode]
 
+### Debugging
 
+- bug : 버그
+- debug : 버그를 없앤다.
+
+**[디버깅 프로세스]**
+- 문제식별 및 발생 위치 찾기
+- 실행코드의 제어 흐름 및 데이터 구조를 조사하여 원인 규명
+- 솔루션을 고안하고 그에 따라 코드 수정
+- 수정된 앱을 실행하고 수정된 코드가 잘 동작하는지 확인
+
+**LLVM** - Xcond의 컴파일러 + 툴체인
+**LLDB** - LLVM환경에서 동작하는 디버거 , LLDB는 명령 행 디버거는 모든 Apple 플랫폼에서의 개발을 위한 기본 디버깅 서비스 제공함 
+
+```swift
+@objc func basicDebugging(_ sender: UIButton){
+  var sum = 0
+  for i in 0...100{
+    sum += i
+  }
+  print(sum)    
+}
+```
+
+**Debugger Command**
+```
+help apropos
+help po
+p list
+p number
+```
+- help - 명령어 나열 및 도움말 출력
+- apropos - 단어나 특정 주제에 대한 내용 검색
+- po(print object) - DebugDescription 또는 description내용 출력 ( DebugDescription > description 우선순위 )
+- p - LLDB 기본 형식으로 출력
+- expression - 새로운 변수 넣기. 에디터 코드를 넣는 것과 같은 효과.(인라인으로 작성)
+- 예시)
+```swift
+e
+(lldb) p let $myValue = 3
+(lldb) p $myValue
+(Int) $R82 = 3
+```
+- 임의의 값을 선언하고 출력 해볼 수 있음. 
+
+```swift
+e
+
+1 let $myView = UIView()
+2  $myView.backgroundColor = .red
+3  $myView.frame = .init(x: 100, y: 100, width: 100, height: 100)
+4 self.view.addSubview($myView)
+5
+  c
+  c(컨티뉴로 완성)
+```
+- 임의의 View를 만들 수 있음. (색변경, 오토레이아웃 등 가능)
+
+*Veiw주소값을 통해 조회. **[ Obj-C ], [ Swift ] 버전.** 
+```
+[ Obj-C ]
+  (lldb) e ((UIButton *)0x7fea7d30af20).backgroundColor = [UIColor redColor]
+
+  [ Swift ]
+  (lldb) e -l swift -- import UIKit
+  (lldb) e -l swift -- unsafeBitCast(0x7fea7d30af20, to: UIButton.self).backgroundColor = .blue
+```
+***
