@@ -31,6 +31,13 @@
 - [Debugging](#Debugging)
 
 
+**[SwiftUI]**
+
+- [SwiftUI](#SwiftUI)
+- [SwiftUI사용](#SwiftUI사용)
+
+
+
   - [보여지는 텍스트](#이동할위치의텍스트)
   - ~생략~
   - #이동할위치의텍스트
@@ -406,6 +413,7 @@ let path: Bundle.main.path(forResource: "CafeList", ofType: "json")
 - 수정된 앱을 실행하고 수정된 코드가 잘 동작하는지 확인
 
 **LLVM** - Xcond의 컴파일러 + 툴체인
+
 **LLDB** - LLVM환경에서 동작하는 디버거 , LLDB는 명령 행 디버거는 모든 Apple 플랫폼에서의 개발을 위한 기본 디버깅 서비스 제공함 
 
 ```swift
@@ -452,7 +460,7 @@ e
 ```
 - 임의의 View를 만들 수 있음. (색변경, 오토레이아웃 등 가능)
 
-*Veiw주소값을 통해 조회. **[ Obj-C ], [ Swift ] 버전.** 
+**Veiw주소값을 통해 조회 [ Obj-C ], [ Swift ] 버전.** 
 ```
 [ Obj-C ]
   (lldb) e ((UIButton *)0x7fea7d30af20).backgroundColor = [UIColor redColor]
@@ -462,3 +470,161 @@ e
   (lldb) e -l swift -- unsafeBitCast(0x7fea7d30af20, to: UIButton.self).backgroundColor = .blue
 ```
 ***
+
+## SwiftUI 
+
+### **SwiftUI**
+
+*swiftUI소개*
+ [ https://developer.apple.com/kr/xcode/swiftui/](https://developer.apple.com/kr/xcode/swiftui/)
+
+*튜토리얼*
+[https://developer.apple.com/tutorials/swiftui/tutorials](https://developer.apple.com/tutorials/swiftui/tutorials)
+
+
+### SwiftUI와 Objective-C(UIKit)차이 
+
+- Objective-C의 UIKit는 class 기반임 , SwiftUI는 struct기반(구조체)
+- iOS. tvOS. macOS - AppKit,  watchOS - watchKit 처럼 알맞은 Kit를 이용해야하지만, SwiftUI는 모든 기종 호환가능. 
+
+
+### **SwiftUI사용**  
+
+- View와 body로 구성됨.  그 중 body를 구현하는것 . (some View => 사용자에게 보여지는 뷰). 뷰의 프로토콜을 구현하는 어떤 것 **someView**.
+
+- **Assets.xcassets(에셋)** 앱 출시시 사용하는 이미지와 **preview Assets.xcassets(프리뷰에셋)**  개발하는 동안에만 사용하는 이미지로 구분됨. 
+- 시뮬레이터가 아닌, 프리뷰(preview)이용.
+- 메서드체이닝의 형태. ~ (선언적 구문) 
+예시)
+```
+Text(“ASDR") 
+.Font(.title)
+.fintWeight(.balck)
+.italic()
+```
+- 속성값을 불러옴 
+- **modifier** 는 method이지만, 수식어와 비슷한 속성을 가짐 (뷰에서 사용가능한 메서드, 어떤 변화를 가미한 새로운 뷰를 반환하는 메서드. 원본은 그대로 두고, 계속 변경해 나가는 것. 덧칠해나가는 것.) 
+
+### **사용 코드 (예시: Text)**
+
+```swift
+import SwiftUI
+
+struct Ex01_Text: View {
+  var body: some View {
+    //2.someView를반환하는 연산프로퍼티라서 그냥 여기다가 갖다 씀
+    example05  //<- 함수 호출하듯이 이곳에 해당하는 someView호출.
+  }
+  
+  //error = Compiling failed: extra tokens at the end of #sourceLocation directive
+  
+  
+  var example01: some View {
+    
+    //1.swiftUI는 대 부분의 retrun이 생략되어 있음(보통 View를 표현할때는 생략)
+    
+    Text("Hello, SwiftUI")
+      //  .font(.headline)
+      .fontWeight(.light)
+      .foregroundColor(Color.purple)
+      // .font(.system(size: 40, weight: .light))
+      .font(.custom("AppleGothic", size: 40))
+      .blur(radius: 3.0)
+    
+    // cmd+shif+L 로 끌어와서 쓸수도 있음. 
+    
+  }
+  
+  
+  // (텍스트간의 합성 용의)
+  var example02: some View {
+    Text("Hello").font(.headline)
+      .foregroundColor(.blue)
+      .italic()
+      +
+      Text("SwiftUI").font(.largeTitle)
+        .foregroundColor(.green)
+        .baselineOffset(8)
+    
+  }
+  //밑줄 긋기등
+  var example03: some View {
+    
+    Text("Hellow, Qussk")
+      .font(.title)
+      .kerning(5)
+      .underline(true, color: .orange)
+      .strikethrough(true, color: .blue)
+  }
+  
+  
+  //중요!: 수식어 적용시 순서 주의.
+  var example04: some View {
+    Text("Qussk")
+      .font(.largeTitle) //Text
+      .bold() //Text
+      .background(Color.yellow)
+    //View
+    
+    
+    //    Text("Qussk")
+    //        .font(.largeTitle) //View - 알아서 속성이 바뀜.
+    //        .background(Color.yellow) //Veiw
+    //        .bold() => text가 가진 속성 //Text
+    //       -background가 가진 속성은 View~ 반환타입도 View이기 때문에 bold()를 쓸수 없음.
+  }
+  
+  
+  //내용은 같은데 순서가 다르다. why?
+  var example05: some View {
+    VStack(spacing: 20) {
+      //spacing: 뷰간의 간격
+      Text("🐰🦊🐻🐼").font(.largeTitle)
+        .padding()
+        .background(Color.yellow)
+      //뷰의 크기만큼 배경색을 주느냐,
+      
+      Text("🐶🐱🐭🐹").font(.largeTitle)
+        .background(Color.green)
+        //백그라운드 색을 주고, 뷰 크기를 결정하느냐
+        .padding()
+      
+    }
+  }
+}
+/*
+ 기본적으로 가운데 정렬함.
+ 
+ */아래처럼 여러개를 한 꺼번에 볼 수 도 있음. 
+
+//이것 때문에 Preview가 나올 수 있음.
+//struct Ex01_Text_Previews: PreviewProvider {
+//  static var previews: some View {
+//    Group {
+//      Ex01_Text()
+//        .previewLayout(.sizeThatFits)
+//      //.previewLayout(.fixed(width: 300, height: 200))
+//
+//      Ex01_Text()
+//        .preferredColorScheme(.dark)
+//        .previewDisplayName("iPhon 11")
+//        .previewDevice(PreviewDevice(rewValue: "iPhon 11"))
+//
+//      Ex01_Text()
+//        .preferredColorScheme(.dark)
+//        .previewDisplayName("iPhon 8")
+//        .previewDevice(PreviewDevice(rewValue: "iPhon 8"))
+//
+//    }
+//  }
+//}
+
+//}
+struct Ex01_Text_Previews2: PreviewProvider {
+  static var previews: some View {
+    Ex01_Text()
+    .preferredColorScheme(.light)
+  }
+}
+```
+
