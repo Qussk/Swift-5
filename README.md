@@ -109,10 +109,15 @@ reponders는 UIEvent오브젝트를 처리하며, input view를 통한 custom in
 
 
 **application**: 앱 시작 전에 필요한 작업들을 여기에 작성
+
 **applicationWillResignActive** : 앱이 비활성화 되는 단계에 들어갈 때 실행되는 메소드
+
 **applicationDidEnterBackground**: 앱이 백그라운드 상태에 들어갔을 때 실행되는 메소드 
+
 **applicationWillEnterForeground** :앱이 백그라운드에서 다시 화면으로 나올 때 실행되는 메소드 
+
 **applicationDidBecomeActive** : 앱이 화면으로 나오고 나서 실행되는 메소드
+
 **applicationWillTerminate** : 앱이 종료할 때 실행되는 메소드 
 
 ***
@@ -120,9 +125,13 @@ reponders는 UIEvent오브젝트를 처리하며, input view를 통한 custom in
 ### iOSApplicationState
 
 **Not Running** : 앱이 실행되지 않았거나, 시스템에 의해 종료된 상태.
+
 **Active** : 앱이 Foreground에서 실행되고 있고, 이벤트를 받을 수 있는 상태. 
+
 **Inactive** : 앱이 Foreground에서 실행되고 있으나, 이벤트를 받지 못하는 상태
+
 **Background** : 앱이 Foreground에서 실행중인 상태, Home버튼을 눌렀을 때 일시적으로 Background상태가 됨
+
 **Suspended** : 실행이 중단되어 대기중인 상태, 잠시동안 Background상태를 거친 후에 이 상태가 됨
 
 ***
