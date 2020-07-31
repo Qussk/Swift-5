@@ -20,13 +20,14 @@
 - [ViewController Life Cycle](#ViewControllerLifeCycle(생명주기))
 
 
-**[]**
-
+**[문법]**
 - [then(with: 전수열)](#then)
 
 
 **[]**
-
+- [func](#func)
+- [inout](#inout)
+- [Optional Chaining](#OptionalChaining)
 - [mutable/Immutable](#mutable)
 - [initializer](#initializer)
 - [MVC](#MVC)
@@ -248,6 +249,233 @@ extension Then where Self: AnyObject {
 - return 은 imageView를 반환하게 됨.
 
 ***
+### func
+- [https://docs.swift.org/swift-book/LanguageGuide/Functions.html#//apple_ref/doc/uid/TP40014097-CH10-ID158](https://docs.swift.org/swift-book/LanguageGuide/Functions.html#//apple_ref/doc/uid/TP40014097-CH10-ID158)
+- 수학에서 y = x +1 과 같은 공식들을 함수라고 칭함.
+- 어떤 입력값(Argument, 인자)을 받아 이를 재료로 특정 계산을 수행하고, 계산의 결과값(Return Value)을 도출하는 일련의 과정. 
+- 마치, 공장에서 기계(함수)애 원재료(인자)를 넣고, 기계를 돌려 완성품(결과값)을 만드는 과정과 유사함. -> 어떤 일을 수행하는 코드 묶음
+- Class의 함수는 특별히 구분짓기 위해 Method라고 부름. 
+- 예시)
+```swift
+func sayHello(name : String) -> String {
+let qussk = "Hello, " + name
+return qussk
+}
+
+func 함수명(파라미터명: 자료형) -> 리턴자료형 { 
+파라미터로 받은 인자들로 수행할 코드들
+return 리턴값 
+}
+```
+- func, 함수명, 파라미터, 리턴자료형, 코드블럭등 5가지 요소 존재.
+
+*func 함수명*
+- **func** 함수임을 선언. 함수명이 있는 이유는 나중에 함수를 사용할 때 함수명을 통해 부르기 위함.
+- Swift에서는 CamelCase 권장. (예)myCamelCase)
+
+*parameter / argument*
+- 함수명 뒤에 오는 소괄호는 함수의 원재료(인자)가 되는 파라미터(Parmaeter)를 표현하는 곳. 
+- 파라미터명과 각 파라미터 자료형(type)을 지정함. 함수가 입력값을 받는지 유무에 따라 파라미터는 아예 없을 수도 있고, 여러 개일 수도 있음. 이렇게 선언한 함수를 사용할 때 파라미터에 들어오는 값들을 인자(Argument)라고 부름. 
+
+*return*
+- **->** 키워드는 출력값 (return값)을 표현하기 위한 구분자.
+- 자료형을 지정할 때, 파라미터처럼 아예없거나, 여러 개 일 수 있으며, 임의의 이름을 지정해줄 수도 있음. 
+- 만약, ->을 통해 리턴 자료형(return type)을 지정해줬다면, 코드 블럭의 맨 마지막에는 반드시 return이 있어야 하며, 리턴하는 값은 위에서 지정한 자료형(type)과 같은 자료형이어야함. 
+- 자료형이 지정되어 있지 않다면 Void를 리턴함. () -> Void.
+
+*인자값 받기*
+- 함수는 입력값을 받을 수도 있고 받지 않을 수도 있음. 
+- 입력값을 받는 함수를 선언할 때, 입력값들을 위해 지은 상수 이름들을 파라미터(parameter)라고 부르며, 실제 함수를 사용할 때(call) 들어오는 입력값들은 인자(argument)라고 부름. 
+- 파라미터를 지정한 함수를 사용하려면 함수명과 더불어 파라미터에 대응하는 인자값들을 모두 입력해야함. 
+```swift
+func setUI(title : String, image : String) -> String {
+return title + image
+}
+setUI(title : "제목", image: "나무")
+```
+*파라미터 / 인자는 상수*
+- 파라미터는 이미 상수로 이름 앞에 let 키워드가 숨어 있음
+- 상수이기 때문에 파라미터에 들어온 인자값은 임의로 변경할 수 없음.
+- 변경하려면 함수 내에서 새로운 변수를 만든 후 인자값을 대입하여 다음 변수값을 변경해야함. 
+- 다른 방법으로는 inout을 쓸 수도 있음. 
+- 예시) 
+```swift
+func aboutMe(name : String, age : Int) -> String {
+var newName = name //name 파라미터를 변형한 값을 새 변수에 대입
+newName = "윤나"
+retrun "My name is \(newName). I am \(age) years old"
+}
+
+aboutMe(name: "Qussk", age: 29)
+//"My name is Qussk. I am 29 years old"
+```
+*Value Type 인자들*
+- String, Int, Bool 등 주로 인자값으로 오는 것들의 자료형은 struct로서 value type임.
+- 무슨 말이냐, 인자값들은 원본이 들어오는 것이 아니라 사본을 새로 만들어 함수 안에서 사용한다는 뜻.
+-  그래서 함수 안에서 인자값들을 마구 변형해도 인자값들은 새로운 사본이기 때문에 인자값들의 원본은 그대로 이게 됨.
+
+*외부이름 arhument Label / 내부이름 Parameter name*
+- 함수 파라미터는 기본적으로 2개의 이름을 가지고 있음. 함수를 부를 때(call) 외부에서 부르는 인자 이름(argument label, 옛 external name)과, 함수 내부에서 쓰이는 파라미터 이름(parameter name, 옛 internal name). 
+- 코드의 가독성을 높이기 위해
+- 외부, 내부이름 지정에 따라 파라미터명을 여러가지 유형으로 나눌 수 있음.  예를 들면, **_** 와일드카드 키워드로 생략이 가능해짐 
+
+*Variadic Parameter*
+- 함수가 하나의 인자를 받을 것인지 여러 개의 인자를 받을 것인지 불분명할 때, 함수의 파라메터 자료형(type)에 **...**을 찍어 Variadic Parameter를 구성해줌. 
+```swift
+func catsHello(catsNames : String...) -> String {
+var hiMessage = "Hello"
+for i in catsNames {
+hiMessage = hiMessage + i + " "
+}
+retrun hiMessage
+}
+
+catsHello(catNames: "PaPa") //Hellow PaPa
+
+catsHello(catNames: "PaPa", "KaKa", "HoHo") 
+//Hellow PaPa KaKa HoHo
+
+```
+이러한 Variadic Parmeter는 함수당 하나 밖에 올 수 없고, 반드시 마지막 파라미터가 되어야함. 이유는 일반적으로 함수를 호출 할 때 인자값을 구분하기 위해 콤마를 쓰게 되는데, 규칙이 없다면 Variadic인자와 아닌 인자가 뒤죽박죽 섞이게 되기 때문. 
+
+### inout
+*inout Parameter + &*
+- 위의 예시들로 파라미터/인자값은 상수로 바꿀 수 없고, 바꾸려면 함수 내에 별도의 변수를 만들어 인자값을 대입시킨후 변수를 변경하는 방법을 썼음. 하지만 더 간단하게 파라미터 자료형 앞에 **inout**키워드를 넣으면 됨. 
+- inout키워드를 부여 받은 파라미터는 강력한 권한을 가짐.
+- 함수 밖에 있는 변수를 인자로 받아 함수 안에서 인자값을 변경 할 수 있게 되며, 나아가 인자로 쓰인 함수 밖 변수의 값까지 변경하게 됨. 
+- 함수의 안과 밖 모두를 변경하기 때문에 inout이라는 이름 붙음.
+- inout키워드를 부여 받은 파라미터는 호출시 이름 앞에 **&** 키워드를 붙임. 아래의 예시는 두 숫자 변수의 값을 서로 뒤바꾸는 함수 이용시 inout patameter가 사용됨.(Apple Swift문서 예시) 
+- 예시) 
+```swift
+func swapTwoInts(a: inout Int, b: inout Int) {
+let temporaryA = a
+a = b
+b = temporaryA
+}
+
+var someInt = 3
+var anotherInt = 107
+
+swapTwoInts(a: &someInt, b: &anotherInt)
+
+print("someInt is \(someInt), anotherInt is \(anotherInt)")
+//someInt is 107, anotherInt is 3
+```
+
+*자료형으로써의 함수(func Type)*
+- Xcode에서 cmd + 클릭시 help 보면. (int, int) -> int, (Stfing, Int) -> String같은 것들이 함수 자료형.
+- 앞의 소괄호는 Tuple을 표현한다기 보다, 파라미터를 구분하기 위해 표시하는 것임. 그래서 하나면 (String) -> String.
+- 예시) 변수에 함수가 대입된 경우 
+```swift
+//임의의 덧셈함수
+func add (s1: Int, s2: Int) -> Int {
+return s1 + s2
+}
+
+//변수에 함수 대입. 해당 변수는 (Int, Int) -> Int 자료형을 갖게 됨
+var myMathVariable = add
+
+//변수가 함수처럼 사용됨
+myMethVariable(5,2)  //7
+```
+- 모든 함수는 자료형을 갖고 인자값들을 받아 결과값을 토출 할 때, 인자값, 결과값들 모두 개별적인 자료형을 갖고 있음. 함수가 자료형을 가짐으로써 함수를 다른 함수의 인자값에 손쉽게 넣을 수도, 어떤 함수의 리턴값으로 다시 함수가 나올 수 있게 되는 것임. 즉, 함수끼리 연결해지기 쉬워짐.
+- 예시2) 함수의 인자라 리턴 값도 함수 자료형일 수 있음. 
+```swift
+func add(s1: Int, s2: Int) -> Int {
+return s1 + s2 
+}
+
+func mathResult(mathfunction: (Int, Int) -> Int
+                , s1: Int, s2: Int) -> String {
+                return "Result: \(mathFunction(s1,s2))"
+}
+print(mathResult(mathDunction: add, s1: 5, s2: 2)// Result: 13
+```
+위의 mathResult는 mathfunction, s1,s2 라는 3가지 파라미터를 갖고 있는 함수. mathfunction라는 파라미터는 2개의 정수를 받아 1개의 정수를 리턴하는 함수 자료형. 
+- 예시3) 함수의 리턴 값이 다시 함수가 되는 것의 예
+```swift
+func add(s1: Int, s2: Int) -> Int {
+return s1 + s2
+}
+
+func multiply(s1: Int, s2: Int) -> Int {
+return s1 + s2 
+}
+
+func addOrMultiply(isAdd: Bool) -> (Int, Int) -> Int {
+if isAdd {
+return add
+} else {
+return muliply
+}
+}
+
+addOrMultiply(isAdd: true)(5,10)
+//Result: 7
+```
+- 참고 : 리턴값이 없는(void)함수의 자료형은 () -> () 로 표시하지 않고, () -> Void라고 표시함. 
+***
+
+
+### OptionalChaining
+- [https://docs.swift.org/swift-book/LanguageGuide/OptionalChaining.html#//apple_ref/doc/uid/TP40014097-CH21-ID245](https://docs.swift.org/swift-book/LanguageGuide/OptionalChaining.html#//apple_ref/doc/uid/TP40014097-CH21-ID245)
+- Optional Chaining이란, 값이 nil수도 있는 프로퍼티, 메소드, 서브스크립트 등을 체인처럼 길게 이어가면서 선언하는 것을 일컬음.
+- 각 값들 뒤에 **?** 를 붙이면서 이어가게 됨.(instance.property?.method?.property?등으로 이어진 구조로 좌에서 우로 이동하면서 값이 nil이 아닌지 판별. 
+- 그 중 하나라도 nil로 판명된다면 이동을 멈추고 바로 체인 전체의 결과값이 nil이됨. 
+- 예시) get으로 활용된 예시
+```swift
+class Person { 
+var residence: Residence?
+}
+
+class Residence { 
+var numberOfRooms = 1
+}
+
+let john = Person()
+john.residence?.numberOfRooms //nil
+
+john.residence = Residence()
+john.residence?.numberOfRooms // Optional(1)
+
+```
+- 첫번째 시도. residence가 셋팅되지 않아 nil값 가져옴. 
+- residence프로퍼티 유무에 따라 전체 체인의 값이 달라지게 됨. 
+- 예시2) set으로 활용된 예시
+```swift
+class Person {
+var name : String
+var house: House?
+
+init(name: String) {
+self.name = name
+}
+}
+
+class House {
+var region = "Seuol"
+
+func printRegion() {
+print(region)
+}
+}
+
+var qussk = Person(name: "Qussk")
+
+qussk.house?.printRegion() // nil(get)
+
+qussk.house? = House()  // nil(set) 해당 property를 세팅하는 과정에서도 setting전에 nil이면 nil이 실행됨. 
+qussk.house?.printRegion() //nil
+
+qussk.house = House()
+qussk.house?.printRegion() // "Seuol"
+
+```
+
+***
+
+
+
 ### mutable
 
 **mutable(뮤터블)** 
@@ -266,10 +494,7 @@ extension Then where Self: AnyObject {
 - 위의 이유로 swift는 value-type의 객체를 let이 아닌 var로 선언할 경우 mutable함수를 통해 값을 업데이트 할 수 있으므로 mutable이고, let은 immutable인 셈. 
 - 겉보기에, struct내부의 value를 바꾸는 것처럼 보이지만, 내부적으로는 바꾸려는 value를 가지고 있는 value-type(struct)를 재셋팅 하는 것이다. 
 
-
-
-
-## [기타] 
+***
 
 ### initializer
 swift의 객체는 사용하기 전 모든 저장 프로퍼티에 대해 초기화 필수
