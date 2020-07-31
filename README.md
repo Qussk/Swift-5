@@ -7,16 +7,23 @@
 
 
 
-### ios List
+## ios List
 - [Objective-C 와swift차이](#Objective-C와swift차이 )
 - [ios Fonts](http://iosfonts.com/)
  
 
 
-### Swift List
-**[문법]**
+## Swift List
+
+- [AppDelegate](#AppDelegate)
+- [iOS Application State](#iOSApplicationState)
+- [ViewController Life Cycle](#ViewControllerLifeCycle(생명주기))
+
+
+**[]**
 
 - [then(with: 전수열)](#then)
+
 
 **[]**
 
@@ -47,8 +54,6 @@
 ## Language house(in Swift)
 
 
-## [들어가기]
-
 ### Objective-C와swift차이 
 
 - swift는 ios8에 개발에 사용됨.
@@ -59,7 +64,102 @@
 - Objective-C는 class, swift는 struct 기반임. 
 
 
-## [문법]
+***
+### AppDelegate
+
+**UIResponder** 
+- [http://blog.naver.com/hobin1019/221302910865](http://blog.naver.com/hobin1019/221302910865) 
+- UIKit app의 이벤트핸들링을 위해 있는 것.
+- UIApplication, UIViewController, UIView(UIWindow의 일종)이 모두 이벤트 responder에 포함됨.
+- 이벤트가 발생하면, UIKit는 각각의 responder오브젝트로 처리하게 시킴
+
+*event*
+- 이벤트에는 터치이벤트, 모션이벤트, 리모트콘트롤이벤트, 누르는 이벤트가 있는데, 특정 이벤트를 처리하기 위해 responder는 반드시 특정 메소드를 override해야함. 
+- 예를들면, 터치이벤트를 처리하기 위해 responder는 touchesBegan, touchesMoved, touchesEnded, touchesCancelled를 구현해야함.
+- 터치의 경우 responder는 UIKit로부터 제공되는 이벤트 정보를 사용. 
+- 터치에 대해 바뀐 점을 찾을 수 있고, 적절하게 앱의 인터페이스에 반영할 수 있게됨. 
+
+*UIkit responder* 
+- UIkit responder들은 처리되지 않은 이벤트를 당신의 app의 다른 부분으로 전달 되기도 함. 
+- 주어진 respinder이 이벤트를 처리하지 않으면, 다음 이벤트 responder 체인으로 그 이벤트를 넘김. UIKit는 responder체인을 동적으로 관리하며, 미리 정해진 규칙에 따라 다음에 이벤트를 받게 될 오브젝트를 결정한다. 
+- 예를 들면, view는 super view로 전달하고, root view는 ViewController로 전달함.
+
+reponders는 UIEvent오브젝트를 처리하며, input view를 통한 custom input을 처리하기도 한다. 키보드가 input view의 한 예이다. 유저가 UITextField나 UITextView를 화면에 탭한 경우, view는 최초의 responder가 되고, 그것의 Input view(keyboard)를 보여준다. 
+
+*Respinding to touch events*
+- touchesBegan
+- touchesMoved
+- touchesEnded
+- touchesCancelled
+
+*Respinding to Motion events*
+- motionBegan
+- motionEnded
+- motionCancelled
+
+*Respinding to press events*
+- pressesBegan
+- presserChanged
+- presserEnded
+- presserCancelled
+
+*Respinding to remote-control events*
+- remoteControlRecieved
+
+
+**application**: 앱 시작 전에 필요한 작업들을 여기에 작성
+**applicationWillResignActive** : 앱이 비활성화 되는 단계에 들어갈 때 실행되는 메소드
+**applicationDidEnterBackground**: 앱이 백그라운드 상태에 들어갔을 때 실행되는 메소드 
+**applicationWillEnterForeground** :앱이 백그라운드에서 다시 화면으로 나올 때 실행되는 메소드 
+**applicationDidBecomeActive** : 앱이 화면으로 나오고 나서 실행되는 메소드
+**applicationWillTerminate** : 앱이 종료할 때 실행되는 메소드 
+
+***
+
+### iOSApplicationState
+
+**Not Running** : 앱이 실행되지 않았거나, 시스템에 의해 종료된 상태.
+**Active** : 앱이 Foreground에서 실행되고 있고, 이벤트를 받을 수 있는 상태. 
+**Inactive** : 앱이 Foreground에서 실행되고 있으나, 이벤트를 받지 못하는 상태
+**Background** : 앱이 Foreground에서 실행중인 상태, Home버튼을 눌렀을 때 일시적으로 Background상태가 됨
+**Suspended** : 실행이 중단되어 대기중인 상태, 잠시동안 Background상태를 거친 후에 이 상태가 됨
+
+***
+
+### ViewControllerLifeCycle(생명주기)
+
+- ViewController에서의 생명주기는 화면에 보여졌다가 사라지는 주기를 일컬음.
+![](https://static.packt-cdn.com/products/9781783550814/graphics/0814OT_06_02.jpg)
+
+**loadView()** 
+- 화면에 띄워줄 view를 만드는 메소드로 view를 만들고 메모리에 올림.
+- 설명서 보면, 이 메소드는 직접 호출하지 말라고 쓰여있음. 
+- 모두를 직접적으로 코딩하여 만드는 경우를 제외하고는 override하지 않는 것이 좋음. 자세한 설명은 아래 링크
+- [https://leehonghwa.github.io/blog/loadView/](https://leehonghwa.github.io/blog/loadView/)
+
+**viewDidLoad**
+- 뷰의 컨트롤러가 메모리에 로드 된 후 호출되며 시스템에 의해 자동으로 호출됨.
+- 사용자가 화면이 보여지기 전에 데이터를 뿌려주는 행위에 대한 코드를 작성 할 수 있음.
+- 일반적으로 리소스를 초기화하거나, 초기화면을 구성하는 용도로 쓰임
+- ViewController생에 **딱 한 번** 호출 되는 것이 특징.
+
+**viewWillAppear**
+- 뷰 컨트롤러의 화면이 올라오고 난 후 뷰가 화면에 나타가기 직전에 호출됨.
+- 즉, 뷰가 로드된 후 눈에 보이기 전에 컨트롤러에게 알리는 역할.
+- 다른 뷰로 이동했다가 되돌아올 때 재 호출되는 메소드로 화면이 나타날 때 마다 수행해야하는 작업을 정의하기 좋음. 
+- 처음 어플리케이션이 수행 되고 첫 화면이 띄워질 때 호출되는 것은 viewDidLoad()와 동일하지만, 화면 전환을 통해 **다시 현재의 화면으로 돌아올 때 viewDidLoad가 아닌 viewWillAppear가 호출됨.** 
+
+**viewDidAppear**
+- view가 데이터와 함께 완전히 화면에 나타난 후 호출 되는 메소드
+
+**viewWillDisappear**
+- 다음 ViewController화면이 전환하기 전이거나, viewController가 사라지기 직전에 호출되는 메소드
+**viewDidDisappear**
+- ViewController들이 화면에서 사라지고 나서 호출되는 메소드
+- 화면이 사라지고 나서 필요없어지는 (멈춰야하는) 작업을을 이곳에서 함.
+
+
+***
 
 ### then
 - ios개발자 전수열님이 만든 라이브러리.
@@ -341,6 +441,10 @@ seudent1.name    //홍길동
 ```
 - 자기 자신부터 초기화 하는 건 항상 같음. 
 - 상속받았을 때, 생성자의 같은 이름을 가진 생성자를 바꿔주고 싶을때는 override를 해줘야함. 
+
+
+
+
 
 ***
 
