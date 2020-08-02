@@ -9,9 +9,16 @@
 
 ## ios List
 - [Objective-C 와swift차이](#Objective-C와swift차이 )
-- [ios Fonts](http://iosfonts.com/)
- 
+- [iOS Fonts](http://iosfonts.com/)
+- [App Store 심사지침](https://developer.apple.com/kr/app-store/review/guidelines/)
+- [Apple ID](https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/AppID.html#//apple_ref/doc/uid/TP40008195-CH64-SW1)
+- [Apple Update News](https://developer.apple.com/kr/news/)
 
+
+## WWDC 
+
+- [ios-14](https://www.hackingwithswift.com/articles/221/whats-new-in-swiftui-for-ios-14)
+- []
 
 ## Swift List
 
