@@ -32,6 +32,9 @@
 
 
 **[]**
+- [메모리 구조&관리](메모리구조&관리)
+  - [MMR(MRC)](MMR(MRC)) 
+  - [ARC](ARC)
 - [func](#func)
 - [inout](#inout)
 - [Optional Chaining](#OptionalChaining)
@@ -40,6 +43,7 @@
 - [MVC](#MVC)
 - [bundle](#bundle) 
 - [Nib/Xib](#Nib와Xib)
+
 
 **[Xcode]**
 
@@ -52,10 +56,10 @@
 - [SwiftUI사용](#SwiftUI사용)
 
 
+## 알고리즘
 
-  - [보여지는 텍스트](#이동할위치의텍스트)
-  - ~생략~
-  - #이동할위치의텍스트
+
+
 
 
 
@@ -263,6 +267,93 @@ extension Then where Self: AnyObject {
 - **configure(self)** 부분에 **$0**이 무엇인지 알려주어야함.
 - self의 type은 imageView()
 - return 은 imageView를 반환하게 됨.
+
+***
+### 메모리구조&관리
+```
+alloc, new, copy로 시작하지 않는 메세지로 생성된 오브젝트는 내버려두면 자동적으로 해제 된다.
+만약, 그런 오브젝트 중에서 가종으로 해제되면 곤란한 경우는 retain을 호출한다.
+alloc, new, copy로 시작하는 메세지로 생성된 오브젝트를 자동으로 해제하고 싶을 땐, autorelease메세지를 보낸다.
+retain, release는 레퍼런스 카운트를 즉석에서 증감시키지만, autorelease는 지연하면서 레퍼런스 카운트를 감소 시킨다. 
+```
+
+*메모리 누수(memory leak)와 댕글링 포인터(deangling pointer)*
+메모리를 불필요하게 많이 할당하고 있는 경우 메모리 누수 현상이 발생하고, 데이터 값이 없는 껍데기 포인터가 생성되면, 그 포인터는 댕글링 포인터가 된다. 
+
+*메모리 구조*
+Stack / Heap / Data / Code(Data)로 나누어짐
+
+- Stack : 지역변수, 매개변수 저장공간. os가 메모리 관리. 사용량 변동 있음. 
+- **Heap** : 동적할당. 객체 생성시 여기에 저장. 메모리 관리 대상. 사용량 변동 있음. 
+- Data : 초기값이 있는 전역변수. 프로그램 종료시 해제. 메모리 사용량 일정.
+- Code(Text) : 프로그램 코드. 프로그램 종료시 해제. 메모리 사용량 일정.
+
+*객체 인스턴스*
+- Stack에 할당 된 객체의 포인터를 참조해서 Heap영역에 있는 인스턴스에 접근할 수 있음.
+- Stack에 저장되어 있는 객체의 포인터 주소로는 Heap영역에 저장되어 있는 메모리주소값과 해당 주소의 객체가 유효한지 알 수 없음.
+- Stack에 이미 해제된 객체의 메모리 주소값이 저장되어 있을 수 있음 -> regerence count로 관리 
+
+*스택 오버플로우*
+- 호출 스택은 프로그램 시작시 일정 크기의 메모리가 제공됨. 
+- 하지만 제안된 양의 주소 공간 이상을 사용할 떄, '스택 오버플로우'가 발생함. (프로그램 충동 발생)
+- 무한 루프 혹은 재귀함수가 있는 경우나 Exception발생으로 지역변수가 매개변수가 제대로 unwind되지 않은 경우임
+
+*함수(메소드)의 메모리 할당 방식*
+
+각각의 함수는 실행될 때, 스택에 프레임의 형태로 Push 됨. 각 함수가 끝날 때마다 해당 프레임은 스택의 꼭대기에서 pop됨
+
+
+**MMR(MRC)**
+: 수동 메모리 관리
+- init 계열함수 + alloc, retain, copy = > reference count + 1 시킴
+- release, autorelease => regerence count - 1 시킴
+*==> alloc, retain, copy의 갯수와 release, autorelease의 갯수가 동일해야함* 
+
+- alloc : 해당 객체 생성돠 동시에 메모리 할당 (rc + 1)
+- retain : rc + 1
+- copy : 객체의 복사본을 만든 후 복사본의 rc + 1
+
+- release: rc - 1
+- autorelease: autoreleasepool 이 메모리에서 사라질 때 객체도 동시에 사라짐. 
+
+
+**reference Count(Retain Count)**
+- 각각의 객체에 레퍼런스 카운트 값을 부여해 해당 객체가 몇 번 참조 되고 있는지를 판단 할 수 있음. 
+- 레퍼런스 카운트 값이 0이 되는 즉시 해당 객체를 메모리에서 해제 시킴
+
+*Swift 예시*
+- let firstinst = myClass() //새로운 객체 생성됨 (rc1 = 1)
+- let secondinst = myClass() // 새로운 객체 생성됨 (rc2 = 2)
+- let thirdinst = firstinst //객체 참조함(rc1 = 2)
+메소드의 파라미터로 객체가 사용될 때에서 해당 객체의 rc + 1되며, 메소드 종료시 rc - 1 된다.
+
+**autoreleasepool**
+- 각각의 autorelease된 참조객체를 pool에서 보관하고 있다가 rc가 0 이되는 시점에서 모든 참조객체로 한번에 release메세지를 보내는 것
+- 함수에서 객체를 반환할 때, 요용하게 쓰임
+
+**NSString**
+*stringWithFormat*
+- alloc 이나 init을 사용하지 않아 별도의 retatin을 통해 rc + 1해줘야 함
+- 단, 이런 간편 생성자는 오브젝트 내에서 release할 책임이 있으므로 개발자가 release해 줄 필요는 없음(stringWithFormat함수 내에서 aytorelease해서 autoreleasepool이 release처리)
+*alloc + initWithFormat*
+- 객체 생성돠 동시에 이미 rc가 1로 설정되므로 별도의 retain작업 필요 없
+- 단, 개발자가 생성한 객체이므로 release할 의무가 개발자에게 있음
+
+
+**ARC**
+: 자동 메모리 관리
+- release, retain, reatinCount, autorelease를 사용할 수 없음.
+- 자동으로 관리해줌. 
+
+*메모리 관리 : strong & weak & unwend*
+*멀티스레드 속성: atomic & nonatomic*
+*읽기/쓰기 속성: readOnly, readWrite*
+
+Swift는 ARC방식을 채택하고 있고, Objective-c도 최신버전은 ARC방식을 사용할 수 있는 듯함. Objective-c에서 MRC방식을 사용하고 싶다면, 
+
+Xcode -> Build Settings > Apple LLVM 9.0 - Language - Objective C > Objective -C Automatic Reference Counting > NO로 설정하면 됨.
+
+
 
 ***
 ### func
