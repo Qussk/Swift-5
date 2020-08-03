@@ -305,6 +305,7 @@ Stack / Heap / Data / Code(Data)로 나누어짐
 : 수동 메모리 관리
 - init 계열함수 + alloc, retain, copy = > reference count + 1 시킴
 - release, autorelease => regerence count - 1 시킴
+
 *==> alloc, retain, copy의 갯수와 release, autorelease의 갯수가 동일해야함* 
 
 - alloc : 해당 객체 생성돠 동시에 메모리 할당 (rc + 1)
@@ -351,6 +352,7 @@ Swift는 ARC방식을 채택하고 있고, Objective-c도 최신버전은 ARC방
 
 Xcode -> Build Settings > Apple LLVM 9.0 - Language - Objective C > Objective -C Automatic Reference Counting > NO로 설정하면 됨.
 
+[참고 : https://www.clien.net/service/board/cm_app/1254304](https://www.clien.net/service/board/cm_app/1254304)
 
 
 ***
