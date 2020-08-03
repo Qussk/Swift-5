@@ -32,9 +32,7 @@
 
 
 **[]**
-- [메모리 구조&관리](메모리구조&관리)
-  - [MMR(MRC)](MMR(MRC)) 
-  - [ARC](ARC)
+- [메모리 구조&관리](#메모리구조&관리)
 - [func](#func)
 - [inout](#inout)
 - [Optional Chaining](#OptionalChaining)
