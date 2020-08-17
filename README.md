@@ -27,9 +27,9 @@
 - [ViewController Life Cycle(생명주기)](#ViewControllerLifeCycle)
 - [Main run loop](#MainRunLoop)
 - [Update Cycle](#UpdateCycle)
-- [Layout](#Layout)
-- [Display](#Display)
-- [Constraints](#Constraints)
+  - [Layout](#Layout)
+  - [Display](#Display)
+  - [Constraints](#Constraints)
 - [](#CoreAnimation)
 - [](#CALayer)
 
@@ -410,6 +410,59 @@ class MyView: UIView {
 
 
 ***
+### Constraints
+
+- Auto Layout에서 Layout하고 Draw하는 것에 대해 3단계의 과정이 있음.
+- **Constraints를 업데이트한다 :** 시스템이 View에 필요한 Constraints들을 계산하고 설정한다.
+
+- **Layout 단계 :** 레이아웃 엔진이 View들의 Frame과 자식View들의 Frame을 계산하고 배치한다.
+
+- **Display 단계 :** View의 컨텐츠를 다시 그리고 필요하다면 draw 메소드를 호출한다.
+
+
+**updateConstraints()**
+
+- Auto Layout을 이용시 View의 Constraints를 동적으로 변경할 때 사용.
+- Layout 단계에서 layoutSubviews나 Display 단계에서 draw 같이, updateConstraints는 오직 오버라이딩되어야 하며 명시적으로 호출되어서는 안됨.
+- 보통 updateConstraints에서 동적으로 변해야 하는 Constraints들을 구현하는데, 정적인 Constraints들은 Interface Builder나 View의 생성자나 viewDidLoad에서 정의됨.
+- Constraints를 활성화/비활성화하거나 Constraints의 우선순위나 constant를 변경하거나 View를 View계층에서 삭제하는 것은 updateConstraints를 다음 Update Cycle에서 호출하게 함. 
+- 그러나, UpdateConstraints를 명시적으로 호출하는 방법 또한 존재함.(아래)
+
+**setNeedsUpdateConstraints**
+- setNeedsUpdateConstraints를 호출하는 것은 다음 Update Cycle에서 Constraint가 업데이트되는 것을 보장해줌. 이 메서드는 setNeedsLayout이나 setNeedsDisplay와 비슷하게 작동함.
+
+**updateConstraintsIfNeeded**
+- 이 메서드는 layoutIfNeeded 와 유사함. 그러나 오직 Auto Layout을 사용하는 뷰에만 유효. 
+- 이 메서드는 Constraint Update Flag(이 Flag는 자동으로 설정되거나, setNeedsUpdateConstraints를 통해 설정되거나, invalidateIntrinsicContentSize를 통해 설정될 수 있습니다.)를 검사함. (만약 Constraints가 업데이트가 되어야 하면, updateConstraints를 즉시 호출.)
+
+**invalidateIntrinsicContentSize**
+- Auto Layout을 사용하는 몇몇 View들은 intrinsicContentSize 속성을 갖는데, 이는 View가 갖고 있는 Content의 크기임.
+- intrinsicContentSize는 전형적으로 View가 갖고 있는 요소들의 Constraints으로 결정되지만, 이것 또한 커스텀 한 동작을 오버라이딩하여 제공할 수 있음. 
+- invalidateIntrinsicContentSize를 호출하는 것은 View가 갖고 있는 intrinsicContentSize가 낡았으며, 다음 Update Cycle에서 다시 계산되어야 한다고 플래그를 활성화시켜줌.
+
+
+*run loop에서의 모든 것이 연결되려면(layer,display,constraints)*
+
+**정리**
+1. View의 Layout과 Display 그리고 Constraints는 run loop에서 다른 시점에 어떻게 업데이트되고, 명시적으로 업데이트할 수 있는지에 대해 유사한 패턴을 가짐. 
+2. 각 컴포넌트들은 layoutSubviews, draw, updateConstraints과 같은 실제로 업데이트를 전파하는 메서드들을 가지며, 명시적으로 호출되면 안 되기 때문에 이를 호출하도록 유도할 수 있는 방법들이 있음
+3. 이러한 메서드들은 run loop의 마지막에 View의 해당 flag가 활성화되어있으면 시스템이 호출해주는 방식임. 
+4. 몇 가지의 자동적으로 이 Flag들을 활성화해주는 방식들이 있고 명시적으로 활성화시켜주는 방식도 있음. 
+5. Layout과 Constraints에 관련된 업데이트들에 대해서는 만약 다음 Update Cycle까지 기다릴 수 없다면, 즉시 업데이트가 되도록 요청하는 메서드들도 존재함. 
+6. 아래와 같은 표는 이러한 각 메서드들이 작동하는 방식임.
+
+![](/image/vy.png)
+
+- 위 표를 보면 Update Cycle과 Event Loop 그리고 위에서 설명한 메서드들이 Cycle 동안 어떻게 호출되는지 설명이 됨. 
+- 우리는 명시적으로 layoutIfNeeded나 updateConstraintsIfNeeded를 run loop의 아무 시점에서나 호출할 수 있고, loop의 끝은 Update Cycle임. 
+- Update Cycle은 Constraints, Layout 그리고 Display를 해당 플래그가 활성화되어있다면 업데이트해줌. 
+- 이러한 업데이트들이 완료되면, run loop는 다시 시작함..... ㅎ 아래 그림과 같은 모습으로
+
+![](https://i.stack.imgur.com/i9YuN.png)
+
+
+***
+
 ### CALayer
 
 
