@@ -8,7 +8,6 @@
 
 
 ## ios List
-- [Objective-C 와swift차이](#Objective-C와swift차이 )
 - [iOS Fonts](http://iosfonts.com/)
 - [App Store 심사지침](https://developer.apple.com/kr/app-store/review/guidelines/)
 - [Apple ID](https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/AppID.html#//apple_ref/doc/uid/TP40008195-CH64-SW1)
@@ -22,9 +21,13 @@
 
 ## Swift List
 
+- [Objective-C 와swift차이](#Objective-C와swift차이 )
 - [AppDelegate](#AppDelegate)
 - [iOS Application State](#iOSApplicationState)
-- [ViewController Life Cycle](#ViewControllerLifeCycle(생명주기))
+- [ViewController Life Cycle(생명주기)](#ViewControllerLifeCycle)
+- [Main run loop](#MainRunLoop)
+- [Update Cycle](#UpdateCycle)
+- [Layout](#Layout)
 
 
 **[문법]**
@@ -33,7 +36,7 @@
 
 **[]**
 - [Class](#Class)
-- [메모리 구조&관리](#메모리구조&관리)
+- [메모리 구조&관리](#메모리구조)
 - [func](#func)
 - [inout](#inout)
 - [Optional Chaining](#OptionalChaining)
@@ -147,7 +150,7 @@ reponders는 UIEvent오브젝트를 처리하며, input view를 통한 custom in
 
 ***
 
-### ViewControllerLifeCycle(생명주기)
+### ViewControllerLifeCycle
 
 - ViewController에서의 생명주기는 화면에 보여졌다가 사라지는 주기를 일컬음.
 ![](https://static.packt-cdn.com/products/9781783550814/graphics/0814OT_06_02.jpg)
@@ -157,6 +160,9 @@ reponders는 UIEvent오브젝트를 처리하며, input view를 통한 custom in
 - 설명서 보면, 이 메소드는 직접 호출하지 말라고 쓰여있음. 
 - 모두를 직접적으로 코딩하여 만드는 경우를 제외하고는 override하지 않는 것이 좋음. 자세한 설명은 아래 링크
 - [https://leehonghwa.github.io/blog/loadView/](https://leehonghwa.github.io/blog/loadView/)
+
+**loadViewIfNeeded(iOS9이상)**
+- 뷰 컨트롤러의 뷰가 아직 설정되지 않은 경우로드
 
 **viewDidLoad**
 - 뷰의 컨트롤러가 메모리에 로드 된 후 호출되며 시스템에 의해 자동으로 호출됨.
@@ -172,12 +178,81 @@ reponders는 UIEvent오브젝트를 처리하며, input view를 통한 custom in
 
 **viewDidAppear**
 - view가 데이터와 함께 완전히 화면에 나타난 후 호출 되는 메소드
+**viewWillLayoutSubviews**
+-경계가 확정되는 라이프사이클 첫단계. 뷰 컨트롤러의 뷰의 layoutSubviews 메서드가 호출되기 직전에 호출됨.**뷰의 bounds(좌표,크기)가 최종적으로 결정되는 최초시점.** (변경될 때, 뷰는 하위뷰의 위치를 조절한다.) 뷰가 하위 뷰의 배치를 조절하기 전에 뷰 컨트롤러는 이 메서드를 override할 수 있다. 
+- 컨스트레인트나 오토레이아웃을 사용하지 않았다면, 서브뷰의 레이아웃을 업데이트하기 적합한 시점
+- 여러 번 중복으로 호출될 수 있다.
+- 메인뷰의 서브뷰가 로드되는 경우 (테이블뷰나 컬렉션뷰가 로드된 경우? )
+- 기본값 nop으로 아무것도 하지 않음
+
+**viewDidLayoutSubviews**
+- 뷰 컨트롤러에 하위 뷰가 설정되었음을 알림
+- 서브뷰가 셋업되고 난 후 호출
+- 서브뷰가 셋팅된 후 변경할 점이 있다면 여기서 수정하기 적합함
+- 기본값 nop으로 아무것도 하지 않음
 
 **viewWillDisappear**
 - 다음 ViewController화면이 전환하기 전이거나, viewController가 사라지기 직전에 호출되는 메소드
 **viewDidDisappear**
 - ViewController들이 화면에서 사라지고 나서 호출되는 메소드
 - 화면이 사라지고 나서 필요없어지는 (멈춰야하는) 작업을을 이곳에서 함.
+
+**viewDidUnload /viewDidDispose** 
+- iOS6이후 사용하지 않음. (Objective-C에서이 부분은 메모리관리 및 릴리스를 수행하는 곳이지만 자동으로 처리되므로 Swift에서 할 필요가 거의 없음.)
+- viewDidUnload의 경우 메모리 경고 발생시 뷰가 해제되어 사라지는 메소드 
+
+
+### MainRunLoop
+
+- 유저가 일으키는 input이벤트 들을 처리/응답 해주는 것을 담당하는 프로세스. 
+- UIApplication은 Main Run Loop 를 View 와 관련된 이벤트나 View 의 업데이트에 활용. Main Run Loop 는 View와 관련되어 있기 때문에 main 쓰레드에서 실행됨.
+
+![](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FuAgGr%2FbtqtY06MuFR%2FE2mbpHiCau6pF66eO3b8J0%2Fimg.png)
+
+*사용자 이벤트(user interaction) 발생 및 처리과정*
+1. 유저가 이벤트를 일으킴(터치,줌인등의 input)
+2. 시스템을 통해 이벤트가 생성됨.
+3. UIKit 프레임워크를 통해 생성된 port로 해당 이벤트가 앱으로 전달
+4.이벤트는 앱 내부적으로 Queue의 형태로 정리되고, Main Run Loop에 하나씩 매핑됨.
+5. Application object(애플리케이션 객체)는 유저로부터의 input 이벤트를 해석하고 그에 상응되는 애플리케이션의 Core object들 안에 있는 핸들러를 호출(여기서 핸들러란 개발자가 입력한 코드)
+6. 이러한 메서드들이 반환되면 다시 컨트롤은 main run loop로 돌아가서 Update Cycle이 다시 시작됨
+7. Update Cycle은 View 들을 배치하고 다시 그리는 역할
+
+
+
+![](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/Art/runloop.jpg)
+*전달받은 이벤트를 앱의 run loop에서 처리하는 과정*
+
+1. run loop 대기 중 이벤트 발생(주로 입력소스와 타이머소스 처리)
+2. 정해진 메소드 호출(타이머에서 설정한 시간데 따라)
+3. 메소드 완료 후 변경될 필요가 있는 사항 적용(뷰의 경우 setNeedsLayout, setNeedsDisplay)
+4. runUntil- 메소드에서 정한 시간까지 유지, 할일 없으면 suspend 상태.
+[https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html)
+
+
+***
+
+### UpdateCycle
+
+- Update Cycle은 애플리케이션이 유저로부터의 모든 이벤트 핸들링 코드를 수행하고 다시 main run loop로 컨트롤을 반환하는 지점임. 바로 이 지점에서 시스템은 우리의 View들을 배치하고(layout), 보여주고(display) 제약(constraints)함
+- 만약 우리가 이벤트 핸들러들을 처리하는 과정에서 어떤 UIView에 대해 변화를 준다면, 이 UIView는 다시 그려져야(redraw) 한다고 표시됨.
+- 유저가 상호작용하는 것과 레이아웃이 변하는 시간의 갭은 유저가 인지하지 못할 정도여야 하며, iOS 애플리케이션은 초당 60프레임을 보여주기 때문에, 한 번의 Update Cycle은 1/60초 가 걸림(매우 신속).
+- Update Cycle은 빠르게 업데이트 되기 때문에 유저는 UI와 상호작용 간의 차이를 느끼지 못함. 
+- 그러나, Update Cycle에 대한 이해가 중요한 이유는 이벤트가 처리되는 시점과 실제로 View가 다시 그려지는 시점에 차이가 있기 때문에, View는 우리가 View를 업데이트 하기를 원하는 run loop의 특정 시점에 업데이트가 되지 않을 수 있으므로 주의 필요. 
+
+*MainRunLoop가 한바퀴 돌 때, Update Cycle이 언제 발생하는지 표현한 그림*
+![](https://miro.medium.com/max/1242/1*dz6Rr1Pe9fXd3K285SxdJg.png)
+
+
+
+### Layout
+
+- 화면에서 UIView의 크기와 위치를 의미. 모든 View는 frame을 갖고 있고, 이는 부모 뷰의 Coordinate System(좌표계)에서 어디에 위치하고 얼마나 크기를 차지하는지를 나타냄. 
+- UIView는 시스템에게 UIView의 레이아웃이 변했다고 알려줄 수 있는 메서드나, View의 레이아웃이 다시 계산되는 시점에 특정한 작업을 실행할 수 있게 오버라이딩할 수 있는 콜백 메서드도 제공함. UIView의 하위 메서드는 아래와 같다. 
+
+
+**layoutSubviews()**
+- View와 자식뷰들의 위치와 크기를 재조정
 
 
 ***
@@ -294,7 +369,7 @@ extension Then where Self: AnyObject {
 
 ***
 
-### 메모리구조&관리
+### 메모리구조
 
 ```
 alloc, new, copy로 시작하지 않는 메세지로 생성된 오브젝트는 내버려두면 자동적으로 해제 된다.
