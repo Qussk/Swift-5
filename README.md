@@ -28,6 +28,10 @@
 - [Main run loop](#MainRunLoop)
 - [Update Cycle](#UpdateCycle)
 - [Layout](#Layout)
+- [Display](#Display)
+- [Constraints](#Constraints)
+- [](#CoreAnimation)
+- [](#CALayer)
 
 
 **[문법]**
@@ -178,6 +182,7 @@ reponders는 UIEvent오브젝트를 처리하며, input view를 통한 custom in
 
 **viewDidAppear**
 - view가 데이터와 함께 완전히 화면에 나타난 후 호출 되는 메소드
+
 **viewWillLayoutSubviews**
 -경계가 확정되는 라이프사이클 첫단계. 뷰 컨트롤러의 뷰의 layoutSubviews 메서드가 호출되기 직전에 호출됨.**뷰의 bounds(좌표,크기)가 최종적으로 결정되는 최초시점.** (변경될 때, 뷰는 하위뷰의 위치를 조절한다.) 뷰가 하위 뷰의 배치를 조절하기 전에 뷰 컨트롤러는 이 메서드를 override할 수 있다. 
 - 컨스트레인트나 오토레이아웃을 사용하지 않았다면, 서브뷰의 레이아웃을 업데이트하기 적합한 시점
@@ -201,6 +206,7 @@ reponders는 UIEvent오브젝트를 처리하며, input view를 통한 custom in
 - iOS6이후 사용하지 않음. (Objective-C에서이 부분은 메모리관리 및 릴리스를 수행하는 곳이지만 자동으로 처리되므로 Swift에서 할 필요가 거의 없음.)
 - viewDidUnload의 경우 메모리 경고 발생시 뷰가 해제되어 사라지는 메소드 
 
+***
 
 ### MainRunLoop
 
@@ -209,7 +215,7 @@ reponders는 UIEvent오브젝트를 처리하며, input view를 통한 custom in
 
 ![](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FuAgGr%2FbtqtY06MuFR%2FE2mbpHiCau6pF66eO3b8J0%2Fimg.png)
 
-*사용자 이벤트(user interaction) 발생 및 처리과정*
+*그림.사용자 이벤트(user interaction) 발생 및 처리과정*
 1. 유저가 이벤트를 일으킴(터치,줌인등의 input)
 2. 시스템을 통해 이벤트가 생성됨.
 3. UIKit 프레임워크를 통해 생성된 port로 해당 이벤트가 앱으로 전달
@@ -221,7 +227,8 @@ reponders는 UIEvent오브젝트를 처리하며, input view를 통한 custom in
 
 
 ![](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/Art/runloop.jpg)
-*전달받은 이벤트를 앱의 run loop에서 처리하는 과정*
+
+*그림.전달받은 이벤트를 앱의 run loop에서 처리하는 과정*
 
 1. run loop 대기 중 이벤트 발생(주로 입력소스와 타이머소스 처리)
 2. 정해진 메소드 호출(타이머에서 설정한 시간데 따라)
@@ -244,6 +251,7 @@ reponders는 UIEvent오브젝트를 처리하며, input view를 통한 custom in
 ![](https://miro.medium.com/max/1242/1*dz6Rr1Pe9fXd3K285SxdJg.png)
 
 
+***
 
 ### Layout
 
@@ -252,7 +260,181 @@ reponders는 UIEvent오브젝트를 처리하며, input view를 통한 custom in
 
 
 **layoutSubviews()**
-- View와 자식뷰들의 위치와 크기를 재조정
+- 서브 뷰들의 위치나 크기를 결정하는 제약조건을 사용함에 따라 View(부모)와 자식뷰들의 위치와 크기를 재조정(배치). 
+
+```
+해당 메서드는 재귀적으로 모든 자식 뷰의 layoutSubviews까지 호출해야 하기 때문에 실행 시에 부하가 큰 메서드임. 시스템은 layoutSubviews를 뷰의 frame을 다시 계산해야 할 때 호출하기 때문에 layoutSubviews를 오버라이딩해서 frame이나 특정한 위치와 크기를 조절할 수 있지만, 레이아웃을 업데이트해야 할 때 layoutSubviews를 직접 호출하는 것은 금지되어 있음.
+
+layoutSubviews가 완료될 때, viewDidLayoutSubviews가 View를 소유한 ViewController에서 호출되기 때문에, layoutSubviews는 View의 layout이 변화했다는 유일한 콜백으로 레이아웃의 크기나 위치와 연관된 로직을 viewDidLoad나 viewDidAppear가 아닌, viewDidLayoutSubviews에 호출해야 함. 이것이 오래된 레이아웃이나 위치 변수를 다른 계산에 사용하는 실수를 막는 유일한 방법이 됨..
+
+이러한 방식들은 모두 run loop가 돌아가는 동안 layoutSubviews가 실행되는 시점이 다르며, 직접 layoutSubviews를 호출하는 것보다는 부하가 덜하므로 사용됨
+```
+
+*Automatic refresh triggers*
+
+다음과 같은 이벤트들은 자동으로 View가 그것들의 layout에 변화가 생겼다고 표시를 해주어서 개발자가 직접 요청할 필요 없이, layoutSubviews가 다음 기회에 호출이 되게 해줌.
+- View를 Resizing
+- SubView를 추가
+- UIScrollView를 스크롤할 때, UIScrollView와 그것의 부모뷰에 layoutSubviews가 호출
+- Device를 회전(orientation change)
+- View의 Constraint를 변경
+
+위의 방법들은 자동으로 시스템이 View의 위치가 변했고, 다시 계산되도록 하여 결국엔 layoutSubviews가 호출되게 해줌. 그러나 layoutSubviews를 직접 호출해줄 수 있는 방법들도 존재함(아래).
+
+
+**setNeedsLayout()**
+
+- 가장 적은 부하로 호출할 수있는 메서드.(layoutSubview가 호출 됨)
+- setNeedsLayouts은 시스템에게 이 View의 layout이 다시 계산되어야 한다고 알려줌
+- 그러나,  **setNeedsLayout은 즉시 반환되지만, 실제로 View를 업데이트해주는 것은 아님**메서드가 완료되어 즉시 반환되기 때문에 비동기 액티비티의 성질을 가짐. (그러나 레이아웃과 다시 그리는 작업이 실제로 발생하기 전까지는 아직 이른상태이고 업데이트 주기가 언제일지도 모르는 상태.)
+- 다만, 시스템이 다음 Update Cycle에서 layoutSubviews를 View와 자식 View들에게 호출하게 하고 그 시점에 setNeedsLayout이 호출된 뷰들은 Update Cycle에서 업데이트가 되도록 해줌.
+- 호출 시  needsLayout flag가 YES로 변경.
+- 여러 부분에서 호출하더라도, 다음 run loop에서 한번만 적용
+- 레이아웃 업데이트를 하나의 업데이트 주기로 통합할 수 있으며, 일반적으로 성능향상에 도움이 됨. 
+
+**layoutIfNeeded()**
+
+- 만약 View가 레이아웃이 재조정되어야 한다면, 즉시 layoutSubviews를 호출함. 레이아웃 업데이트가 보류중인 경우, 하위 View를 즉시 레이아웃(배치)합니다 (layoutSubview가 호출 됨) 이 메소드를 사용하면 View가 레이아웃을 즉시 업데이트 할 수 있음. 
+- layoutIfNeeded를 호출했는데 View가 재조정되어야 하는 이유가 없다면, layoutSubviews는 호출되지 않음
+- 동일한 run loop에서 레이아웃의 업데이트 없이 layoutIfNeeded를 두 번 호출했다면, 두 번째 호출은 layoutSubviews를 발생시키지 않음
+- layoutIfNeeded를 사용한다면, 레이아웃을 하는 것과 자식 View들을 다시 그리는 것은 즉시 실행되고, 해당 메서드가 반환되기 전에 실행됨.(애니메이션을 제외하고). setNeedsLayout 과는 다르게, 이 메서드는 다음 Update Cycle까지 뷰의 변화를 기다릴 수 없는 상황에서 유용함.
+- 재조정되어야하는 상황이 아니라면 그냥 setNeedsLayout을 호출해서 다음 Update Cycle에 뷰가 업데이트되어 run loop 한번 당 View업데이트가 한 번만 이루어지게 하는 것이 이상적
+- 호출 시 needsLayout flag를 체크하여 YES인 경우 뷰 변경을 즉시 적용.
+- 호출 즉시 뷰 변경을 적용하기 때문에 여러 부분에서 사용할 경우 성능상의 문제가 생길 수 있음
+- 메서드가 반환되기 전에 실행(즉시 실행)되는 것으로 동기적 성질을 띰. setNeedsLayout과 layoutIfNeeded의 차이점은 동기적으로 동작하느냐 비동기적으로 동작하느냐의 차이.
+
+*layoutIfNeeded는 Constraints를 애니메이션 하는 상황에서 특히 유용*
+
+애니메이션이 시작하기 전에 layoutIfNeeded를 호출하여 모든 레이아웃 업데이트가 애니메이션 전에 수행되도록 한 뒤, 새로운 Constraints를 설정하고, 애니메이션 클로저 안에서는 또 layoutIfNeeded를 호출해서 애니메이션이 올바른 상태로 진행되도록 하는 방법이 있음. 
+
+- [https://developer.apple.com/documentation/uikit/uiview/1622507-layoutifneeded](https://developer.apple.com/documentation/uikit/uiview/1622507-layoutifneeded)
+
+* setNeedsLayout()와 layoutIfNeeded()차이에 대한 github*
+- [https://github.com/lmacfadyen/UIViewLifecycleLayoutDisplay](https://github.com/lmacfadyen/UIViewLifecycleLayoutDisplay)
+
+*정리*
+- 하위 클래스는 이 메서드를 하위 클래스의 뷰들을 보다 정확하게 배치하기 위해 재정의 할 수 있다. 
+- autoresizing과 하위 뷰의 동작에 따른 constraint가 원하는 행동을 하지 않을 경우에만 이 메서드를 재정의 해야 한다. 
+- 하위 뷰의 프레임을 설정하기 위해서 이 메서드를 재정의 할 수 있다.
+- 강제로 배치를 update 하기 위해서는 이 메서드를 직접 호출하지 말고 다음에 그려질 것이 update 하기 이전에 setNeedsLayout 메서드를 호출하거나, 뷰들의 레이아웃을 즉각적으로 update 하기 위해야한다면 layoutIfNeeded 메서드를 호출할 것.
+
+***
+
+### Display
+
+- Layout 이란 것이 뷰의 위치와 크기를 의미한다면, Display는 뷰의 속성들 중 크기와 위치나 뷰의 자식 View들에 대한 정보를 갖지 않는 속성들을 포함함. 예) 색, 텍스트, 이미지, Core Graphics 그리기 등
+- Display는 Layout 과정과 유사함. 시스템이 자동으로 업데이트가 되게 하는 방식과 우리가 명시적으로 업데이트를 해주게 하는 방식(메서드들)이 존재.(아래)
+
+
+**draw(_:)**
+
+- Apple문서 정의 : 전달된 사각형 내에서 receiver(수신자)의 이미지를 그립니다.
+- 여기서 **전달된 사각형**이란 파라미터로 받은 **CGRect**타입을 의미
+- UIView의 draw 메서드는 Layout 업데이트 과정에서의 layoutSubviews와 같은 역할을 하지만, 큰 차이점은 draw 메서드는 자식 View들의 draw까지 호출해주지는 않는다 점이있음. 
+- layoutSubviews와 마찬가지로 draw를 직접 사용하는 것은 좋지 않음!
+
+
+*이해를 위해 zedd님 블로그에서 가져왔다*
+```
+View가 처음 로드됨 -> 모든 View들이 준비됨(viewDidLoad. 즉 View객체들이 메모리에 올라감.) -> 컨텐츠를 그려줄때 이때!!!! 처음 draw메소드가 불림 -> View업데이트가 발생함 -> View업데이트해야하니 draw메소드를 호출해볼까?ㅋㄹㅋㅎㅋㅎ ==> XXX!!!! 절대 이 메소드를  직접 호출하면 안됨. View업데이트가 필요하면 setNeedsDisplay() 또는 setNeedsDisplay(_ :) 메소드를 호출해. -> ㅇㅋㅇㅋ요청받았어! 다음 드로잉 사이클에 업데이트 해줄게  -> 다음 드로잉 사이클때 View가 업데이트 됨(우리가 직접 draw메소드를 호출하진 않았지만, setNeedsDisplay () 또는 setNeedsDisplay (_ :) 메소드를 호출했기 때문에 draw메소드가 불림.)
+
+출처: https://zeddios.tistory.com/359 [ZeddiOS]
+```
+
+
+**setNeedsDisplay()**
+
+- setNeedsDisplay는 setNeedsLayout와 유사
+- View의 Content가 업데이트 되게 하는 내부 플래그를 활성화시키고 실제로 View가 다시 그리기 전에 메서드는 반환함. 그러면, 다음 Update Cycle에 시스템은 이 플래그가 활성화되어있는 View들을 draw를 호출해서 다시 그려줌. (만약 View의 일부분만 다시 그려지길 원한다면, setNeedsDisplay 메서드의 인자로 rect를 전달할 수 있음)
+- 뷰의 내용을 다시 그려야 함을 시스템에 알림.. 이 메서드는 지정된 사각형을 뷰의 현재 잘못된 사각형 목록에 추가하고 즉시 반환함. 뷰는 무효화 된 모든 뷰가 업데이트되는 다음 드로잉주기까지 실제로 다시 그려지지 않음.
+- 호출 시 needsDisplay flag가  YES로 변경.
+- 호출 즉시 뷰가 적용되는 것이 아니라 다음 run loop에 뷰 변경이 적용
+- 여러 부분에서 호출하더라도, 다음 run loop에서 한번만 적용
+- drawRect가 호출 됨
+- 정리하자면,  setNeedsDisplay()메서드는 View의 컨텐츠가 변하면 이 View가 변했다는 사실을 시스템에 알려주기 위해서 사용하고, 그리고 이 setNeedsDisplay()메서드는 시스템에게 다음 [드로잉 사이클](#)때 View업데이트하라고 전달함.
+
+
+*Apple 개발자가이드에서 setNeedsDisplay정의*
+![](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile21.uf.tistory.com%2Fimage%2F993CA33E5A41EA460CDFAC)
+
+```
+View의 실제 컨텐츠가 변경될 때, View를 다시 그려야함을 시스템에 알리는 것은 당신(개발자)의 책임입니다. 
+
+View의 setNeedsDisplay () 또는 setNeedsDisplay (_ :) 메소드를 호출하여 이 작업을 수행할 수 있습니다.
+
+이 메소드는 다음 드로잉 사이클(next drawing cycle)동안 View를 업데이트해야 함을 시스템에 알립니다. View를 업데이트하기 위해 다음 드로잉 사이클때까지 기다리기 때문에, 여러 View에서 이 메소드를 호출하여 동시에 업데이트 할 수 있습니다. 
+
+```
+- 뷰의 UI 컴포넌트를 업데이트하는 것은 View의 dirty flag를 활성화시켜 우리가 명시적으로 setNeedsDisplay를 호출하지 않아도 다음 Update Cycle에 뷰가 다시 그려지도록 유도함. 그러나, 만약 UI 컴포넌트와 직접적으로 연관되어 있지 않지만 매 Update Cycle마다 다시 뷰를 그려주어야 하는 속성이 있다면 우린 didSet 속성 감시자를 설정하고 setNeedsDisplay를 명시적으로 호출해줄 수 있다.(아래 코드참고)
+
+예시) 커스텀으로 View그리기를 예로 설명 
+```swift
+class MyView: UIView {
+    var numberOfPoints = 0 {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+
+    override func draw(_ rect: CGRect) {
+        switch numberOfPoints {
+        case 0:
+            return
+        case 1:
+            drawPoint(rect)
+        case 2:
+            drawLine(rect)
+        case 3:
+            drawTriangle(rect)
+        case 4:
+            drawRectangle(rect)
+        case 5:
+            drawPentagon(rect)
+        default:
+            drawEllipse(rect)
+        }
+    }
+}
+```
+- numberOfPoints가 변하면 draw(_:) 안에서 View를 그리는 방식이 달라지기 때문에 didSet 블록 안에 setNeedsDisplay를 명시적으로 호출해준 예시임.
+- Layout 과정과 다르게 Display는 즉시 draw(_:)를 호출해주는 메서드는 존재하지 않음. 이유는 뷰가 다시 그려지기 위해 다음 Update Cycle을 기다리는 것이 아무런 문제가 없기 때문.
+
+
+**displayIfNeeded()**
+- Apple문서 정의 : 필요에 따라 이 메서드를 호출하여 레이어의 내용을 표준 업데이트 주기 외로 강제 업데이트 할 수 있습니다.. 그러나 그렇게 하는 것은 일반적으로 필요하지 않으며, 레이어를 업데이트하는 가장 좋은 방법은 setNeedsDisplay()를 호출하고, 다음주기 동안 시스템이 레이어를 업데이트 하도록 하는 것입니다.
+- layoutIfNeeded와 유사하게 동기방식임.
+- NSView, NSWindow, CALayer에 포함된 메소드
+- 호출 시 needsDisplay flag를 체크하여 YES인 경우 뷰 변경을 즉시 적용.
+- 호출 즉시 뷰 변경을 적용하기 때문에 여러 부분에서 사용할 경우 성능상의 문제가 생길 수 있음
+- drawRect가 호출 됨
+
+
+***
+### CALayer
+
+
+***
+
+### Core Animation
+
+
+***
+
+*next drawing cycle(드로잉 사이클)*
+
+- 다음에 정리..
+- [https://zeddios.tistory.com/359](https://zeddios.tistory.com/359)
+
+- [View Programming Guide for iOS](https://developer.apple.com/library/archive/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/WindowsandViews/WindowsandViews.html#//apple_ref/doc/uid/TP40009503-CH2-SW9)
+- [Drawing and Printing Guide for iOS](https://developer.apple.com/library/archive/documentation/2DDrawing/Conceptual/DrawingPrintingiOS/GraphicsDrawingOverview/GraphicsDrawingOverview.html#//apple_ref/doc/uid/TP40010156-CH14-SW1)
+
+- [참고](https://medium.com/@rz1477/swift-drawing-cycle-and-screen-refresh-5396b86a4849)
+
+
+
+***
+
+
 
 
 ***
