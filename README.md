@@ -403,7 +403,7 @@ class MyView: UIView {
 **displayIfNeeded()**
 - Apple문서 정의 : 필요에 따라 이 메서드를 호출하여 레이어의 내용을 표준 업데이트 주기 외로 강제 업데이트 할 수 있습니다.. 그러나 그렇게 하는 것은 일반적으로 필요하지 않으며, 레이어를 업데이트하는 가장 좋은 방법은 setNeedsDisplay()를 호출하고, 다음주기 동안 시스템이 레이어를 업데이트 하도록 하는 것입니다.
 - layoutIfNeeded와 유사하게 동기방식임.
-- NSView, NSWindow, CALayer에 포함된 메소드
+- NSView, NSWindow, [CALayer](#CALayer)에 포함된 메소드
 - 호출 시 needsDisplay flag를 체크하여 YES인 경우 뷰 변경을 즉시 적용.
 - 호출 즉시 뷰 변경을 적용하기 때문에 여러 부분에서 사용할 경우 성능상의 문제가 생길 수 있음
 - drawRect가 호출 됨
@@ -465,13 +465,41 @@ class MyView: UIView {
 
 ### CALayer
 
+- UIView는 내부적으로 CALayer를 통해 구현됨. 또, Core Animation과 상호작용
+- 레이어의 위치와 크기 / 레이어의 배경색/ 레이어에 그려질 컨텐트 (이미지를 출력하거나 혹은 Core Graphic를 통해 그려진 그래픽 등)/ 레이어의 모서리가 동글게 그려져야 하는지/레이어에 그림자를 추가하기/
+레이어에 외곽선을 그려주기 등
+- CALayer는 실제로 UIView에 속하며 UIView를 지원해주는 역할을 함
+- 각 뷰마다 루트 layer는 하나씩 존재하고 이 루트 layer는 각각 SubLayer들을 가짐.
+- UIView는 레이아웃과 터치 이벤트 처리등 많은 작업을 하지만 실제로 뷰 위에 컨텐츠나 애니매이션을 그리는 행위는 직접적으로 다루지 않고 UIKit가 Core Animation에 위임함. 즉, 실질적으로 뷰 위에 컨텐츠와 애니매이션을 그리는 행위는 CALayer가 담당
+
+![](https://t1.daumcdn.net/cfile/tistory/996A474D5AD598E32A)
+
+- UIView는 사실 CALayer를 감싸고 있는 것에 불과하고, UIView의 bounds가 변경되면 UIView는 자신의 루트 layer의 bounds를 변경하게 되어 루트 layer의 레이아웃은 속해있는 UIVIew에 맞추어 자동으로 변경함. (하지만 SubLayer들은 자동으로 맞추어지지 않음..)
+- 쉽게 차이를 보자면, **ClipeToBounds**는 **UIView**에 속해있고, **makeToBounds**는 **CALayer**에 속해 있는 것. 
+
+- [https://developer.apple.com/CALayer 애니메이션 가능 속성](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/AnimatableProperties/AnimatableProperties.html#//apple_ref/doc/uid/TP40004514-CH11-SW1)
+- [사용예제에 대한 글 : https://points.tistory.com/11](https://points.tistory.com/11)
+- [참고 : https://baked-corn.tistory.com/110](https://baked-corn.tistory.com/110)
 
 ***
 
 ### Core Animation
+- [https://developer.apple.com/documentation/quartzcore](https://developer.apple.com/documentation/quartzcore)
+- Apple문서 정의 : 시각적 요소(visual elements)를 렌더링, 합성하고 애니메이션화합니다.
+- CPU에 부담을 주지 않고 앱 속도를 저하시키지 않으면서 높은 프레임 속도와 부드러운 애니메이션을 제공. 
+- 애니메이션의 각 프레임을 그리는데 필요한 대부분의 작업이 수행. 
+- [https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/CoreAnimationBasics](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/CoreAnimationBasics/CoreAnimationBasics.html#//apple_ref/doc/uid/TP40004514-CH2-SW3)
+- 시작 및 종료지점과 같은 몇가지 애니메이션 매개변수를 구성하고 Core Animation이 시작하도록 지시. 
+- Core Animation은 나머지 작업을 수행하여 렌더링 작업을 가속화 하기 위해 대부분의 작업을 전용 그래픽 하드웨어에 넘김. 
+-  CALayer 를 상속한 CATiledLayer, CAEAGLLayer 등이 있는데, 상황에 따라 rendering performance 를 높일 수 있음.
+- ore Animation Framework 는 CALayer 의 property 들을 직접 modify 하지 않음.
+- Core Animation은 2개의 Layer tree를 관리하는데, 하나는 Model layer tree, //CALayer, [CALayer modelLayer], 다른 하나는 Presentation layer tree. //Animation 중에만 관리되는 녀석, [CALayer presentationLayer]
 
+*정리 짱이라서 첨부*
+- [참고: https://aroundck.tistory.com/4760](https://aroundck.tistory.com/4760)
 
 ***
+
 
 *next drawing cycle(드로잉 사이클)*
 
