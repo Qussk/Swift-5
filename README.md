@@ -42,6 +42,7 @@
 
 **[]**
 - [extention](#extention)
+- [Protocol](#Protocol)
 - [Class](#Class)
 - [메모리 구조&관리](#메모리구조)
 - [func](#func)
@@ -616,14 +617,65 @@ extension Then where Self: AnyObject {
 
 ***
 
+### Protocol
+
+- 특정 역할을 하기 위한 메소드. 프로퍼티, 기타 요구사항 등의 청사진.
+- 구조체, 클래스, 열거형은 프로토콜을 채택해서 특정 기능을 실행하기 위한 프로토콜의 요구사항을 실제로 구현할 수 있음.
+- 프로토콜은 정의를 하고 제시를 할 뿐 스스로 기능을 구현하지 않음.
+- 하나의 타입으로써 사용되며, 타입이 허용되는 모든 곳에 사용할 수 있음.
+```
+- 함수, 메소드, 이니셜라이저의 파라미터 타입 혹은 리턴 타입
+- 상수, 변수, 프로퍼티의 타입
+- 배열, 딕셔너리의 원소타입
+```
+
+*기본*
+```swift
+protocol 프로토콜이름 {
+ // 프로토콜 정의
+}
+```
+
+*extention과 사용*
+해봤던 것
+```swift
+//1. 기능추가
+extension ViewController: StartViewControllerDelegate {
+  func handleDismiss() {
+    let MainVC = MainViewController()
+    MainVC.modalPresentationStyle = .fullScreen
+    self.present(MainVC, animated: false)
+  }
+}
+```
+```swift
+//2. 필요한 곳에 정의
+protocol StartViewControllerDelegate: class {
+  func handleDismiss()
+}
+
+//2-1. 변수에 담아서 사용하기
+  weak var delegate: StartViewControllerDelegate?
+```
+```swift
+//3. 버튼에 사용
+@objc func setupButton(_ sender: UIButton){
+  dismiss(animated: false, completion: {
+    self.delegate?.handleDismiss()
+  })
+```
+
+**
+
+
+***
 ### extention
 
 - 확장(Extensions)은 기존에 있는 클래스, 구조체, 열거형, 프로토콜 타입에 새로운 기능을 추가하는 역할을 함. 
 - 원래 소스코드(소급 모델링(retroactive modeling))에 접근하지 못하는 타입을 확장하는 능력도 포함. (확장은 Objective-C에서의 카테고리와 비슷.
 - Objective-C 카테고리와 다르게, Swift의 확장은 이름을 가지지 않음
 
-*기능*
-
+*extention 기능*
 - 계산 인스턴스 프로퍼티와 계산 타입 프로퍼티를 추가
 - 인스턴스 메소드와 타입 메소드를 정의
 - 새로운 초기화 제공
@@ -633,7 +685,7 @@ extension Then where Self: AnyObject {
 
 *사용*
 ```swift
-extension ViewController, (프로토콜 이름) { 
+extension 클래스이름 : (프로토콜 이름) { 
  }
 
 ```
