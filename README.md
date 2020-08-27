@@ -41,6 +41,7 @@
 
 
 **[]**
+- [extention](#extention)
 - [Class](#Class)
 - [메모리 구조&관리](#메모리구조)
 - [func](#func)
@@ -612,6 +613,46 @@ extension Then where Self: AnyObject {
 - **configure(self)** 부분에 **$0**이 무엇인지 알려주어야함.
 - self의 type은 imageView()
 - return 은 imageView를 반환하게 됨.
+
+***
+
+### extention
+
+- 확장(Extensions)은 기존에 있는 클래스, 구조체, 열거형, 프로토콜 타입에 새로운 기능을 추가하는 역할을 함. 
+- 원래 소스코드(소급 모델링(retroactive modeling))에 접근하지 못하는 타입을 확장하는 능력도 포함. (확장은 Objective-C에서의 카테고리와 비슷.
+- Objective-C 카테고리와 다르게, Swift의 확장은 이름을 가지지 않음
+
+*기능*
+
+- 계산 인스턴스 프로퍼티와 계산 타입 프로퍼티를 추가
+- 인스턴스 메소드와 타입 메소드를 정의
+- 새로운 초기화 제공
+- 서브스크립트 정의
+- 새로 중첩된 타입을 정의하고 사용
+- 기존 타입에 프로토콜을 준수하도록 만들기
+
+*사용*
+```swift
+extension ViewController, (프로토콜 이름) { 
+ }
+
+```
+- 프로토콜을 추가적으로 준수(conformance)하기 위해, 클래스나 구조체를 작성하는 것과 같은 방법으로 프로토콜 이름을 작성함.
+
+*제네릭이 있는 경우*
+- [https://docs.swift.org/swift-book/LanguageGuide/Generics.html#ID553](https://docs.swift.org/swift-book/LanguageGuide/Generics.html#ID553)
+
+```swift
+extension Stack where Element: Equatable {
+    func isTop(_ item: Element) -> Bool {
+        guard let topItem = items.last else {
+            return false
+        }
+        return topItem == item
+    }
+}
+```
+
 
 ***
 ### Class
