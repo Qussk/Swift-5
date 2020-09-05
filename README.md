@@ -47,7 +47,10 @@
 - [메모리 구조&관리](#메모리구조)
 - [func](#func)
 - [inout](#inout)
-- [Optional Chaining](#OptionalChaining)
+- [Optional](#Optional)
+  - [Optional unwrapping](#Optionalunwrapping)
+  - [Optional Binding](#OptionalBinding)
+  - [Optional Chaining](#OptionalChaining)
 - [mutable/Immutable](#mutable)
 - [initializer](#initializer)
 - [MVC](#MVC)
@@ -988,14 +991,30 @@ addOrMultiply(isAdd: true)(5,10)
 ```
 - 참고 : 리턴값이 없는(void)함수의 자료형은 () -> () 로 표시하지 않고, () -> Void라고 표시함. 
 ***
+### Optional
 
+-  optional 인 변수는 nil 값이 들어갈 수 있는 변수를 뜻함. 
+- 개발자가 여기는 비어있을 수 있다고 "?"로 명시.
+- var variable : Int? 처럼 옵셔널 "?"을 붙여주어서 optional 변수로 만듦.
 
+### Optionalunwrapping
+- optional로 선언된 변수에 nil이 아니라 값이 분명히 들어있다고 확신하는 경우 !사용(언래핑 키워드 = !)하여 값을 꺼냄.
+-  ! 을 썼는데 불구하고 nil 이 들어있었다면 에러를 일으킴으로 주의 필요.
+
+***
+
+### optionalBinding 
+- ! (언래핑)을 사용하지 않고 새로운 상수를 선언한 뒤 상수에 옵셔널 변수의 값을 넣어보고, nil이 아니면 연산에 사용하는 방식입니다.
+- if let nonOptionalVariable = OptionalVariable { 연산 } 의 방식으로 사용.
+
+***
 ### OptionalChaining
 - [https://docs.swift.org/swift-book/LanguageGuide/OptionalChaining.html#//apple_ref/doc/uid/TP40014097-CH21-ID245](https://docs.swift.org/swift-book/LanguageGuide/OptionalChaining.html#//apple_ref/doc/uid/TP40014097-CH21-ID245)
 - Optional Chaining이란, 값이 nil수도 있는 프로퍼티, 메소드, 서브스크립트 등을 체인처럼 길게 이어가면서 선언하는 것을 일컬음.
 - 각 값들 뒤에 **?** 를 붙이면서 이어가게 됨.(instance.property?.method?.property?등으로 이어진 구조로 좌에서 우로 이동하면서 값이 nil이 아닌지 판별. 
 - 그 중 하나라도 nil로 판명된다면 이동을 멈추고 바로 체인 전체의 결과값이 nil이됨. 
-- 예시) get으로 활용된 예시
+-  언래핑과 달리, 체이닝은 런타임 에러 대신 nil 값을 반환하는 특징(그래서 체이닝의 결과는 항상 옵셔널임)
+예시) get으로 활용된 예시
 ```swift
 class Person { 
 var residence: Residence?
