@@ -35,12 +35,22 @@
 - [CALayer](#CALayer)
 - [iOS UIClassDiagram](#UIClassDiagram)
 
+**[기초문법]**
+- [데이터 타입](#데이터타입)
+  - [Int](#Int)
+  - [Double](#Double)
+  - [Bool](#Bool)
+  - [Character](#Character)
+  - [String](#String)
+  - [특수문자,이스케이프시퀀스](#특수문자,이스케이프시퀀스)
+  - [var(변수)](#var(변수))
+  - [let(상수)](#let(상수))
+- [타입어노테이션과 타입추론](#타입어노테이션과타입추론)
+
 
 **[문법]**
 - [then(with: 전수열)](#then)
 
-
-**[]**
 - [extention](#extention)
 - [Protocol](#Protocol)
 - [Class](#Class)
@@ -68,10 +78,6 @@
 
 - [SwiftUI](#SwiftUI)
 - [SwiftUI사용](#SwiftUI사용)
-
-
-## 알고리즘
-
 
 
 
@@ -528,6 +534,154 @@ class MyView: UIView {
 ![](http://3.bp.blogspot.com/-1M6XDhL2AB8/VS4U4OPVPHI/AAAAAAAAA1c/iVG1jYr26pM/s1600/uikit_classes.jpg)
 
 
+
+
+***
+## 기초문법
+
+### 데이터타입
+- 자료형, data type
+- swift에서 숫자를 저장 
+```swift
+var mynumber = 10
+```
+- mynumber라는 **변수 생성**과 **숫자 10 할당**
+- var mynumber : Int = 10
+- 위와 같이 초깃값이 있을 경우 컴파일러가 자동으로 타입추론(type inference)을 하므로 데이터 타입(자료형)을 명시할 필요 없음
+- Bool, Character, Int, Double, String, Void등이 있음
+- var x : Int
+- **x= 10** // error '=' must have consistent whitespace on both sides(공백을 명확히 처리할 것)
+
+- 일반적으로 초깃값을 주지 않을 경우에만 자료형을 씀. 
+
+### Int 
+- 정수 데이터 타입 
+  - 양수, 음수, 0 값을 담을 수 있는 부호 있는(sifned)정수
+  - 0, 양수만 담을 수 있는 부호 없는 (unsigned)정수
+- 8비트,16비트,32비트,64비트 지원(Int8, Int16, Int32, Int64)
+- 부호없는 정수 : UInt8, UInt16, UInt32, UInt64
+- 애플은 특정 크기의 데이터 타입보다 Int데이터 타입을 권장
+- 32비트 부호 있는 정수 데이터 타입에 대한 최솟값과 최댓값을 출력 
+```
+//\(출력하고 싶은 변수나 상수)
+pirnt("Int32Min = \(Int32.min) Int32Max = \(Int32.max)")
+Int32Min = -2147483648 Int32Max = 2147483647 
+```
+
+### Double 
+- 소수점이 있는 숫자
+- Double형이 기본
+- Double : 64비트로 부동 소수점 수를 저장, 소수점 15자리 정확도
+- Float : 32비트로 부동 소수점 수를 저장, 소수점 6자리 정확도
+```
+var myWeight : Double
+var myWeight : Double = 58.5
+```
+
+### Bool
+- 참 또는 거짓을 처리할 데이터 타입
+- Boolean 데이터 타입을 처리하기 위하여 두개의 불리언 상수 값(true/false)사용
+```
+var orangesAreOrange : Bool
+var orangesAreOrange : true  
+```
+
+### Character
+- 문자, 숫자, 문장부포, 심볼 같은 유니코드(Unicode)문자 하나를 저장
+- 스위프트에서의 문자들은 문자소 묶음(Grapheme cluster)의 형태로 저장
+- 문자소 묶음은 하나의 문자를 표현하기 위하여 유니코드 코드 값들로 이루어짐 
+- var 변수명 : Character = "초깃값"
+```
+var myChar1 : Character
+var myChar2 : Character = ":"
+var myChar3 : Character = "X"
+//Character는 생략불가, 생략하면 String형이 됨. 
+```
+- 유니코드를 이용하여 변수에 문자 X를 할당
+- var myChar4 = "\ u{0058}"
+
+### String 
+- 단어나 문장을 구성하는 일련의 문자
+- 저장, 검색, 비교, 문자열 연결, 수정 등의 기능을 포함
+- 문자열 보간(string interpolation)을 사용하여 문자열과 변수, 상수, 표현식, 함수 호출의 조합으로 만들 수도 있음 
+```
+var userName : String = "Qussk"
+var inboxCount = 29
+let maxCount = 100
+var message = "\(userName) has \(inboxCount) message. Message capacity remaining is \(maxCount - inboxCount)"
+print(message)
+```
+
+### 특수문자,이스케이프시퀀스
+- 표준 문자 세트뿐 아니라 문자열에 개행, 탭, 또는 유니코드 값과 같은 항목을 지정할 수 있는 여러 특수 문자도 포함
+- 이스케이프 시퀀스(escape sequence)
+- 특수 문자들은 역슬래시를 접두어로 하여 구별
+- var newline = "\n" //newline
+- 역슬래시로 시작되는 모든 문자는 특수문자로 간주
+- 역슬래시 문자자체 
+- var nackslach = "\ \"
+많이 사용하는 특수 문자
+```
+\n - 개행
+\r - 캐리지 리턴(carriage return)
+\t - 수형탭 
+\ \ - 역슬래시
+\ " = 큰따옴표(문자열 선언부에 큰 따옴표를 쓰고 싶을 경우에 사용됨)
+\ ' = 작은따옴표(문자열 선언부에 작은 따옴표를 쓰고 싶을 경우에 사용됨)
+\ u{uu} - nn위치에 유니코드 문자를 표현하는 두개의 16진수가 배치되는 1바이트 유니코드 스칼라
+\ u{nnnn} - nnnn위치에 유니코드 문자를 표현하는 네 개의 16진수가 배치되는 2바이트 유니코드 스칼라
+\ u{nnnnnn} - nnnnnn위치에 유니코드 문자를 표현하는 네 개의 16진수가 배치되는 4바이트 유니코드 스칼라
+
+```
+
+### var(변수)
+- 기본적으로 변수(variable)는 프로그램에서 사용될 데이터를 저장하기 위한 메모리 공간
+- 변수에 할당된 값은 **변경 가능**
+- var myVariable = 10 
+- var x = 0.0 , y = 0.0 , z = 0.0 (다중 사용 가능)
+
+### let(상수)
+- 상수(constant)는 데이터 값을 저장하기 위하여 메모리 내의 명명된 공간을 제공한다는 점에서 변수와 비슷
+- 어떤 값이 한 번 할당되면 이후에 변경 될 수 없음
+- 상수는 코드 내에서 반복적으로 사용되는 값이 있을 경우에 유용
+- 코드 내에서 반복적으로 사용되는 특정 값을 매법 사용하는 것 보다, 그 값을 상수에 할단한 다음 코드 내에서 참조하면 코드 읽기가 더 수월
+- let maximumNuber = 10
+- 변수나 상수명은 영문자, 숫자 Unicode도 가능...
+- 애플은 코드의 효율성과 실행 성능을 높이기 위해 var보다는 let를 사용하라고 권장
+
+### 타입어노테이션과타입추론
+- 스위프트는 타입안전(type safe) 프로그래밍 언어 
+  - 변수의 데이터 타입이 식별되면 그 변수는 다른 타입의 데이터를 저장하는 데 사용될 수 없음
+  - 변수가 선언된 후에도 다른 데이터 타입을 저장할 수 있는 느슨한 타입(loosely typed)의 언어와 대조적
+- 상수와 변수의 타입을 식별하는 방법은 두가지.   
+  - 첫번째 
+  - 변수 또는 상수가 코드 내에서 선언되는 시점에 타입 어노테이션(type annitation)을 사용하는 것
+  - 변수 또는 상수 이름 다음에 타입 선언을 두면됨 
+  - Int타입의 userCount라는 이름의 변수를 선언
+  - var userCount: Int = 10 // Int가 type annotation
+  - 두번째 
+  - 선언부에 타입 어노테이션이 없으면 스위프트 컴파일러는 상수 또는 변수의 타입을 식별하기 위하여 타입추론(typr inference)사용
+  - 해당 상수 또는 변수에 값이 할당되는 시점에서 그 값의 타입을 확인하고 그와 같은 타입처럼 사용
+```
+var signalStrenght = 2.231 // var signalStrenght : Double = 2.231
+let companyName = "My Company"
+//signalStrength라는 변수를 Double타입(스위프트의 타입추론에서 모든 부동 소수점 수는 Double타입)
+//companyName이라는 상수는 String으로 간주
+```
+- 상수를 선언할 때도 타입 어노테이션을 사용하면 나중에 코드에서 값을 할당할 수 있다. 
+예제)
+```swift
+let bookTitle: String
+var book = true
+if book {
+bookTitle = "iOS"
+}else{
+bookTitle = "Android"
+}
+print(bookTitle)
+```
+- 상수에는 값을 한 번만 할당할 수 있다.
+- 이미 값이 할당된 상수에 다시 값을 할당하려고 시도한다면 구문 에러(syntac error)가 발생 
 
 
 ***
