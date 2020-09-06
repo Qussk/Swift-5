@@ -48,10 +48,11 @@
 - [타입어노테이션과 타입추론](#타입어노테이션과타입추론)
 - [Tuple](#Tuple)
 - [as](#as)
+- [is](#is)
 
-**[문법]**
+
+
 - [then(with: 전수열)](#then)
-
 - [extention](#extention)
 - [Protocol](#Protocol)
 - [Class](#Class)
@@ -743,7 +744,18 @@ print(message.message)// "Hi"
 - 부모 인스턴스 as! 자식 클래스 // downcasting 일반 타입으로 반환.확신있는 경우
 - 부모 인스턴스 as? 자식 클래스 //downcasting 옵셔널 타입으로 반환. 확신이 없을 경우
 
-
+***
+### is
+- 타입검사 (is)
+- is 키워드를 이용하여 값의 타입 검사(Type check)
+  - 지정된 객체가 MYClass라는 이름의 클래스의 인스턴스인지 검사
+  - 인스턴스가 해당 클래스인가?
+  - 인스턴스 is 클래스
+```
+if mtobject is MyClass {
+  //myobject는 MyClass의 인스턴스이다
+}
+```
 
 
 ***
