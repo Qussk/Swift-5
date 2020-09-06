@@ -7,7 +7,7 @@
 
 
 
-## ios List
+## iOS 
 - [iOS Fonts](http://iosfonts.com/)
 - [App Store 심사지침](https://developer.apple.com/kr/app-store/review/guidelines/)
 - [Apple ID](https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/AppID.html#//apple_ref/doc/uid/TP40008195-CH64-SW1)
@@ -20,7 +20,7 @@
 - [UIMenu](https://zeddios.tistory.com/1098?category=682195)
 - []
 
-## Swift List
+## Swift 
 - [](#)
 - [Objective-C 와swift차이](#Objective-C와swift차이 )
 - [AppDelegate](#AppDelegate)
@@ -35,7 +35,7 @@
 - [CALayer](#CALayer)
 - [iOS UIClassDiagram](#UIClassDiagram)
 
-**[기초문법]**
+**[문법]**
 - [데이터 타입](#데이터타입)
   - [Int](#Int)
   - [Double](#Double)
@@ -43,10 +43,11 @@
   - [Character](#Character)
   - [String](#String)
   - [특수문자,이스케이프시퀀스](#특수문자,이스케이프시퀀스)
-  - [var(변수)](#var(변수))
-  - [let(상수)](#let(상수))
+  - [var(변수)](#var)
+  - [let(상수)](#let)
 - [타입어노테이션과 타입추론](#타입어노테이션과타입추론)
-
+- [Tuple](#Tuple)
+- [as](#as)
 
 **[문법]**
 - [then(with: 전수열)](#then)
@@ -60,6 +61,7 @@
 - [Optional](#Optional)
   - [Optional unwrapping](#Optionalunwrapping)
   - [Optional Binding](#OptionalBinding)
+  - [implicitlyunwrapping](#implicitlyunwrapping)
   - [Optional Chaining](#OptionalChaining)
 - [mutable/Immutable](#mutable)
 - [initializer](#initializer)
@@ -633,14 +635,13 @@ print(message)
 \ u{nnnnnn} - nnnnnn위치에 유니코드 문자를 표현하는 네 개의 16진수가 배치되는 4바이트 유니코드 스칼라
 
 ```
-
-### var(변수)
+### var
 - 기본적으로 변수(variable)는 프로그램에서 사용될 데이터를 저장하기 위한 메모리 공간
 - 변수에 할당된 값은 **변경 가능**
 - var myVariable = 10 
 - var x = 0.0 , y = 0.0 , z = 0.0 (다중 사용 가능)
 
-### let(상수)
+### let
 - 상수(constant)는 데이터 값을 저장하기 위하여 메모리 내의 명명된 공간을 제공한다는 점에서 변수와 비슷
 - 어떤 값이 한 번 할당되면 이후에 변경 될 수 없음
 - 상수는 코드 내에서 반복적으로 사용되는 값이 있을 경우에 유용
@@ -682,10 +683,70 @@ print(bookTitle)
 ```
 - 상수에는 값을 한 번만 할당할 수 있다.
 - 이미 값이 할당된 상수에 다시 값을 할당하려고 시도한다면 구문 에러(syntac error)가 발생 
+***
+
+### Tuple
+- 튜플은 스위프트 프로그래밍 언어에서 가장 강력한 기능중 하나
+- 여러 값을 하나의 개체에 일시적으로 묶는 방법
+- 튜플에 저장되는 항목들은 어떠한 타입도 될 수 있으며, 저장된 값들이 모두 동일한 타입이어야한다는 제약도 없음
+- let myTuple = (10,12.1,"Hi")
+- 튜플의 요소들은 여러 다른 방법들을 사용하여 접근할 수 있음
+- 특정 튜플 값은 인덱스 위치를 참조하면 간단하게 접근
+- 맨 첫번째 값은 인덱스0
+- 인덱스 2위치를 추출하고 그 값을 새로운 무자열 변수에 할당
+```
+let myTuple = (10, 12.1, "Hi")
+var myString = myTuple.2
+print(myString) //"Hi"
+```
+- 단 한줄의 코드로 튜플의 모든 값을 추출하여 변수 또는 상수에 할당
+```
+let myTuple = (10, 12.1, "Hi")
+let (myInt, myFloat, myString) = myTuple
+```  
+- 튜플의 값을 선택적으로 추출하는데 사용될 수 있으며, **무시하고 싶은 값에 밑줄(언더바)을 사용하면 그 값은 무시**
+```
+var (myInt, _, myString) = myTuple 
+```
+- 튜플을 생성할 때 **각 값에 이름을 할당**할 수도 있음
+```
+let myTuple = (count: 10, lenght: 12.1, message: "Hi")
+```
+- 튜플에 저장된 값에 할당된 이름은 각 값을 참조하는 데 사용
+- myTuple인스턴스의 message값을 출력하는 코드
+```
+print(message.message)// "Hi"
+```
+- 튜플의 가장 강력한 점은 함수에서 여러 값들을 한 번에 반환하는 것
+
+***
+### as
+**형 변환(as로 upcasting)**
+
+- 상속 관계가 있는 클래스들끼리만 타입 캐스팅 가능
+- 자식(부모로부터 상속받아 더 많은 것을 가지고 있음)을 부모로 캐스팅하는 것은 문제가 없음
+  - **as** 연산자를 이용한 타입 변환(Type casting)
+  - **자식인스턴스 as 부모클래스** // upcasting 안전한 캐스팅, 자식이. 추상화됨.
+  - 업캐스팅은 객체를 부모 클래스의 객체로 형 변환
+  - 형 변환은 성공할 것이기 때문에 보장된 변환(guaranteed conversion)
+  - UIButton은 UIControl의 자식 클래스이므로 안전하게 형 변환
+  - let myButton : UIButton = UIButton()
+  - let myControl = myButton as UIControl // 자식인스턴스 as 부모클래스
+  - 자식인스턴스인 myButton을 부모 클래스 형으로 형 변환 
+   
+**형 변환(as! as?로 downcasting)**
+- 다운캐스팅은 어떤 클래스에서 다른 클래스로 변환할 때 안전한 변환을 보장할 수 없음
+- 다운 캐스팅에서 유효하지 않은 형 변환이 이뤄졌는데 컴파일러가 에러를 잡지 않았다면, 런타임에서 에러가 발생
+- 다운 캐스팅은 주로 자식 클래스로 변환하는 데 사용
+- 성공 확신이 있으면 as! 키워드를 사용하여 강제 변환(forced conversion) //변환 안되면 crash
+- 성공 확신이 없으면 as?를 사용하여 안전하게 반환 // 변환이 안되면 nil을 리턴하므로 옵셔널 타입으로 반환함
+- 부모 인스턴스 as! 자식 클래스 // downcasting 일반 타입으로 반환.확신있는 경우
+- 부모 인스턴스 as? 자식 클래스 //downcasting 옵셔널 타입으로 반환. 확신이 없을 경우
+
+
 
 
 ***
-
 ### then
 - ios개발자 전수열님이 만든 라이브러리.
 - [https://github.com/devxoul/Then](https://github.com/devxoul/Then)
@@ -1146,20 +1207,127 @@ addOrMultiply(isAdd: true)(5,10)
 - 참고 : 리턴값이 없는(void)함수의 자료형은 () -> () 로 표시하지 않고, () -> Void라고 표시함. 
 ***
 ### Optional
+-  optional인 변수는 nil 값이 들어갈 수 있는 변수를 뜻함. 
+- 값을 반환할 때 오류가 발생할 가능성이 있는 값은 옵셔널 타입이라는 객체로 감싸서 반환함
+  - Int("100")은 100이 아닌 Optional(100)을 리턴함, Print(Int("100")),Int형 initializer
+  - Int("Hi")은 정수값을 반활할 수 없음, 아무런 값도 반환할 수 없다는 의미로 nil반환.
+  - Swift에서 기본 자료형(Int,Double,String등)은 nil값을 저장할 수 없음
+  - nil도 저장하려면 옵셔널 타입으로 선언해야함
+- 옵셔널 타입은 변수 또는 상수에 아무런 값이 할당되지 않는 상황을 안전하게 처리하기 위한 방법 제공
+- 개발자가 여기는 값이 없을 수 있다고 "?"로 명시.
+- var index : Int? 처럼 옵셔널 "?"을 붙여주어서 optional 변수로 만듦.
+- index 변수는 정수값을 갖거나 아무 값도 갖지 않을 수 있음(nil)
 
--  optional 인 변수는 nil 값이 들어갈 수 있는 변수를 뜻함. 
-- 개발자가 여기는 비어있을 수 있다고 "?"로 명시.
-- var variable : Int? 처럼 옵셔널 "?"을 붙여주어서 optional 변수로 만듦.
+*옵셔널 사용하는 이유?*
 
+- 옵셔널 타입만이 값을 갖지 않는다는 의미의 nil값을 가질 수 있음
+- You set an optional variable to a nalueless state by assihning it the  special value nil.
+- nil값을 옵셔널이 아닌 변수나 상수에 할당 할 수 없음
+   - var myInt = nil //error
+   - var myInt : Int? = nil // Ok
+   - var myInt : Int? // Ok
+   - 옵셔널 변수는 초기화하지 않으면 자동으로 nil로 초기화
+   - var myString: String = nil //유효하지 않은 코드
+   - let myConstant = nil //유효하지 않은 코드
+   
 ### Optionalunwrapping
+- 옵셔널 변수에 값이 있으면 옵셔널로 "래핑되었다(wrapped)라고 함"
+- 옵셔널에 래핑된 값은 강제 언래핑(forced unwrapping)으로 풀어줌
 - optional로 선언된 변수에 nil이 아니라 값이 분명히 들어있다고 확신하는 경우 !사용(언래핑 키워드 = !)하여 값을 꺼냄.
 -  ! 을 썼는데 불구하고 nil 이 들어있었다면 에러를 일으킴으로 주의 필요.
+```
+var x : Int? // 옵셔널 정수형 변수 x선언
+x = 10
+print(x) // Optional(10)
+print(x!) // forced unwrapping해서 정수 10이 나옴
+// ?는 자료형 뒤, !는 변수명 뒤
+```
+```swift
+var x : Int?
+x = 10
+if x != nil {
+print(x!)
+}else{
+print("nil")
+}
+```
 
 ***
 
 ### optionalBinding 
+- 강제 언래핑하는 또 다른 방법으로, 옵셔널 바인딩(Optional binding)을 이용하여 옵셔널에 할당된 값을 임시 변수 또는 상수에 할당
 - ! (언래핑)을 사용하지 않고 새로운 상수를 선언한 뒤 상수에 옵셔널 변수의 값을 넣어보고, nil이 아니면 연산에 사용하는 방식입니다.
 - if let nonOptionalVariable = OptionalVariable { 연산 } 의 방식으로 사용.
+```
+if let constantName = optionalName{
+//옵셔널 변수가 값이 있다면 언래핑해서 일반 상수constantName에 대입하고 참이되면 if문 실행
+//값이 없다면 if문의 조건이 거짓이 되어 if문을 실행하지 않음
+}
+
+if var variableName = optionalName{
+//옵셔널 변수가 값이 있다면 언래핑해서 일반 변수 variableName에 대입하고 참이되면 if문 실행
+//값이 없다면 if문의 조건이 거짓이 되어 if문을 실행하지 않음. 
+}
+```
+```swift
+var x : Int?
+x = 10
+if let xx = x {
+print(xx)
+}else{
+print("nil")
+} //xx는 if문안에서만 쓸 수 있는 것
+var x1 : Int?
+if let xx = x1 {
+print(xx)
+}else{
+print("nil")
+}
+```
+*여러 옵셔널을 언래핑*
+여러 옵셔널 변수를 한번에 언래핑하는 방법은 콤마(,) 사용
+```swift
+var pet1: String?
+var pet2: String?
+pet1 = "cat"
+pet2 = "dog"
+if let firstPet = per1, let secondPet = pet2{ //옵셔널 풀림
+print(firstPet, secondPet) //cat, dog
+}else{
+print("nil")
+}
+```
+```swift
+var x : Int?
+var v : Int?
+x = 10
+y = 20
+if let xx = x {
+print(xx)
+}else{
+print("nil")
+}
+if let yy = y {
+print(yy)
+}else{
+print("nil")
+}
+```
+***
+### implicitlyunwrapping
+- 암묵적 언래핑 : 폐지됨
+- 옵셔널이 항상 유효한 값을 가질 경우 옵셔널이 암묵적인 언래핑(implicitly unwrapping)이 되도록 선언할 수도 있음
+- 클래스 초기화에서 많이 사용
+- 이러한 방법으로 옵셔널이 선언된다면 강제 언래핑이나 옵셔널 바인딩을 하지 않아도 값에 접근할 수 있음
+- 암묵적인 언래핑으로 옵셔널을 선언하기 위해서는 선언부에 물음표(?) 대신에 느낌표(!)를 사용
+```
+var x : Int? //옵셔널 변수 선언방법 1
+var y : Int! //옵셔널 변수 선언방법 2
+x = 10
+y = 20
+print(x,y) // Optional(10), Optional(20)
+//Swift4버전까지 y는 그냥 20이 나왔음. Swift5부터는 Optional(20)
+```
 
 ***
 ### OptionalChaining
