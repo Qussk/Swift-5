@@ -49,7 +49,7 @@
 - [Tuple](#Tuple)
 - [as](#as)
 - [is](#is)
-
+- [Any와 AnyObject](#Any)
 
 
 - [then(with: 전수열)](#then)
@@ -756,6 +756,17 @@ if mtobject is MyClass {
   //myobject는 MyClass의 인스턴스이다
 }
 ```
+***
+### Any
+**Any**
+- Any can represent an instance of any type at all, including function types
+**AnyObject**
+- AnyObject can represent an istance of any class type.
+- 범용타입
+- 상속관계가 아니라도 타입 캐스팅 가능한 타입
+- 어떤 클래스의 객체도 저장 가능
+- 가장 추상화된 최상위 클래스(Obj-C의 NSObject)
+- 클래스만 허용하여 구조체나 열거형은 허용하지 않음
 
 
 ***
