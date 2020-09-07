@@ -50,7 +50,7 @@
 - [as](#as)
 - [is](#is)
 - [Any와 AnyObject](#Any)
-
+- [연산자](#연산자)
 
 - [then(with: 전수열)](#then)
 - [extention](#extention)
@@ -760,14 +760,62 @@ if mtobject is MyClass {
 ### Any
 **Any**
 - Any can represent an instance of any type at all, including function types
+- 클래스, 구조체, 열거형, 함수타입도 가능 
 **AnyObject**
-- AnyObject can represent an istance of any class type.
+- AnyObject can represent an **istance of any class type.**
 - 범용타입
 - 상속관계가 아니라도 타입 캐스팅 가능한 타입
 - 어떤 클래스의 객체도 저장 가능
-- 가장 추상화된 최상위 클래스(Obj-C의 NSObject)
+- 가장 추상화된 최상위 클래스(Obj-C의 NSObject와 비슷)
 - 클래스만 허용하여 구조체나 열거형은 허용하지 않음
 
+***
+### 연산자
+- [https://jusung.gitbook.io/the-swift-language-guide/language-guide](https://jusung.gitbook.io/the-swift-language-guide/language-guide/02-basic-operators)
+- 할당 연산자(=)는 두 개의 피연산자를 가짐
+- 왼쪽에 있는 피연산자는 값이 할당되는 변수 또는 상수이며, 그 결과는 왼쪽 피연산자인 변수나 상수에 할당
+```
+var x : Int? //옵셔널 Int변수를 선언함
+var y = 10 //일반 Int변수를 선언하고 초기화함
+x = 10 //값을 x에 할당함, Optional(10) 
+x = x! + y //x+y의 결과를 x에 할당함, Optional(10)
+x = y //y의 값을 x에 할당함, Optional(10)
+```
+
+*산술 연산자*
+- 보통 두 개의 피연산자를 받는 이항(binary)연산자
+- 예외로는 값이 음수임을 가리키는 단항 마이너스 연산자(unary negative operator)인 '-'
+- var x = 10 //변수 x에 -10을 할당하기 위해 사용되는 단항 - 연산자
+- x = x - 5 //x에서 5를 빼는 뺄셈 연산자
+  - -(단항) 변수 또는 표현식의 값을 음수로 만듦
+  - * 곱
+  - / 나눗셈
+  - + 덧셈
+  - - 뺄셈
+  - % 나머지
+- 하나의 표현식 안에 여러 개의 연산자를 사용할 수 있음
+- x = y * 10 + x - 5 / 4 
+
+*복합 할당 연산자*
+- x = x + y
+- x += y
+- 변수 x값과 변수 y값을 더하고 그 결과를 변수 x에 저장
+|복합 할당 연산자|결과|
+|:------:|:---:|
+|x += y|x와 y를 더하고 그 결과를 x에 할당|
+|x -= y|x와 y를 빼고 그 결과를 x에 할당|
+|x *= y|x와 y를 곱하고 그 결과를 x에 할당|
+|x /= y|x와 y로나누고 그 결과를 x에 할당|
+|x %= y|x와 y로 나눈 나머지를 x에 할당|
+|x &= y|x와 y의 bit AND 연산 결과를 x에 할당 |
+|x \|= y|x와 y의 bit OR 연산 결과를 x에 할당 |
+
+*증가 연산자와 감소 연산자*
+- 단항 연산자
+- x = x + 1 //x 변수의 값을 1씩 증가
+- x = x - 1 //x 변수의 값을 1씩 감소
+- 위의 표현식은 x의 값을 1증감
+- 이러한 방법 대신 ++ 와 --로 사용할 수 있었지만 현재는 폐지(Swift3)
 
 ***
 ### then
