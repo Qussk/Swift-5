@@ -45,12 +45,14 @@
   - [특수문자,이스케이프시퀀스](#특수문자,이스케이프시퀀스)
   - [var(변수)](#var)
   - [let(상수)](#let)
-- [타입어노테이션과 타입추론](#타입어노테이션과타입추론)
+  - [타입어노테이션과 타입추론](#타입어노테이션과타입추론)
 - [Tuple](#Tuple)
 - [as](#as)
 - [is](#is)
 - [Any와 AnyObject](#Any)
 - [연산자](#연산자)
+  - [nil 합병 연산자](#Nil합병연산자)
+
 
 - [then(with: 전수열)](#then)
 - [extention](#extention)
@@ -62,7 +64,7 @@
 - [Optional](#Optional)
   - [Optional unwrapping](#Optionalunwrapping)
   - [Optional Binding](#OptionalBinding)
-  - [implicitlyunwrapping](#implicitlyunwrapping)
+  - [Implicitly Unwrapping](#implicitlyunwrapping)
   - [Optional Chaining](#OptionalChaining)
 - [mutable/Immutable](#mutable)
 - [initializer](#initializer)
@@ -817,6 +819,125 @@ x = y //y의 값을 x에 할당함, Optional(10)
 - x = x - 1 //x 변수의 값을 1씩 감소
 - 위의 표현식은 x의 값을 1증감
 - 이러한 방법 대신 ++ 와 --로 사용할 수 있었지만 현재는 폐지(Swift3)
+
+*불리언 논리 연산자*
+- NOT (!), AND (&&), OR(||)와 XOR(^)
+- NOT(!) 연산자는 불리언 값 또는 표현식의 결과를 현재와 반대로 바꿈
+- var flag = true //참
+- var secondFlag = !flag // secondFlag 는 거짓
+- OR(||)연산자는 두 개의 피연산자 중에 하나라도 참이면 참(TRUE)을 반환하고, 두 개 모두 거짓이면 거짓(false)을 반환
+```
+if (10 < 20) || (20 < 10) {
+print("Expression is true")
+}
+```
+- AND(&&)연산자는 두 개의 피연산자가 모두 참일 때만 참(TRUE)을 반환
+```
+if (10 < 20) && (20 < 10){
+print("Expression is true")
+}
+```
+
+*범위 연산자*
+**닫힌 범위 연산자(closed range operator)**
+
+: x...y (x에서 시작해서 y로 끝나는 범위에 포함된 숫자), 5...8(5,6,7,8)
+
+**반 열린 범위 연산자(helf-open range operator)**
+
+: x..< y (x부터 시작하여 y가 포함되지 않는 숫자), 5..<8(5,6,7)
+
+**One-Sided Ranges**
+
+: let names = ["A","B","C","D"]
+```
+for name in names[2...]{ //[...2],[..<2]
+print(name) 
+}//C , D 
+```
+
+*삼항 연산자 ?:*
+- 비교 연산을 빠르게 하기 위해 삼항 연산자(Ternary operator)를 지원
+- [조건] ? [참 표현식] : [거짓 표현식]
+- 삼항 연산자는 [조건] 부분을 계산하여 참(true)혹은 거짓(false)을 확인하여 결과가 참이면 [참 표현식] 부분이 실행되며, 거짓이면 [거짓 표현식] 부분을 수행
+```
+var x = 10
+var y = 20
+print("Largest number is \(x>y ? x:y)")
+// Largest number is 20
+```
+- x가 y보다 큰 지 검사시 거짓. y가 사용자에게 표시
+
+### Nil합병연산자
+- nil-CoalescingOperator
+- 옵셔널 변수 **?? nil**일 때 할당되는 값
+- 옵셔널 변수의 값이 nil이면 ?? 다음 값으로 할당됨
+```swift
+let defaultColor = "black"
+var userDefinedColor : String? // defaults to nil
+
+var myColor = userDefinedColor ?? defaultColor
+//nil이므로 defaultColor인 black으로 설정됨 
+print(myColor) //black
+
+userDefinedColor = "red"
+myColor = userDefinedColor ?? defaultColor
+//nil이 아니므로 원래 값이 red가 할당됨
+print(myColor) // red 주의, optional(red)가아님, 자동으로 풀림.
+```
+```
+let defaultAge = 1
+var age : Int?
+age = 3
+print(age) //3
+var myAge = age ?? defaultAge 
+print(myAge) //3
+```
+*비트AND연산자*
+- AND연산자는 단일 앰퍼샌드(&, ampersand)로 표현
+- 해당 위치의 비트가 모두 1일 경우에 결과 값의 해당 위치가 1
+```
+10101011 AND
+00000011
+===========
+00000011
+
+var x = 171
+var y = 3
+var z = x & y 
+print("Result is \(z)")
+```
+
+*비트OR연산자*
+- 두 개의 피연산자의 비트 중에 하나만 1이어도 결과가 1
+- 하나의 수직 바(Vertical bar) 문자 (|)로 표현
+```
+10101011 OR
+00000011
+===========
+10101011
+
+var x = 171
+var y = 3
+var z = x | y 
+print("Result is \(z)")
+```
+*비트XOR연산자*
+- 배타적 논리합(exclusive OR)
+- 캐럿(caret)문자인 '^'로 표현
+- 두 피연산자의 비트중 한 쪽의 비트가 1일 경우에 1
+```
+10101011 XOR
+00000011
+===========
+10101000
+
+//결과는 10101000으로, 십진수로 변환하면 168
+var x = 171
+var y = 3
+var z = x ^ y 
+print("Result is \(z)")
+```
 
 ***
 ### then
