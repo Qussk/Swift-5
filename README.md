@@ -975,8 +975,8 @@ for 상수명 in 컬렉션 또는 범위 {
 - 상수명은 반복문이 돌면서 컬렉션 또는 범위에서 가져온 항목을 담게될 상수
 (일반적으로 반복문의 몸체에 있는 코드는 반복문을 통해 가져온 현재 항목의 참조체로 상수명을 사용)
 - '컬렉션 또는 범위'는 반복문이 반복되면서 현재의 항목을 참조
-```
-문자열 값들의 배열이거나 범위 연산, 또는 문자들로 구성된 문자열일 수 있음
+```swift
+//문자열 값들의 배열이거나 범위 연산, 또는 문자들로 구성된 문자열일 수 있음
 for index in 1...5 {
 print("Value or index is \(index)")
 }
@@ -985,7 +985,7 @@ print("Value or index is \(index)")
 - for 반복문이 숫자 1부터 시작하여 5로 끝난다는 것으 가르키는 닫힌 범위 연산자를 선언하고 있음
 
 *_참조체(i)로 생략가능*
-```
+```swift
 for _ in 1...5 {
 print("안녕")
 }
@@ -994,7 +994,7 @@ print("\(i) 안녕")
 }
 ```
 *배열의 항목 접근*
-```
+```swift
 let names = ["Anna", "Alex", "Brina", "Jack"]
 for name in names { 
 print(name) 
@@ -1005,7 +1005,7 @@ print(name)
 }
 ```
 *딕셔너리의 항목 접근*
-```
+```swift
 let numberOfLegs = ["spider": 8, "ant": 6, "cat":4]
 for (animalNAme, legCount) in numberOfLehs {
 print ("\(animalName)s have \(legCount) legs")
@@ -1019,14 +1019,14 @@ print ("\(animalName)s have \(legCount) legs")
 - for 반복문읜 몇 번 정도 반복해야 할지를 이미 아는 경우에 사용
 - 어떠한 조건이 되기 전에 대체 몇 번 정도 반복해야 할지를 알 수 없지만 그 조건을 만족할때까지는 반복해야하는 경우 while반복문 사용(참이면 무한 반복)
 - 기본적으로 while은 지정된 조건을 만족할 떄까지 작업을 반복
-```
+```swift
 while 조건식 {
 //실행코드
 }
 ```
 - 위의 코드에서 조건식은 참,거짓을 반환하는 표션식이며, 주석부분은 조건이 참인 동안에 실행될 코드를 나타냄
 - myCount변수가 100보다 크지 않을 때까지 반복될 것이며, 100이 되는 시점에서 반복문이 종료됨
-```
+```swift
 var myCount = 0 
 while maCount < 100 {
 myCount += 1
@@ -1036,7 +1036,7 @@ print(myCount) 0...100
 
 *repeat...while*
 - repeat...while 반복문의 몸체는 적어도 한번은 실행
-```
+```swift
 repeat { 
 }while 조건식
 
@@ -1054,7 +1054,7 @@ var i = 10
 - 반복문에서 빠져나오기 위해 break문 사용
 - 현재의 반복문에서 빠져나와 반복문 바로 다음에 있는 코드를 실행
 - j의 값이 100을 넘을 때까지 계속 수행할 것이며, 100을 넘으면 반복문이 종료되고 반복문 밑의 코드를 실행
-```
+```swift
 var j = 10
 for i in 1..<100 {
 j += j
@@ -1072,7 +1072,7 @@ print ("j = \(j)")
 - 변수 i의 값이 짝수 일 경우에만 print함수가 호출
 - continue 문은 i의 값을 2로 나눈 나머지가 있으면 print호출하는 코드를 건너뜀
 - continue 문이 실행되면 while 반복문의 상단으로 이동하고 바복문을 다시 실행
-```
+```swift
 var i = 1
 while 1 < 20 {
 i += 1
@@ -1092,7 +1092,7 @@ if 불리언 표현식 {
 - 다른 프로그래밍 언어들과 다르게, 스위프트에서는 **if문 다음의 실행코드가 한 줄이라도 괄호 { }를 필수적으로 사용해야한다. 
 - 기본적으로 '불리언 표현식'이 참으로 판단되면 괄호로 감싸인 코드 실행
 - '불리언 표현식'이 거짓이면 괄호로 감싸인 코드는 건너뛴다
-```
+```swift
 var x = 10
 if x > 9 {
 print("x is greater than 9!")
@@ -1101,7 +1101,7 @@ print("x is greater than 9!")
 
 *if else if ... 문 사용하기*
 - 다양한 조건을 바탕으로 결정해야할 때 if..else..if 구문을 사용
-```
+```swift
 var x = 9
 if x == 10 {
    print("x is 10")
@@ -1122,7 +1122,7 @@ if x == 10 {
 - **guard문은 표현식이 거짓으로 판단 될 경우에 수행 될 else절을 반드시 포함해야함**
 - else 절에 속한 코드는 현재의 코드 흐름을 빠져 나갈 수 있는 구문(return, break, continue, throw 구문)을 반드시 포함해야함
 - 또는 다른 함수를 else코드 블록 안에서 호출할 수도 있음
-```
+```swift
 guard 불리언 표현식 else {
 //표현식이 거짓일 경우 실행될 코드 
 코드 블록을 빠져나갈 구문
@@ -1131,7 +1131,7 @@ guard 불리언 표현식 else {
 ```
 - guard문은 기본적으로 특정 조건에 맞지 않을 경우에 현재의 함수나 반복문에서 빠져나갈수 있도록 하는 '조기출구(early exit)'전략을 제공
 
-```
+```swift
 func multiplyByTen(value : Int? ) {
   guard let number = value, number < 10 else { //(옵셔널3)조건이 거짓일 때 실행
   print("수가 10 보다 크다")
@@ -1146,7 +1146,7 @@ multiplyByTen(value: 3) //30
 - 10보다 작은 값이면, guard문 아래에 있는 코드가 실행되어 그 값에 10이 곱해진 값이 출력된다.
 - **언래핑된 number변수를 gurad 문 밖에 있는 코드가 사용할 수 있다!!**
 (if 문을 이용하여 언래핑된 변수는 그렇게 못함)
-```
+```swift
 var index : Int?
 index = 3
 var treeArray = ["Oak","Pine","Yew","Birch"]
@@ -1164,7 +1164,7 @@ var treeArray = ["Oak","Pine","Yew","Birch"]
 - 각각 case문은 표현식을 처리한 결과와 동일한 데이터 타입이어야 한다
 - case문 당므에는 해당 case문과 일치했을 때 실행되는 스위프트 구문을 쓴다
 - 마지막 default문은 표현식과 일치하는 case문이 ㅇ벗을 경우를 위한 것.
-```
+```swift
 var value = 4
 switch (value)
 { 
@@ -1182,7 +1182,7 @@ print("Integer out reange")
 - 때때로 여러 가지 서로 다른 경우에 대해서 동일한 코드를 실행해야할 경우가 있다.
 - 이런경우, 실행될 공통 코드로 그룹 case문을 만들 수 있다
 - 위의 예제를 수정하여 값이 0,1, 또는 2일 경우에 동일한 코드가 실행되도록 할 수 있다. 
-```
+```swift
 var value = 1
 switch value {
 case 0,1,2 :   //이런식으로
@@ -1196,7 +1196,7 @@ print("Integer out reange")
 ```
 *switch에서의 매칭 범위*
 - switch문에 있는 case문은 매칭 범위를 구현하도록 할 수도 있다
-```
+```swift
 var temperature = 83
 switch temperature {
 case 0..49 : // 0~49
@@ -1208,7 +1208,7 @@ print("Warm")
 ### where
 - where문은 switch case에 **부가적인 조건**을 추가하기 위하여 사용될 수 있다.
 - 값이 속하는 범위뿐만 아니라 그 숫자가 홀수인지 짝수인지도 검사한다.
-```
+```swift
 var  temperature = 54
 switch temperature {
 case 0...49 where tempetature % 2 == 0 :  //tempetature가 2로 나누어서 짝수면,, 
@@ -1224,7 +1224,7 @@ print("Warm and even")
 - C/C++, 오브젝-C와 같은 언어와 달리 case문 당므에 break문을 포함할 필요가 없다. 
 - 다른언어들과는 다르게, 스위프트는 일치하는 case문을 만나면 자동으로 빠져나온다.
 - **case별로 빠져 나가지 않고 아래로 계속 내려가게 하려면 fallthrough문을 사용한다.**
-```
+```swift
 var  temperature = 54
 switch temperature {
 case 0...49 where temperature % 2 == 0 : 
@@ -1239,7 +1239,7 @@ print("ddd")
 } 
 ```
 - 스위프트 switch문에서는 보통 break문이 사용되지 않지만, 다음과 같이 default case에서 해야할 경우 유용하다
-```
+```swift
 default : 
 break
 }
@@ -1268,7 +1268,7 @@ break
 - 매개변수 타입 - 함수에 전달되는 매개변수의 타입
 - 반환값 타입 - 함수가 반환하는 결과에 대한 데이터 타입
 (반환하지 않으면 Void -> 생략가능 )
-```
+```swift
 //message함수는 문자열과 정수를 받아 문자열로 반환. 
 func message(name : String, age: Int) -> String {
 return ("\(name), \(age)") 
@@ -1276,7 +1276,7 @@ return ("\(name), \(age)")
 ```
 
 *정의와 호출*
-```
+```swift
 func satHello(){
  print("Hello")
 }
@@ -1285,7 +1285,7 @@ sayHello() //(헬로우를 프린트하는) 함수 호출
 
 
 *C에서 Swift로 함수 변경하기*
-```
+```swift
 int add(int x, int y) { //C, C++ //x,y는 파라메터
  return(x+y)
 }
@@ -1300,7 +1300,7 @@ add(x: 10, y:20)
 
 ### 내부외부
 *내부 매개변수 이름과 외부 매개변수 이름*
-```
+```swift
 func add(first x : Int, seconf y : Int) -> Int {
 //외부 내부: 자료형, 외부 내부: 자료형 -> 리턴형
 return x + y //함수 정의할 떄는 내부 매개변수명을 사용 
@@ -1310,7 +1310,7 @@ add(first: 10, secound : 20)  // add(x:10, y:20)은 오류
 //호출시 반드시 외부 매개변수명을 사용 --> 함수바깥에서 호출할 때 사용
 ```
 *외부이름 생략*
-```
+```swift
 // _언더스코어: 언더바라고 읽지 말래..
 //외부매개변수명 생략한다는 의미
 func add(_ x: Int, _ y: Int) -> Int {
@@ -1326,7 +1326,7 @@ return x + y
 print(add(10, with: 20))
 ```
 *앱으로 예를들면*
-```
+```swift
 @objc func changeDetePiker(_ sender : UIDatePicker) {
 let datePickerView = sender
 let formatter = DateFormatter()
@@ -1335,7 +1335,7 @@ lblPickerTime.text = "선택시간: " + formatter.string(from: datePickerView)
 }
 ```
 
-```
+```swift
 //내부이름 : pickerView,row,component
 //이런 내부이름으로 함수 안에서 개발하게 됨. 
 func pickerView(_ pickerView: UIPickerView, didSelectRow row : Int, inComponent component: Int) {
@@ -1351,18 +1351,18 @@ imageView.image = imageArray[row]
 - 아규먼트로 전달하는 값이 없는 경우, 디폴트 매개변수 값을 사용
 - 함수를 선언할 떄 매개변수에 디폴트 값을 할당
 - 이름이 인자로 전달되지 않을 겨웅에 디폴트로 "Kim"이라는 문자열이 사용되도록함 
-```
+```swift
 func vuildMessage(count: Int, name: String = "Kim") -> String {
 return ("\(name), you are customer number \(count)")
 }
 ```
 - 이 함수는 고객 이름 값을 전달하지 않고도 호출할 수 있다.
-```
+```swift
 var message = buildMessage(count: 100)
 print(message) // Kim, you are customer number 100 
 ```
 - 고객 이름을 가지고 함수를 호출하면 아규먼트를 참조함
-```
+```swift
 var message = buildeMessage(count : 50, name : "Lee")
 print(message) //Lee, you are customer number 50
 ```
@@ -1370,7 +1370,7 @@ print(message) //Lee, you are customer number 50
 ### 여러개결과반환
 - 함수는 여러 결과 값들을 튜플로 감싸서 반환할 수 있음 
 - 인치 단위의 수를 매개변수로 받아 야드, 센티미터, 미터로 변환하고 이 세개의 값을 하나의 튜플()에 넣어 반환 
-```
+```swift
 func sizeConverter(length: Float) -> (yards: Float, centimeters: Float, meters: Float){
  let yards = length * 0.02777778
  let cnetimeters = length * 2.54
@@ -1386,7 +1386,7 @@ print(lenthTuple.meters)
 ```
 
 *직접해봄* 
-```
+```swift
 func adc(leg: Float) -> (a: Float, b:Float, c:Float) {
   let a = leg * 0.0277
   let b = leg * 2.52222
@@ -1401,7 +1401,7 @@ print("c는 \(oo.c)")
 ```
 
 *2개의 정수를 입력받아 가감제 리턴 *
-```
+```swift
 fucn sss(x : Int, y : Int) -> (sum: Int, sub: Int, div: Double){
 let sum = x + y
 let sub = x - y
@@ -1421,7 +1421,7 @@ swift print format으로 구글링하여 소수점 원하는 만큼 출력
 : variafic parameter
 - 함수가 지정된 데이터 타입으로 개수에 상관없이 매개변수를 받는다면 세 개의 점(...)사용
 - 임의의 개수의 String 값을 매개변수로 받아서 콘솔에 출력
-```
+```swift
 func displayStrings(strings: String...)
  {
  for string in strings {
@@ -1438,7 +1438,6 @@ add(numbers: 1,2,3) //6
 add(numbers: 2,2,2,2,2)//10
 add(numbers: 1,1,1,1,1,1,1,1,1,1)//10
 를 출력하는 함수 만들어보기
-
 */
 
 func add(numbers : Int...) -> Int {
@@ -1483,7 +1482,7 @@ print(number3) //10
 - swift에서 call by refernce를 구현하는 방법
 - 함수가 값을 반환한 후에도 매개변수에 일어난 변화를 유지하려면, 함수의 선언부에서 매개변수를 입출력 매개변수(inout parameter)로 선언해야함
 
-```
+```swift
 //1.call by reference하고 싶은 매개변수의 자료형 앞에 inout씀.
 //2.call by reference하고 싶은 변수에 &붙여서 호출
 var myValue = 10
@@ -1500,14 +1499,14 @@ print(myValue) //20
 ### 함수를매개변수로사용
 - swift는 함수를 데이터 타입처럼 사용할 수 있음
 - 다음과 같이 함수를 상수 또는 변수에 할당하는 것이 가능
-```
+```swift
 func inchesToFeet(inches: Float) -> Float {
 retrun inches * 0.0873636
 }
 let toFeet = inchesToFeet //함수를 자료형처럼 사용
 ```
 - 함수를 호출하려면 원래의 함수이름 대신에 상수이름을 사용하여 호출가능
-```
+```swift
 var result = toFeet(10) //inchesToFeet(10)
 ```
 - 어떤 함수에 다른 함수를 매개변수나 반환 값으로 함수를 사용할 수 있음
@@ -1517,7 +1516,7 @@ var result = toFeet(10) //inchesToFeet(10)
 - Int와 Double형을 매개변수로 받아서 String을 반환하는 함수의 데이터 타입
 (Int, Double) -> String
 - 매개변수로 함수를 받으려면, 함수를 받게 될 함수는 함수의 데이터 타입을 선언함
-```
+```swift
 func addTowInteger(x: Int, y: Int) -> Int {
 return x + y
 }//의 자료형은 ? ((Int, Int) -> Int).Type
@@ -1529,7 +1528,7 @@ return x + y
 1) 변수에 저장할 수 있다.
 2) 매개변수로 전달할 수 있다.
 3) 리턴값으로 사용할 수 있다. 
-```
+```swift
 func inchesToFeet(inches: Float) -> Float {
  return inches * 0.0873636
 }
@@ -1544,7 +1543,7 @@ let toYard = inchesToYarde
 //print(toYard(inchesToYarde(inches: 40))) //0.030864248
 ```
 - 단위를 변환하고 콘솔에 결과를 출력하는 다른 함수
-```
+```swift
 //converterFunc: 는 (Float) -> Float 자료형만 들어갈 수 있음(위의 toFeet, toYard같은 자료형)
 func outputConversion(converterFunc: (Float) -> Float, value: Float) {
  let result = converterFunc(value)
@@ -1553,13 +1552,13 @@ func outputConversion(converterFunc: (Float) -> Float, value: Float) {
 ```
 - outputConversion 함수를 호출할 때 선언된 데이터 타입과 일치하는 함수 전달
 - 매개변수로 적절한 변환함수를 전달하면 인치를 피트 또는 야드로 변환하기 위하여 동일한 함수가 호출될 수 있음
-```
+```swift
 outputConversion(converterFunc: toFeet, value: 14) //피트로 변환하는 inchesToFeet함수 호출
 outputConversion(converterFunc: toYard, value: 14) //야드로 변환하는 inchesToYard함수 호출
 ```
 - 반환타입으로 함수의 타입을 선언하면 함수도 반환될 수 있음
 - 다음 함수는 Boolean 매개변수의 값에 따라 toFeat 함수 또는 toYard함수를 반환
-```
+```swift
 //매개변수형 리턴형이 함수형 : ()가 있으면 일단 함수구나! 생각해야함 : (Float) -> Float 
 finc decideFunction(feet: Bool) -> (Float) -> Float {
  if feet {
@@ -1572,8 +1571,8 @@ finc decideFunction(feet: Bool) -> (Float) -> Float {
 
 ### swift함수명
 - 함수명(외부매개변수 : 외부매개변수: ...)
-- :의 개수가 매개변수의 개수
-```
+- : 의 개수가 매개변수의 개수
+```swift
 func add(x: Int, y: Int) -> Int {
 return x + y
 }
@@ -1605,7 +1604,7 @@ func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> 
 - C#의 Delegates
 - 클로저표현식은 독립적인 코드 블록
 - 클로저 : 익명함수(이름이 없는 함수)
-```
+```swift
 //기존함수
 func add(x: Int, y: Int) -> Int {
 return x + y
@@ -1626,12 +1625,12 @@ print(add(x:10, y:20))
 }
 ```
 - 클로저 표현식을 선언하고 상수에 할당한 다음, 함수를 호출
-```
+```swift
 let sayHello = { print("Hello") }
 sayHello() //상수처럼 함수 호출
 ```
 - 두개의 정수 매개변수를 받아서 정수 결과 값을 반환
-```
+```swift
 let multiply = {(val1: Int, val2: Int) -> Int in 
 return val1 * val2
 }//여기서 multiply의 자료형은 (Int, Int) -> Int 
@@ -1641,7 +1640,7 @@ let result = multiply(10,20) //상수를 함수처럼 호출, 200
 ### 후행클로저
 : trailing closure (꼬리 클로저)
 - 클로저가 함수의 마지막 아규먼트라면 마지막 매개변수 이름(여기서는 handler: )을 생략한 후 함수 소관호 외부에 클로저를 구현
-```
+```swift
 let onAction = UIAlertAction(title: "아니오, 켭니다(on).",
 style: UIAlertAtion.style.default) { Action in //->handler 날려버림. //마지막 인자의 경우에 생략가능
 self.lampImag.image = self.imagOn
