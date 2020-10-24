@@ -59,7 +59,18 @@
 - [Any와 AnyObject](#Any)
 - [연산자](#연산자)
   - [nil 합병 연산자](#Nil합병연산자)
-
+- [제어문](#제어문)
+  - [for](#for)
+  - [while](#while)
+  - [break](#break)
+  - [continue](#continue)
+  - [if문사용하기](#if문사용하기)
+  - [guard](#guard)
+  - [switch](#switch)
+  - [where](#where)
+  - [fallthrough](#fallthrough)
+  
+  
 
 - [then(with: 전수열)](#then)
 - [extention](#extention)
@@ -945,6 +956,293 @@ var y = 3
 var z = x ^ y 
 print("Result is \(z)")
 ```
+***
+### 제어문
+### for
+- 조건-증가(condition-increment) for문
+- for - in 반복문은 컬렉션 또는 숫자 범위 내에 있는 목들을 반복
+```
+for 상수명 in 컬렉션 또는 범위 {
+//실행될 코드
+}
+```
+- 상수명은 반복문이 돌면서 컬렉션 또는 범위에서 가져온 항목을 담게될 상수
+(일반적으로 반복문의 몸체에 있는 코드는 반복문을 통해 가져온 현재 항목의 참조체로 상수명을 사용)
+- '컬렉션 또는 범위'는 반복문이 반복되면서 현재의 항목을 참조
+```
+문자열 값들의 배열이거나 범위 연산, 또는 문자들로 구성된 문자열일 수 있음
+for index in 1...5 {
+print("Value or index is \(index)")
+}
+```
+- index라는 이름의 상수에 현재 항목이 할등되면서 시작
+- for 반복문이 숫자 1부터 시작하여 5로 끝난다는 것으 가르키는 닫힌 범위 연산자를 선언하고 있음
+
+*_참조체(i)로 생략가능*
+```
+for _ in 1...5 {
+print("안녕")
+}
+for i in 1...5 {
+print("\(i) 안녕")
+}
+```
+*배열의 항목 접근*
+```
+let names = ["Anna", "Alex", "Brina", "Jack"]
+for name in names { 
+print(name) 
+//Anna 
+//Alex 
+//Brina 
+//Jack
+}
+```
+*딕셔너리의 항목 접근*
+```
+let numberOfLegs = ["spider": 8, "ant": 6, "cat":4]
+for (animalNAme, legCount) in numberOfLehs {
+print ("\(animalName)s have \(legCount) legs")
+}
+// spiders have 8 legs
+// ants have 6 legs
+// cats have 4 legs
+```
+
+### while
+- for 반복문읜 몇 번 정도 반복해야 할지를 이미 아는 경우에 사용
+- 어떠한 조건이 되기 전에 대체 몇 번 정도 반복해야 할지를 알 수 없지만 그 조건을 만족할때까지는 반복해야하는 경우 while반복문 사용(참이면 무한 반복)
+- 기본적으로 while은 지정된 조건을 만족할 떄까지 작업을 반복
+```
+while 조건식 {
+//실행코드
+}
+```
+- 위의 코드에서 조건식은 참,거짓을 반환하는 표션식이며, 주석부분은 조건이 참인 동안에 실행될 코드를 나타냄
+- myCount변수가 100보다 크지 않을 때까지 반복될 것이며, 100이 되는 시점에서 반복문이 종료됨
+```
+var myCount = 0 
+while maCount < 100 {
+myCount += 1
+}
+print(myCount) 0...100
+```
+
+*repeat...while*
+- repeat...while 반복문의 몸체는 적어도 한번은 실행
+```
+repeat { 
+}while 조건식
+
+
+var i = 10
+ repeat{
+ i = i - 1
+ print(i) 
+}while (i>0) // 9...0
+```
+
+### break
+: 반복문에서 빠져나오기
+- 반복문을 생성했다면 반복문이 완료되는 조건에 다다르기 전에 반복문을 빠져나오는 어떤 조건을 만들 수도 있음. (특히 무한루프를 생성할 경우)
+- 반복문에서 빠져나오기 위해 break문 사용
+- 현재의 반복문에서 빠져나와 반복문 바로 다음에 있는 코드를 실행
+- j의 값이 100을 넘을 때까지 계속 수행할 것이며, 100을 넘으면 반복문이 종료되고 반복문 밑의 코드를 실행
+```
+var j = 10
+for i in 1..<100 {
+j += j
+  if j > 100 {
+  break
+  }
+print ("j = \(j)")
+}
+//j = 20
+//j = 40
+//j = 80
+```
+### continue 
+- continue는 반복문에서 continue문 이후의 모든 코드를 건너뛰고 반복문의 사단 시작 위치로 돌아감
+- 변수 i의 값이 짝수 일 경우에만 print함수가 호출
+- continue 문은 i의 값을 2로 나눈 나머지가 있으면 print호출하는 코드를 건너뜀
+- continue 문이 실행되면 while 반복문의 상단으로 이동하고 바복문을 다시 실행
+```
+var i = 1
+while 1 < 20 {
+i += 1
+  if (1 % 2) != 0 {
+  contonue
+  }
+print("i = \(i)") //2~20
+}
+```
+
+### if문사용하기
+```
+if 불리언 표현식 {
+//불리언 표현식이 참일 경우 수행될 코드
+}
+```
+- 다른 프로그래밍 언어들과 다르게, 스위프트에서는 **if문 다음의 실행코드가 한 줄이라도 괄호 { }를 필수적으로 사용해야한다. 
+- 기본적으로 '불리언 표현식'이 참으로 판단되면 괄호로 감싸인 코드 실행
+- '불리언 표현식'이 거짓이면 괄호로 감싸인 코드는 건너뛴다
+```
+var x = 10
+if x > 9 {
+print("x is greater than 9!")
+}
+```
+
+*if else if ... 문 사용하기*
+- 다양한 조건을 바탕으로 결정해야할 때 if..else..if 구문을 사용
+```
+var x = 9
+if x == 10 {
+   print("x is 10")
+ }else if x == 9 {
+   print("x is 9")
+ }else if x == 8 {
+   print("x is 8")
+ }
+}
+```
+- 적당한 개수의 비교에는 잘 동작하지만, 너무 많은 수의 비교에는 복잡
+- 이러한 경우 switch문을 씀( 더 유연하고 효과적인 해결책 제시)
+
+
+### guard
+: 조건이 거짓이면 실행 
+- guard는 siwft2에 도움
+- **guard문은 표현식이 거짓으로 판단 될 경우에 수행 될 else절을 반드시 포함해야함**
+- else 절에 속한 코드는 현재의 코드 흐름을 빠져 나갈 수 있는 구문(return, break, continue, throw 구문)을 반드시 포함해야함
+- 또는 다른 함수를 else코드 블록 안에서 호출할 수도 있음
+```
+guard 불리언 표현식 else {
+//표현식이 거짓일 경우 실행될 코드 
+코드 블록을 빠져나갈 구문
+}
+//표현식이 참일 경우에 실행되는 코드는 이곳에 위치 
+```
+- guard문은 기본적으로 특정 조건에 맞지 않을 경우에 현재의 함수나 반복문에서 빠져나갈수 있도록 하는 '조기출구(early exit)'전략을 제공
+
+```
+func multiplyByTen(value : Int? ) {
+  guard let number = value, number < 10 else { //(옵셔널3)조건이 거짓일 때 실행
+  print("수가 10 보다 크다")
+return 
+} 
+print(number*10) //조건식이 참일 때 실행, 주의 : number를 여기서도 사용가능
+}
+multiplyByTen(value: 3) //30
+```
+- guard문은 값을 언래핑(unwrap)하기 위해서 옵셔널 바인딩을 이용하여, 그 값이 10보다 작은지 검사
+- 변수를 언래핑 할 수 없거나 그 값이 10보다 크면, else절이 실행되어 에러 메세지가 출력되며, 이 함수에서 빠져 나가도록 return 실행
+- 10보다 작은 값이면, guard문 아래에 있는 코드가 실행되어 그 값에 10이 곱해진 값이 출력된다.
+- **언래핑된 number변수를 gurad 문 밖에 있는 코드가 사용할 수 있다!!**
+(if 문을 이용하여 언래핑된 변수는 그렇게 못함)
+```
+var index : Int?
+index = 3
+var treeArray = ["Oak","Pine","Yew","Birch"]
+  if let myValue = index { //옵셔널 변수 값을 상수 myValue에 대입
+    print(treeArray[myValue]) //Birch
+    } else {
+    print("index does not contain a value") // ⚇ 여기서 index 못씀. 
+    }
+  }
+```
+
+### switch
+- '표현식'은 값 또는 값을 반환하는 표현식을 나타낸다.
+- 각각의 가능한 경우마다 case 문이 필요하여, 해당하는 일치 값(match)을 다음에 쓴다
+- 각각 case문은 표현식을 처리한 결과와 동일한 데이터 타입이어야 한다
+- case문 당므에는 해당 case문과 일치했을 때 실행되는 스위프트 구문을 쓴다
+- 마지막 default문은 표현식과 일치하는 case문이 ㅇ벗을 경우를 위한 것.
+```
+var value = 4
+switch (value)
+{ 
+case 0 : 
+print("zero") //break문 눈에 보이지 않지만 숨어있음
+case 1 :
+print("one")
+(..중략)
+default: 
+print("Integer out reange")
+}
+```
+*case문 결합하기*
+- 위의 예제 에서 각각의 case문은 각자의 실행할 구문을 가졌다
+- 때때로 여러 가지 서로 다른 경우에 대해서 동일한 코드를 실행해야할 경우가 있다.
+- 이런경우, 실행될 공통 코드로 그룹 case문을 만들 수 있다
+- 위의 예제를 수정하여 값이 0,1, 또는 2일 경우에 동일한 코드가 실행되도록 할 수 있다. 
+```
+var value = 1
+switch value {
+case 0,1,2 :   //이런식으로
+print("zero, one or two")
+case 3 : 
+print("three")
+(..중략)
+default: 
+print("Integer out reange")
+}
+```
+*switch에서의 매칭 범위*
+- switch문에 있는 case문은 매칭 범위를 구현하도록 할 수도 있다
+```
+var temperature = 83
+switch temperature {
+case 0..49 : // 0~49
+print("cold")
+case 50...79 : 
+print("Warm")
+(..중략)
+```
+### where
+- where문은 switch case에 **부가적인 조건**을 추가하기 위하여 사용될 수 있다.
+- 값이 속하는 범위뿐만 아니라 그 숫자가 홀수인지 짝수인지도 검사한다.
+```
+var  temperature = 54
+switch temperature {
+case 0...49 where tempetature % 2 == 0 :  //tempetature가 2로 나누어서 짝수면,, 
+print("Cold and even")
+case 50...79 where temperature % 2 == 0 : 
+print("Warm and even")
+(..중략)
+}
+```
+
+
+### fallthrough
+- C/C++, 오브젝-C와 같은 언어와 달리 case문 당므에 break문을 포함할 필요가 없다. 
+- 다른언어들과는 다르게, 스위프트는 일치하는 case문을 만나면 자동으로 빠져나온다.
+- **case별로 빠져 나가지 않고 아래로 계속 내려가게 하려면 fallthrough문을 사용한다.**
+```
+var  temperature = 54
+switch temperature {
+case 0...49 where temperature % 2 == 0 : 
+ fallthrough //빠져나가지 않고 아래로 내려감
+print("Cold and even")
+case 50...79 where temperature % 2 == 0 :
+ fallthrough
+print("Warm and even")
+(..중략)
+default : 
+print("ddd")
+} 
+```
+- 스위프트 switch문에서는 보통 break문이 사용되지 않지만, 다음과 같이 default case에서 해야할 경우 유용하다
+```
+default : 
+break
+}
+```
+
+
+
+
+
 
 ***
 ### then
@@ -1930,6 +2228,8 @@ e
 
 ### **SwiftUI**
 
+[ 링크 : SwiftUI 레퍼지토리로 이동 ](https://github.com/Qussk/SwiftUI)
+
 *swiftUI소개*
  [ https://developer.apple.com/kr/xcode/swiftui/](https://developer.apple.com/kr/xcode/swiftui/)
 
@@ -1943,7 +2243,7 @@ e
 - iOS. tvOS. macOS - AppKit,  watchOS - watchKit 처럼 알맞은 Kit를 이용해야하지만, SwiftUI는 모든 기종 호환가능. 
 
 
-### **SwiftUI사용**  
+### **SwiftUI사용 기본**  
 
 - View와 body로 구성됨.  그 중 body를 구현하는것 . (some View => 사용자에게 보여지는 뷰). 뷰의 프로토콜을 구현하는 어떤 것 **someView**.
 
