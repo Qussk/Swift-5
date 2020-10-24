@@ -69,9 +69,15 @@
   - [switch](#switch)
   - [where](#where)
   - [fallthrough](#fallthrough)
-  
-  
-
+- [함수기초](#함수)
+  - [내부 매개변수와 외부 매개변수](#내부외부)
+  - [디폴트 매개변수 : Default Parameter](#디폴트매개변수)
+  - [여러개의 결과 반환](#여러개결과반환)
+  - [가변매개변수 : Variafic Parameter](#가변매개변수)
+  - [inout매개변수](#inout매개변수)
+  - [함수를 매개변수와 리턴값으로 사용](#함수를매개변수로사용)
+  - [swift함수명](#swift함수명)
+  - [클로저표현식 : 클로저와 후행 클로저](#클로저표현식)
 - [then(with: 전수열)](#then)
 - [extention](#extention)
 - [Protocol](#Protocol)
@@ -1238,6 +1244,416 @@ default :
 break
 }
 ```
+***
+
+### 함수
+- 특정 작업을 수행하는 코드 블록
+- 수행하기 위하여 데이터가 제공될 수 있으며, 함수를 호출한 코드에 작업한 결과를 반환할 수도 있음
+- 매개변수(perameter, 인자)와 인수(argument)는 차이가 있음
+- 함수 정의부의 값을 **매개변수**, 호출시의 값은 **아규먼트**라고 함
+```
+내 동전 = 전달인자(argument)
+자판기 안의 내 동전 = 매개변수(parameter)
+리턴 값 = return value 
+```
+
+*method*
+- 특정 클래스, 구조체, 열거형 내의 함수
+- 함수를 스위프트 클래스 내에 선언하면 메서드라 부름
+
+*함수를 선언하는 방법*
+- func 함수라는 것을 컴파일러에 알려줌
+- 함수명 - 함수이름
+- 매개변수 이름 - 함수 코드 내에서 참조되는 매개변수의 이름
+- 매개변수 타입 - 함수에 전달되는 매개변수의 타입
+- 반환값 타입 - 함수가 반환하는 결과에 대한 데이터 타입
+(반환하지 않으면 Void -> 생략가능 )
+```
+//message함수는 문자열과 정수를 받아 문자열로 반환. 
+func message(name : String, age: Int) -> String {
+return ("\(name), \(age)") 
+}
+```
+
+*정의와 호출*
+```
+func satHello(){
+ print("Hello")
+}
+sayHello() //(헬로우를 프린트하는) 함수 호출
+```
+
+
+*C에서 Swift로 함수 변경하기*
+```
+int add(int x, int y) { //C, C++ //x,y는 파라메터
+ return(x+y)
+}
+add(10,20); //10,20은 아큐먼트
+
+//타입의 자료형은 무조건 대문자
+func add(x: Int, y: Int) -> Int {
+return(x+y)
+}
+add(x: 10, y:20)
+```
+
+### 내부외부
+*내부 매개변수 이름과 외부 매개변수 이름*
+```
+func add(first x : Int, seconf y : Int) -> Int {
+//외부 내부: 자료형, 외부 내부: 자료형 -> 리턴형
+return x + y //함수 정의할 떄는 내부 매개변수명을 사용 
+             //return (first+second)하게 되면 오류
+}
+add(first: 10, secound : 20)  // add(x:10, y:20)은 오류
+//호출시 반드시 외부 매개변수명을 사용 --> 함수바깥에서 호출할 때 사용
+```
+*외부이름 생략*
+```
+// _언더스코어: 언더바라고 읽지 말래..
+//외부매개변수명 생략한다는 의미
+func add(_ x: Int, _ y: Int) -> Int {
+return x + y
+}
+print(add(10,20))
+
+
+//첫번째 외부매개변수명만 생략하는 경우가 많음,두번 째 매개변수부터는 외부매개변수 사용(제일 많이 쓴다고함) 
+func add(_ x: Int, with: Int) -> Int {
+return x + y
+}
+print(add(10, with: 20))
+```
+*앱으로 예를들면*
+```
+@objc func changeDetePiker(_ sender : UIDatePicker) {
+let datePickerView = sender
+let formatter = DateFormatter()
+formatter.dateDormat = "yyyy-MM-dd HH:mm:ss EEE"
+lblPickerTime.text = "선택시간: " + formatter.string(from: datePickerView)
+}
+```
+
+```
+//내부이름 : pickerView,row,component
+//이런 내부이름으로 함수 안에서 개발하게 됨. 
+func pickerView(_ pickerView: UIPickerView, didSelectRow row : Int, inComponent component: Int) {
+
+lblImageDileName.text = imageFilName[row]
+imageView.image = imageArray[row]
+}
+
+```
+
+### 디폴트매개변수
+: Default Parameter
+- 아규먼트로 전달하는 값이 없는 경우, 디폴트 매개변수 값을 사용
+- 함수를 선언할 떄 매개변수에 디폴트 값을 할당
+- 이름이 인자로 전달되지 않을 겨웅에 디폴트로 "Kim"이라는 문자열이 사용되도록함 
+```
+func vuildMessage(count: Int, name: String = "Kim") -> String {
+return ("\(name), you are customer number \(count)")
+}
+```
+- 이 함수는 고객 이름 값을 전달하지 않고도 호출할 수 있다.
+```
+var message = buildMessage(count: 100)
+print(message) // Kim, you are customer number 100 
+```
+- 고객 이름을 가지고 함수를 호출하면 아규먼트를 참조함
+```
+var message = buildeMessage(count : 50, name : "Lee")
+print(message) //Lee, you are customer number 50
+```
+
+### 여러개결과반환
+- 함수는 여러 결과 값들을 튜플로 감싸서 반환할 수 있음 
+- 인치 단위의 수를 매개변수로 받아 야드, 센티미터, 미터로 변환하고 이 세개의 값을 하나의 튜플()에 넣어 반환 
+```
+func sizeConverter(length: Float) -> (yards: Float, centimeters: Float, meters: Float){
+ let yards = length * 0.02777778
+ let cnetimeters = length * 2.54
+ let meters = length * 0.0254 
+
+retrun (yards, cnetimeters, meters)
+}
+
+var lengthTuple = sizeConverter(length:20)
+print(lenthTuple.yards)
+print(lenthTuple.cnetimeters)
+print(lenthTuple.meters)
+```
+
+*직접해봄* 
+```
+func adc(leg: Float) -> (a: Float, b:Float, c:Float) {
+  let a = leg * 0.0277
+  let b = leg * 2.52222
+  let c = leg * 4.533
+return (a,b,c)
+}
+
+var oo = adc(leg: 2)
+print("a는 \(oo.a)")
+print("b는 \(oo.b)")
+print("c는 \(oo.c)")
+```
+
+*2개의 정수를 입력받아 가감제 리턴 *
+```
+fucn sss(x : Int, y : Int) -> (sum: Int, sub: Int, div: Double){
+let sum = x + y
+let sub = x - y
+let div = Double(x)/Double(y) //x,y를 Double로 바꾸기 
+//서로 다른 자료형은 연산이 안됨.
+
+return (sum, sub, div)
+}
+var result = sss(x: 15, y: 14)
+print(result.sum)
+print(result.sub)
+print(result.div)
+```
+swift print format으로 구글링하여 소수점 원하는 만큼 출력
+
+### 가변매개변수
+: variafic parameter
+- 함수가 지정된 데이터 타입으로 개수에 상관없이 매개변수를 받는다면 세 개의 점(...)사용
+- 임의의 개수의 String 값을 매개변수로 받아서 콘솔에 출력
+```
+func displayStrings(strings: String...)
+ {
+ for string in strings {
+ print(String)
+ }
+}
+displayStrings(strins: "one", "two", "three", "four")
+displayStrings(strins: "one", "two")
+```
+*임의의 개수의 정수값의 합을 출력하는 함수를 작성하여 호출하기*
+```swift
+/*
+add(numbers: 1,2,3) //6
+add(numbers: 2,2,2,2,2)//10
+add(numbers: 1,1,1,1,1,1,1,1,1,1)//10
+를 출력하는 함수 만들어보기
+
+*/
+
+func add(numbers : Int...) -> Int {
+  var result = 0
+  for index in numbers {
+    result += index
+  }
+  return result
+}
+var number = add(numbers: 1,2,3)
+print(number) //6
+
+
+func add2(numbers: Int...) -> Int {
+  var result = 0
+  for index in numbers {
+    result += index
+  }
+  return result
+}
+var number2 = add2(numbers: 2,2,2,2,2)
+print(number2) //10
+
+
+func add3(numbers : Int...) -> Int {
+  var result = 0
+  for index in numbers {
+    result += index
+  }
+return result
+}
+
+var number3 = add3(numbers: 1,1,1,1,1,1,1,1,1,1)
+print(number3) //10
+
+
+```
+
+### inout매개변수
+: call by referecn 구현
+- swift는 기본적으로 call by value형식임
+- swift에서 call by refernce를 구현하는 방법
+- 함수가 값을 반환한 후에도 매개변수에 일어난 변화를 유지하려면, 함수의 선언부에서 매개변수를 입출력 매개변수(inout parameter)로 선언해야함
+
+```
+//1.call by reference하고 싶은 매개변수의 자료형 앞에 inout씀.
+//2.call by reference하고 싶은 변수에 &붙여서 호출
+var myValue = 10
+func daoubleValue(value: inout Int) -> Int {
+  value += value
+  return(value)
+}
+print(myValue) //10
+print(daoubleValue(value: &myValue))//20
+print(myValue) //20
+
+```
+
+### 함수를매개변수로사용
+- swift는 함수를 데이터 타입처럼 사용할 수 있음
+- 다음과 같이 함수를 상수 또는 변수에 할당하는 것이 가능
+```
+func inchesToFeet(inches: Float) -> Float {
+retrun inches * 0.0873636
+}
+let toFeet = inchesToFeet //함수를 자료형처럼 사용
+```
+- 함수를 호출하려면 원래의 함수이름 대신에 상수이름을 사용하여 호출가능
+```
+var result = toFeet(10) //inchesToFeet(10)
+```
+- 어떤 함수에 다른 함수를 매개변수나 반환 값으로 함수를 사용할 수 있음
+(스위프트 함수는 1급 객체(first class object) 또는 1급시민(first class citizen)
+- 위 함수는 Float형 매개변수, Float형 결과를 반환하기 때문에 함수의 데이터 타입(자료형)
+(Float) -> Float // (매개변수형)-> 리턴형
+- Int와 Double형을 매개변수로 받아서 String을 반환하는 함수의 데이터 타입
+(Int, Double) -> String
+- 매개변수로 함수를 받으려면, 함수를 받게 될 함수는 함수의 데이터 타입을 선언함
+```
+func addTowInteger(x: Int, y: Int) -> Int {
+return x + y
+}//의 자료형은 ? ((Int, Int) -> Int).Type
+```
+
+### 함수를매개변수나리턴값으로사용
+- swift의 함수는 1급 객체이다.
+-  다음 조건을 충족하는 객체를 1급 객체라고 한다.
+1) 변수에 저장할 수 있다.
+2) 매개변수로 전달할 수 있다.
+3) 리턴값으로 사용할 수 있다. 
+```
+func inchesToFeet(inches: Float) -> Float {
+ return inches * 0.0873636
+}
+
+func inchesToYarde (inches: Float) -> Float {
+ return inches * 0.0277778
+}
+let toFeet = inchesToFeet
+let toYard = inchesToYarde
+
+//print(toFeet(inchesToFeet(inches: 30))) //0.22897196
+//print(toYard(inchesToYarde(inches: 40))) //0.030864248
+```
+- 단위를 변환하고 콘솔에 결과를 출력하는 다른 함수
+```
+//converterFunc: 는 (Float) -> Float 자료형만 들어갈 수 있음(위의 toFeet, toYard같은 자료형)
+func outputConversion(converterFunc: (Float) -> Float, value: Float) {
+ let result = converterFunc(value)
+ print("Result = \(result)")
+}
+```
+- outputConversion 함수를 호출할 때 선언된 데이터 타입과 일치하는 함수 전달
+- 매개변수로 적절한 변환함수를 전달하면 인치를 피트 또는 야드로 변환하기 위하여 동일한 함수가 호출될 수 있음
+```
+outputConversion(converterFunc: toFeet, value: 14) //피트로 변환하는 inchesToFeet함수 호출
+outputConversion(converterFunc: toYard, value: 14) //야드로 변환하는 inchesToYard함수 호출
+```
+- 반환타입으로 함수의 타입을 선언하면 함수도 반환될 수 있음
+- 다음 함수는 Boolean 매개변수의 값에 따라 toFeat 함수 또는 toYard함수를 반환
+```
+//매개변수형 리턴형이 함수형 : ()가 있으면 일단 함수구나! 생각해야함 : (Float) -> Float 
+finc decideFunction(feet: Bool) -> (Float) -> Float {
+ if feet {
+ return toFeet //함수를 리턴
+ } else {
+ return toYard
+ }
+}
+```
+
+### swift함수명
+- 함수명(외부매개변수 : 외부매개변수: ...)
+- :의 개수가 매개변수의 개수
+```
+func add(x: Int, y: Int) -> Int {
+return x + y
+}
+//add( : : )
+```
+```
+func add(first x: Int, second: Int) -> Int {
+return x + y
+}
+//add(first: second: )
+```
+
+- numberOfRows(inSection:)
+```swift
+func numberOfRows(inSection section: Int) -> Int
+```
+- tableView(_ : cellForRowAt: )
+```swift
+func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+```
+- tableView(_ numberOfRowsInSection: )
+```swift
+func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+```
+
+### 클로저표현식 
+- C,C++,Objc-C의 block
+- Java의 Lambda function
+- C#의 Delegates
+- 클로저표현식은 독립적인 코드 블록
+- 클로저 : 익명함수(이름이 없는 함수)
+```
+//기존함수
+func add(x: Int, y: Int) -> Int {
+return x + y
+}
+print(add(x:10, y:20))
+
+//클로저 이용
+let add = {(x: Int, y: Int) -> Int in 
+retrun x + y
+}
+print(add(x:10, y:20))
+//매개변수를 바로 사용
+```
+- 클로저 표현식은 매개변수를 받거나, 값을 반환하도록 만들 수도 있음
+```
+{(<매개변수 이름> : <매개변수 타입>, ... ) -> <반환타입> in 
+//클로저 표현식 코드
+}
+```
+- 클로저 표현식을 선언하고 상수에 할당한 다음, 함수를 호출
+```
+let sayHello = { print("Hello") }
+sayHello() //상수처럼 함수 호출
+```
+- 두개의 정수 매개변수를 받아서 정수 결과 값을 반환
+```
+let multiply = {(val1: Int, val2: Int) -> Int in 
+return val1 * val2
+}//여기서 multiply의 자료형은 (Int, Int) -> Int 
+let result = multiply(10,20) //상수를 함수처럼 호출, 200
+```
+
+### 후행클로저
+: trailing closure (꼬리 클로저)
+- 클로저가 함수의 마지막 아규먼트라면 마지막 매개변수 이름(여기서는 handler: )을 생략한 후 함수 소관호 외부에 클로저를 구현
+```
+let onAction = UIAlertAction(title: "아니오, 켭니다(on).",
+style: UIAlertAtion.style.default) { Action in //->handler 날려버림. //마지막 인자의 경우에 생략가능
+self.lampImag.image = self.imagOn
+self.isLampOn = true
+} 
+
+let removeAction = UIAlertAction(title: "네, 제거합니다.",
+style: UIAlertAtion.style.destructive, handler : { Action in
+self.isLampOn = false
+}
+```
+
 
 
 
