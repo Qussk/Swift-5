@@ -45,7 +45,6 @@
 - [CoreAnimation](#CoreAnimation)
 - [CALayer](#CALayer)
 - [iOS UIClassDiagram](#UIClassDiagram)
-
 **[문법]**
 - [데이터 타입](#데이터타입)
   - [Int](#Int)
@@ -93,8 +92,12 @@
   - [Self](#Self)
   - [CulatedProperty : get, set](#CulatedProperty)
   - [overloading ~ Failable Initializers](#overloading)
-- [상속](#상속)  
-- [extention](#extention)
+- [상속](#상속)
+  - [super](#super)
+  - [override](#override)
+  - [extension](#extension)
+- [접근제어](#접근제어)
+
 - [Protocol](#Protocol)
 - [메모리 구조&관리](#메모리구조)
 - [func](#func)
@@ -2127,7 +2130,6 @@ kim2.display()
 
 
 ***
-
 ### Protocol
 
 - 특정 역할을 하기 위한 메소드. 프로퍼티, 기타 요구사항 등의 청사진.
@@ -2147,7 +2149,7 @@ protocol 프로토콜이름 {
 }
 ```
 
-*extention과 사용*
+*extension과 사용*
 해봤던 것
 ```swift
 //1. 기능추가
@@ -2176,31 +2178,172 @@ protocol StartViewControllerDelegate: class {
   })
 ```
 
-**
-
-
 ***
-### extention
+### 상속
+- superclass(부모 class)와 <=== subclass(자식 class) : class다이어그램
+- 상속, 클래스, 하위 클래스
+- 상속받은 클래스는 부모 클래스의 모든 기능을 상속받으며, 자신만의 기능을 추가
+- 상속받은 클래스들을 하위 클래서(subclass)또는 자식 클래스(child class)
+- 하위 클래스가 상속받은 클래스는 부모 클래스(parent class) 또는 상위 클래서 (superclass) 
+- 단일 상속(single inheritence) : 스위프트에서 하위 클래스틑 단 하나의 부모 클래스만 상속받을 수 있음
 
-- 확장(Extensions)은 기존에 있는 클래스, 구조체, 열거형, 프로토콜 타입에 새로운 기능을 추가하는 역할을 함. 
+*스위프트의 상속*
+```
+class 자식 : 부모 { 
+}
+```
+- C#에서와 동일, C++에서는 3가지방법 (퍼블릭,프라이벗,프로택티드), 자바는 익스텐즈 
+- 부모 클래스는 하나만 가능하며 여러 개라면 나머지는 프로토콜 
+- class 클래스명 : 부모명 , 프로토콜명 { } // 부모 다음에 표기
+- class 클래스명 : 프로토콜명 { } //부모가 없으면 프로토콜 명만 기재
+- class 클래스명 : 프로토콜명 1, 프로토콜명2 {}
+- 클래스, 구조체, 열거형, extension에 프로토콜을 채택(adopt)할 수 있음 
+//프로토콜은 상속이아니라 채택의 개념임
+```swift
+//부모
+class Man { 
+var age : Int : 1
+var weight : Double = 3.5
+
+ func display(){
+ print("나이 = \(age), 몸무게 = \(weight)")
+ }
+ init(age: Int, weight: Double){
+ self.age = age
+ self.weight = weight
+ }
+}
+
+//자식 - 부모가 가진 것을 물려받아요!!
+class Student : Man {
+//비어있지만 Man의 모든 것을 가지고 있음
+}
+var kim : Man = Man(age:10, weight: 20.5)
+kim.display() //age: 10
+var lee : Strudent = Student(age: 20 ,weight: 65.2) //Strudent를 타입으로 해도 Man의 프로퍼티를 쓸 수 있음
+lee.display()
+print(lee.age) //age: 20
+
+```
+
+### super
+: 부모 메서드 호출 시 사용 
+
+```swift
+//부모
+class Man { 
+var age : Int : 1
+var weight : Double = 3.5
+
+ func displayS(){
+ print("나이 = \(age), 몸무게 = \(weight)")
+ }
+ init(age: Int, weight: Double){
+  self.age = age
+  self.weight = weight
+ }
+}
+
+//자식 - 부모가 가진 것을 물려받아요!!
+class Student : Man {
+var name : String = "Qussk"
+
+  func display2(){
+  print("이름 = \(name), 나이 = \(age), 몸무게 = \(weight)")
+  }
+  init(name: String, age: Int, weight: Double){
+   super.init(age:age, weight: weight) //부모메서드 호출 -> 꼭 부모것을 super.init으로 호출해야함.
+   self.name = name 
+ }
+}
+var lee : Strudent = Student(name: "안젤라", age: 20 ,weight: 65.2) //Strudent를 타입으로 해도 Man의 프로퍼티를 쓸 수 있음
+lee.display2() //안젤라, 20, 66.2
+lee.display() //부모에 있는 함수 가져옴. // 1, 3.5 //***나이랑 몸무게만 가져옴.
+
+//보충 
+init(name: String, age2: Int, weigh2t: Double){
+ super.init(age:age2, weight: weight2) //부모메서드 호출 -> 꼭 부모것을 super.init으로 호출해야함.
+ self.name = name 
+}
+var lee : Student = Student(age2: 20, weight2: 65.2, name: "홍길동")
+```
+**관계도**
+![](/image/class.png)
+
+
+### override
+: 부모와 자식에 같은 메서드가 있으면 자식 우선
+- overoading과 override의 차이점 알아보기
+  - overoading은 함수이름이 같은 init메서드 여러개 중첩하여 사용.
+  - override은 부모와 자식간의 관계에서 똑같은 이름의 메서드가 있을 때, 자식쪽의 메서드를 우선적으로 호출한다. 
+- 사전적 의미 :무엇보다도. //부모것 무시하고 자식거 먼저 해줄게~~
+- 부모와 자식에 display()라는 메서드가 있어서 Student클래스는 display()메서드가 두 개임
+- Student클래스의 인스턴스 lee가 display()를 호출할 때, 자식 클래스가 새로 만든 display() 메서드가 우선적으로 호출되려면 func 앞에 override키워드 씀
+```swift
+//부모
+class Man { 
+var age : Int : 1
+var weight : Double = 3.5
+
+ func displayS(){
+ print("나이 = \(age), 몸무게 = \(weight)")
+ }
+ init(age: Int, weight: Double){
+  self.age = age
+  self.weight = weight
+ }
+}
+
+//자식
+class Student : Man {
+var name : String = "Qussk"
+
+  override func display() { //자식이 만든 새로운 display()를 먼저 호출해주세요.
+  print("이름 = \(name), 나이 = \(age), 몸무게 = \(weight)")
+  }
+  init(age: Int, weight: Double, name: String){
+   super.init(age:age, weight: weight) 
+   self.name = name 
+ }
+}
+var lee : Strudent = Student(age: 20 ,weight: 65.2, name: "홍길동")
+lee.display() //20, 65.2, "홍길동"
+
+```
+### extension
+: 확장
+- 스위프트 클래스, 구조체, 열거형, protocol에 새로운 기능을 추가
 - 원래 소스코드(소급 모델링(retroactive modeling))에 접근하지 못하는 타입을 확장하는 능력도 포함. (확장은 Objective-C에서의 카테고리와 비슷.
 - Objective-C 카테고리와 다르게, Swift의 확장은 이름을 가지지 않음
+- 익스텐션은 하위 클래스를 생성하거나 참조(상속)하지 않고 기존 클래스에 메서드, 생성자, 계산프로퍼티 등의 기능을 추가하기 위하여 사용
+- 스위흐트 언어의 built-in클래스와 iOS 프레임워크에 내장된 클래스에 기능을 추가할 때, 익스텐션을 이용하면 매우 효과적임
+- 클래스(구조체, 열거형, protocol)는 다음과 같은 형태로 확장(익스텐션)된다.
+```
+extension 기존타입이름 {
+//새로운 기능
+}
+```
+- 표준 자료형 Double 구조체에 두 배의 값을 반환하는 프로퍼티를 추가
+- Double형의 인스턴스 myValue를 다음과 같이 사용할 수 있다.
+```swift
+extension Double {
+ var squared : Double {
+ return self * self
+ }
+}
+let isValue : Double = 3.0
+print(isValue.squared) //0.22897196
+print(3.0.squared) //Double형 값에도 .으로 바로 사용 가능.
+//0.030864248
 
-*extention 기능*
+```
+*extension 기능*
 - 계산 인스턴스 프로퍼티와 계산 타입 프로퍼티를 추가
 - 인스턴스 메소드와 타입 메소드를 정의
 - 새로운 초기화 제공
 - 서브스크립트 정의
 - 새로 중첩된 타입을 정의하고 사용
 - 기존 타입에 프로토콜을 준수하도록 만들기
-
-*사용*
-```swift
-extension 클래스이름 : (프로토콜 이름) { 
- }
-
-```
-- 프로토콜을 추가적으로 준수(conformance)하기 위해, 클래스나 구조체를 작성하는 것과 같은 방법으로 프로토콜 이름을 작성함.
 
 *제네릭이 있는 경우*
 - [https://docs.swift.org/swift-book/LanguageGuide/Generics.html#ID553](https://docs.swift.org/swift-book/LanguageGuide/Generics.html#ID553)
@@ -2215,10 +2358,13 @@ extension Stack where Element: Equatable {
     }
 }
 ```
+***
+
+### 접근제어
+: access control
 
 
 ***
-
 ### 메모리구조
 
 ```
