@@ -1,5 +1,6 @@
-# Swift-5.0
 
+# Swift-5.0
+![](https://blog.kakaocdn.net/dn/pqFj2/btqudUDGj8z/jDw0OEypjB60UYTWmvOQdk/img.png)
 
 - [x] You can refer to it through the playground
 - [x] You can use swift
@@ -79,9 +80,19 @@
   - [swift함수명](#swift함수명)
   - [클로저표현식 : 클로저와 후행 클로저](#클로저표현식)
 - [then(with: 전수열)](#then)
+- [Class](#Class)
+  - [Class 기초](#Class기초)
+  - [클래스 선언하기](#클래스선언하기)
+  - [클래스에 property추가하기](#클래스에property추가하기)
+  - [메서드 정의](#메서드정의)
+  - [타입(클래스)메서드](#타입메서드)
+  - [인스턴스 초기화하기 : init()](#인스턴스초기화하기)
+  - [Self](#Self)
+  - [CulatedProperty : get, set](#CulatedProperty)
+  - [overloading ~ Failable Initializers](#overloading)
+- [상속](#상속)  
 - [extention](#extention)
 - [Protocol](#Protocol)
-- [Class](#Class)
 - [메모리 구조&관리](#메모리구조)
 - [func](#func)
 - [inout](#inout)
@@ -1653,12 +1664,6 @@ self.isLampOn = false
 }
 ```
 
-
-
-
-
-
-
 ***
 ### then
 - ios개발자 전수열님이 만든 라이브러리.
@@ -1721,6 +1726,7 @@ let tableView = UITableView().then {
 - $0으로 view에 대한 내용 간단하게 처리 
 
 *Foundation*
+- then은 프롵토콜인ㅁ. 
 
 ```swift
 import Foundation
@@ -1730,11 +1736,18 @@ extension NSObject: Then {}
 
 extension Then where Self: AnyObject {
   func then(_ configure: (Self) -> Void) -> Self {
-    configure(self)
-    return self
+    configure(self) //셀프를 받아서 --> 셀프 왜써? $0임을 알려줘여하기 떄문에
+    return self //셀프를 리턴
+    
+    //타입 : Self -> void를 뱉는 함수타입.
   }
 }
-
+ then은 프로토콜임
+ extension으로 NSObject을 채택,
+ 
+ //프로토콜 채택하면서도, AnyObject인 경우. AnyObject은 클래스타입임. 클래스 타입일 떄 이 작업을 해라.
+ extension Then where Self: AnyObject {
+ 
 ```
 - 예시는 backgroundImageView로 듦.
 -  **then**을 사용시, **configure**에 **self**를 넣고, **self**를 반환한다는 뜻. 
@@ -1745,6 +1758,370 @@ extension Then where Self: AnyObject {
 - **configure(self)** 부분에 **$0**이 무엇인지 알려주어야함.
 - self의 type은 imageView()
 - return 은 imageView를 반환하게 됨.
+
+***
+
+### Class
+*프로퍼티*
+  - 저장 프로퍼티 : 인스턴스의 변수나 상수 
+  - 연산 프로퍼티 : 특정 연산을 수행한 결과값을 가짐
+  - 타입 프로퍼티 : 인스턴스가 아닌 타입자체에 속판 프로퍼티
+  - 프로퍼티 감시자 : 프로퍼티값이 변경이되면 호출되는 메서지(willSet, didSet)
+  
+*메서드*
+  - 인스턴스 메서드 : 특정타입에 인스턴스에 속한 메서드(일반적인)
+  - 타입(클래스) 메서드 : 타입자체에서 호출이 가능한 메서드
+  
+*접근제어* 
+  - 코드끼리 상호작용할 때 파일 간 또는 모듈간에 접근을 제한 할 수 있는 기능. 접근제어를 구현은 숨기고 허용된 기능만 노출할 수 있음.
+  
+|접근수준|키워드|접근도|범위|비고|
+|:------:|:---:|:---:|:---:|:---:|
+|개방접근|open|높음|모듈 외부까지|클래스에서만 사용|
+|공개접근|public| |모듈 외부까지| |
+|내부접근|Internal| |모듈 내부| |
+|개방접근|fileprivate| |모듈 내부| |
+|비공개접근|private|낮음|기능 정의 내부| |
+
+
+### Class기초
+- 청사진이나 설계사의 그림이 건물이 완성된 후의 모습을 나타내고 있는 것처럼 클래스(class)는 객체가 생성되었을 때 어떠한 모습이 보일 것인지 정의
+- 메서드는 어떠한 일을 하고 어떠한 속성이 있는지 등을 정의
+- 붕어빵을 만드는 데 붕어빵을 만드는 틀.
+- 클래스로부터 만들어진 객체(붕어빵들) ==> 인스턴스
+- When an object is created by a constructor of the class, the resulting object is called an instance of the class.
+클래스로부터 만들어진 객체를 인스턴스라 한다. 
+- 클래스 : Dog { var 객체  ==> 인스턴스 : 멍멍이, 해피, 메리
+ 
+ **객체지향 용어 비교**
+ ![](https://img1.daumcdn.net/thumb/R720x0.q80/?scode=mtistory2&fname=http%3A%2F%2Fcfile21.uf.tistory.com%2Fimage%2F213AC537551A63C0228161)
+
+*Swift*
+- **자동차**라는 **Class**에 **문,핸들,바퀴,의자** 특정 멤버변수(Mamber VarLable)는 **프로퍼티(Property)**, **움직인다,정차한다, 감속한다**는 행위의 멤버함수(Member Function)은 **메소드(Method)**
+- 캡슐화할때, 명사는 프로퍼티, 동사는 메소드로 진행됨. 프로퍼티와 메소드가지고 논다. 프로퍼티는 데이터, 처리하는 동작은 메소드
+
+*인스턴스(instance)*
+ - 실제로 메모리에 할당된 객체(object)
+ - In object-oriented programming(OOP), an instanc is a concrete(실체가 있는) occyrrence of any object, existing usually durinhg the runtime of a computer program. Formally, "instance" is synontmous with "object" as they are each a particular value (realization), and these may be called an instance object. "instance" emghasize the distinct identity(분명한 정체성) of the object .
+ - 소프트웨어 애플리케이션을 개발하는 데 사용되는, 쉽게 사용할 수 있으며 재사용할 수 있는 기능을 가진 모듈
+ - 객체의 구성
+   - 데이터 변수(data variable) or 속성(property)
+   - 함수 or 메서드(method)
+ 
+### 클래스선언하기
+- C#과 비슷
+```
+class 새로운 클래스 이름 : 부모클래스 {
+//프로퍼티
+//인스턴스 메서드 (일반적인 메서드)
+//타입, 메서드(클래스 메서드)
+}
+```
+- "프로퍼티" 부분은 클래스 내에 포함되는 변수(var)와 상수(let)를 정의한다
+- "인스턴스 메서드"는 객체가 호출하는 메서드를 정의한다
+- "타입 메서드"는 클래스가 호출하는 메서드를 정의한다.
+
+### 클래스에property추가하기
+- 프로퍼티는 초기값이 있거나 Init을 이용해서 초기화하거나 옵셔널 변수(상수)로 선언
+- 프로퍼티는 저장 프로퍼티(stored property)와 계산 프로퍼티(calculated property)가 있다.
+- age, weight는 stored property
+- 프로퍼티는 초기값이 있거나 옵셔널 변수(상수)로 선언
+```swift
+class Man {
+var age : Int = 20
+var weight : Double = 3.3
+}
+
+class Man {
+var age : Int?
+var weight : Double!
+}
+```
+### 메서드정의
+- 인스턴스(instance) 메서드, 클래스 또는 타입(class or type)메서드
+- 인스턴스 메서드는 인스턴스에서 동작
+- Man으로부터 만들어진 인스턴스가 display()를 가지고 노는 것임.
+```swift
+class Man {
+var age : Int = 20
+var weight : Double = 3.3
+ 
+ func display() {
+ print ("나이 = \(age), 몸무게=\(weight))
+ }
+}
+
+var kim : Man = Man()
+kim.display()
+print(kim.age)
+```
+
+*인스턴스 생성과 메서드와 프로퍼티 접근*
+```siwft
+var x : Int
+var kim : Man (erro, variable 'kim' used before being initalized)
+var age : Int = 0 
+var 변수명: 자료형 = 초기값
+var 인스턴스명 : 클래스명 = 클래스명()
+var 인스턴스명 = 클래스명() //괄호는 눈에 보이지 않는 default initializer을 나타냄
+var kim : Man = Man()
+var kim = Man()
+
+인스턴스.프로퍼티 // kim.age
+인스턴스.인스턴스메서드 // kim.display
+```
+
+### 타입메서드
+: 클래스 메서드 or 타입 메서드라고도 부름 
+- 클래스.클래스메서드
+- 타입 메서드 또는 클래스 메서드는 **클래스 레벨에서 동작하는 것**으로, 클래스의 새로운 인스턴스를 생성하는 것과 같은 동작
+- 타입 메서드는 인스턴스 메서드와 동일한 방법으로 선언하지만 class나 static키워드를 앞에 붙여서 선언
+- class키워드로 만든 클래스 메서드는 자식 클래스에서 override가능함
+```swift
+class Man {
+var age : Int = 20
+var weight : Double = 3.3
+ 
+ func display() {
+ print ("나이 = \(age), 몸무게=\(weight))
+ }
+ 
+  calss func cM(){ //override가능
+  print("cM은 클래스 메서드입니다.")
+  }
+  
+  static func scM(){
+  print("scM은 클래스 메서드(static)")
+  }
+}
+
+var kim : Man = Man()
+kim.display() //kim은 cM,scM을 가지고 놀 수 없다. 
+Man.cM() //클래스와 스태틱은 클래스 자체가 가지고 놂.
+Man.scM() //클래스와 스태틱은 클래스 자체가 가지고 놂.
+```
+
+### 인스턴스초기화하기
+: init()
+- 클래스, 구조체, 열거형(enum) 인스턴스가 생성되는 시점에서 해야할 초기화 작업
+- 인스턴스가 만들어지면서 자동 호출됨
+- init 메서드(생성자)
+```
+init(){
+}
+```
+- desiganted initaializer (데지그네이트 이니셜라이저) : 모든 프로퍼티(age, weight)를 다 초기화 시키는 생성자
+- 소멸자 
+  - 인스턴스가 사라질 때 자동 호출
+  - deinit { } //소괄호 없음
+
+```swift
+class Man {
+var age : Int = 20
+var weight : Double = 3.3
+
+  func display() {
+  print ("나이 = \(age), 몸무게=\(weight))
+  }
+ init(yourAge: Int, yourWeight: Double){
+   age = yourAge
+   weight = yourWeight
+} //desiganted initaializer
+
+//var kim : Man = Man() //error
+var kim : Man = Man(yourAge: 10, yourWeight: 5.6) //디폴트로 생김 -> 꼭 만들어진 형식대로 호출해야함. 
+kim.display()
+
+```
+- 초기값이 고정이라면 위의 var 프로퍼티에서 해주는 게 좋음. 하지만, 값이 매번 바뀌어야하고 다른 값을 넣어주고 싶은 상황이라면 Init으로 받음. 
+
+### Self
+- 현재 클래스 내 메서드나 프로퍼티를 가리킬 때 메서드나 프로퍼티 앞에 self.을 붙임
+- 아래 소스에서는 self를 붙여도 되어 생략해도 됨
+```swift
+class Man {
+var age : Int = 20
+var weight : Double = 3.3
+ 
+  init(yourAge: Int, yourWeight: Double){
+    age = yourAge //self.age = yourAge (현재 클래스 내의 age의 가르키므로 생략가능)
+    weight = yourWeight
+    }
+```
+- 아래 소스에서는 매개변수와 구분하기 위해 반드시 써야함
+```swift
+class Man {
+var age : Int = 20
+var weight : Double = 3.3
+  
+  init(age : Int, weight: Double){
+  self.age = age  // 매개변수의 age와 프로퍼티의 age를 구분하기 위해 self붙임. (서로를 명시하기 위해)
+  self.weight = weight
+  }
+}
+var kim : Man = Man(age: 10, weight: 20.5)
+kim.display()
+```
+
+### CulatedProperty
+: calculated property는 프로퍼티가 설정되거나검색 되는 시점에서 계산 또는 파생된 값
+- 계산 프로퍼티는 게터(getter)메서드와 계산을 수행하기 위한 코드를 포함하는 세터(setter)메서드를 생성하여 구현
+- manAge는 계산 프로퍼티로 저장프로퍼티 age의 값에서 1을 뺸 값으로 하겠다.
+```swift
+class Man {
+var age : Int = 20
+var weight : Double = 3.3
+var manAge : Int { //메서드 같지만 저장프로퍼티임 {}열어서 시작
+  get {
+   return age - 1
+  }
+}
+
+ func display(){
+ print ("나이 = \(age), 몸무게=\(weight))
+ }
+ init(age: Int, weight: Double){
+ slef.age = age
+ slef.weight = weight
+ }
+}
+var kim : Man = Man(age: 10, weight : 20.5)
+kim.display()
+print(kim.manAge) //9
+
+```
+- **getter :** setter가 없으면 get { }은 생략할 수 있으며 변경하지 않더라도 var로 선언해야함.
+
+```siwft
+var manAge : Int { //메서드 같지만 저장프로퍼티임 {}열어서 시작
+ return age - 1
+}
+//그래서 이렇게 get을 없앨 수 있다,, get이 숨어있는 형태인 것임.
+```
+```swift
+class Man {
+var age : Int = 20
+var weight : Double = 3.3
+var manAge : Int { //메서드 같지만 저장프로퍼티임 {}열어서 시작
+  get {
+   return age - 1
+  }
+  set (USAAge) {
+  age = USAAge + 1  
+ }
+}
+
+ func display(){
+ print ("나이 = \(age), 몸무게=\(weight))
+ }
+ init(age: Int, weight: Double){
+ slef.age = age
+ slef.weight = weight
+ }
+}
+var kim : Man = Man(age: 10, weight : 20.5)
+kim.display()
+print(kim.manAge) //19, get호출
+print(kim.age) // 20
+kim.manAge = 3 // manAge에 3 대입. ==> setter 호출
+print(kim.age) // 4 ==> set가 동작하므로 4가됨 +1
+
+```
+- **setter :** setter가 있으면 get { }은 생략할 수 없음.
+- 매개변수 명은 nuwValue가 기본
+```
+set (newValue) {
+  age = newValue + 1
+ }
+```
+- Shorthand Setter Declaration
+  - setter의 매개변수명이 newValue인 경우에만 이렇게 "(newValue)"생략 가능.
+```
+  set {
+    age = newValue + 1
+   }
+```  
+- getter와 setter를 갖는 계산 프로퍼티 manAge
+```swift
+class Man {
+var age : Int = 20
+var weight : Double = 3.3
+var manAge : Int { //메서드 같지만 저장프로퍼티임 {}열어서 시작
+  get { return age - 1 }
+  set { age = newValue + 1 }
+}
+
+ func display(){
+ print ("나이 = \(age), 몸무게=\(weight))
+ }
+ init(age: Int, weight: Double){
+ slef.age = age
+ slef.weight = weight
+ }
+}
+var kim : Man = Man(age: 10, weight : 20.5)
+kim.display()
+print(kim.manAge) //19, get호출
+print(kim.age) // 20
+kim.manAge = 3 // manAge에 3 대입. ==> setter 호출
+print(kim.age) // 4 ==> set가 동작하므로 4가됨 +1
+```
+
+### overloading 
+: method overloading  생성자 중첩 
+- 매개변수의 개수와 자료형이 다른 같은 이름의 함수를 여러 개 정의
+- 매개변수가 다른 두 생성자를 토앻 두가지 방법으로 인스턴스를 만들 수 있음
+- 하나의 클래스나 같은 이름의 함수가 올 수 있는 것을 객체지향 언어에서 오버로딩이라고 함!
+```swift
+class Man {
+var age : Int = 1
+var weight : Double = 3.3
+
+ func display(){
+ print ("나이 = \(age), 몸무게=\(weight))
+ }
+ init(age: Int, weight: Double){ //1 나이,몸무게 동시 초기화
+ slef.age = age
+ slef.weight = weight
+ }
+ init(age : Int){ //2 나이만 초기화
+ self.age = age 
+ }
+}
+var kim : Man = Man(age: 10, weight: 20.5) //1
+var kim2 : Man = Man(age: 10) //2
+kim.display()
+kim2.display()
+```
+
+*앱으로 예를 들면*
+- 앱에서 이미지 데이터를 고나리하는 클래스 UIImage는 15개의 Init()가 overloading되어 있음
+- let myImage : UIImage = UIImage(named: "apple.png")!
+- var aNewUIImage = UIImage(CGImage: imageRef)
+
+1. Loaing and Caching Images  //한번 캐시를 하면 빠르게 할 수 있는 인잇 메서드
+  - init?(named: String, in: Bundle?, compatibleWith: UITraitCollection?)
+  - init?(named: Strinf)
+  - init(imageLiteralResurecName: String)
+2. Creating and Initializing Image Objects //매번 이니셜라이저하는 인잇 메서드
+  - init?(contentsOffile: String)
+  - init?(data: Data)
+  - init?(data: Data, scale : CGFloat)
+  - init(cgImage: CGImage)
+  - init(cgImage: CGImage, scale: CGFloat, orientation: UIImage.Orientation)
+  - init(ciImage: CIImage, scale: CGFloat, orientation: UIImage.Orientation)
+
+... 이런식
+
+*init후에 ?표가 있는 차이 무엇?*
+
+**Failable Initializers(실패가능한 생성자 : init?)**
+- let myImage: UIImage = UIImage(named: "apple.png")!
+- apple.png파일이 업ㅅ으면 인스턴스를 만들 수 없어 nil 반환
+- nil 값도 저장할 수 있으려면 inite다음에 "?"을 하며 옵셔널 값이 리턴됨
+- init?(named name : String) // Failable initializers  //옵셔널로 리턴이됩니다.
+- init?로 만든 인스턴스는 옵셔널형으로 만들어져서, 사용하려면 옵셔널을 언래핑해야해서 위의 예제에서 제일 마지막에 "!" 가 있음
+
 
 ***
 
@@ -1836,30 +2213,6 @@ extension Stack where Element: Equatable {
 }
 ```
 
-
-***
-### Class
-
-*프로퍼티*
-  - 저장 프로퍼티 : 인스턴스의 변수나 상수 
-  - 연상 프로퍼티 : 특정 연산을 수행한 결과값을 가짐
-  - 타입 프로퍼티 : 인스턴스가 아닌 타입자체에 속판 프로퍼티
-  - 프로퍼티 감시자 : 프로퍼티값이 변경이되면 호출되는 메서지(willSet, didSet)
-  
-*메서드*
-  - 인스턴스 메서드 : 특정타입에 인스턴스에 속한 메서드(일반적인)
-  - 타입 메서드 : 타입자체에서 호출이 가능한 메서드
-  
-*접근제어* 
-  - 코드끼리 상호작용할 때 파일 간 또는 모듈간에 접근을 제한 할 수 있는 기능. 접근제어를 구현은 숨기고 허용된 기능만 노출할 수 있음.
-  
-|접근수준|키워드|접근도|범위|비고|
-|:------:|:---:|:---:|:---:|:---:|
-|개방접근|open|높음|모듈 외부까지|클래스에서만 사용|
-|공개접근|public| |모듈 외부까지| |
-|내부접근|Internal| |모듈 내부| |
-|개방접근|fileprivate| |모듈 내부| |
-|비공개접근|private|낮음|기능 정의 내부| |
 
 ***
 
