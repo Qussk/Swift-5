@@ -1,6 +1,7 @@
 
 # Swift-5.0
-![](https://blog.kakaocdn.net/dn/pqFj2/btqudUDGj8z/jDw0OEypjB60UYTWmvOQdk/img.png)
+
+![](https://blog.kakaocdn.net/dn/pqFj2/btqudUDGj8z/jDw0OEypjB60UYTWmvOQdk/img.png =100x100 )
 
 - [x] You can refer to it through the playground
 - [x] You can use swift
