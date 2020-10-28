@@ -39,63 +39,63 @@
 - [ViewController Life Cycle(생명주기)](#ViewControllerLifeCycle)
 - [Main run loop](#MainRunLoop)
 - [Update Cycle](#UpdateCycle)
-- [Layout](#Layout)
-- [Display](#Display)
-- [Constraints](#Constraints)
+  - [Layout](#Layout)
+  - [Display](#Display)
+  - [Constraints](#Constraints)
 - [CoreAnimation](#CoreAnimation)
 - [CALayer](#CALayer)
 - [iOS UIClassDiagram](#UIClassDiagram)
 **[문법]**
 - [데이터 타입](#데이터타입)
-- [Int](#Int)
-- [Double](#Double)
-- [Bool](#Bool)
-- [Character](#Character)
-- [String](#String)
-- [특수문자,이스케이프시퀀스](#특수문자,이스케이프시퀀스)
-- [var(변수)](#var)
-- [let(상수)](#let)
-- [타입어노테이션과 타입추론](#타입어노테이션과타입추론)
+  - [Int](#Int)
+  - [Double](#Double)
+  - [Bool](#Bool)
+  - [Character](#Character)
+  - [String](#String)
+  - [특수문자,이스케이프시퀀스](#특수문자,이스케이프시퀀스)
+  - [var(변수)](#var)
+  - [let(상수)](#let)
+  - [타입어노테이션과 타입추론](#타입어노테이션과타입추론)
 - [Tuple](#Tuple)
 - [as](#as)
 - [is](#is)
 - [Any와 AnyObject](#Any)
 - [연산자](#연산자)
-- [nil 합병 연산자](#Nil합병연산자)
+  - [nil 합병 연산자](#Nil합병연산자)
 - [제어문](#제어문)
-- [for](#for)
-- [while](#while)
-- [break](#break)
-- [continue](#continue)
-- [if문사용하기](#if문사용하기)
-- [guard](#guard)
-- [switch](#switch)
-- [where](#where)
-- [fallthrough](#fallthrough)
+  - [for](#for)
+  - [while](#while)
+  - [break](#break)
+  - [continue](#continue)
+  - [if문사용하기](#if문사용하기)
+  - [guard](#guard)
+  - [switch](#switch)
+  - [where](#where)
+  - [fallthrough](#fallthrough)
 - [함수기초](#함수)
-- [내부 매개변수와 외부 매개변수](#내부외부)
-- [디폴트 매개변수 : Default Parameter](#디폴트매개변수)
-- [여러개의 결과 반환](#여러개결과반환)
-- [가변매개변수 : Variafic Parameter](#가변매개변수)
-- [inout매개변수](#inout매개변수)
-- [함수를 매개변수와 리턴값으로 사용](#함수를매개변수로사용)
-- [swift함수명](#swift함수명)
-- [클로저표현식 : 클로저와 후행 클로저](#클로저표현식)
+  - [내부 매개변수와 외부 매개변수](#내부외부)
+  - [디폴트 매개변수 : Default Parameter](#디폴트매개변수)
+  - [여러개의 결과 반환](#여러개결과반환)
+  - [가변매개변수 : Variafic Parameter](#가변매개변수)
+  - [inout매개변수](#inout매개변수)
+  - [함수를 매개변수와 리턴값으로 사용](#함수를매개변수로사용)
+  - [swift함수명](#swift함수명)
+  - [클로저표현식 : 클로저와 후행 클로저](#클로저표현식)
 - [then(with: 전수열)](#then)
 - [Class](#Class)
-- [Class 기초](#Class기초)
-- [클래스 선언하기](#클래스선언하기)
-- [클래스에 property추가하기](#클래스에property추가하기)
-- [메서드 정의](#메서드정의)
-- [타입(클래스)메서드](#타입메서드)
-- [인스턴스 초기화하기 : init()](#인스턴스초기화하기)
-- [Self](#Self)
-- [CulatedProperty : get, set](#CulatedProperty)
-- [overloading ~ Failable Initializers](#overloading)
+  - [Class 기초](#Class기초)
+  - [클래스 선언하기](#클래스선언하기)
+  - [클래스에 property추가하기](#클래스에property추가하기)
+  - [메서드 정의](#메서드정의)
+  - [타입(클래스)메서드](#타입메서드)
+  - [인스턴스 초기화하기 : init()](#인스턴스초기화하기)
+  - [Self](#Self)
+  - [CulatedProperty : get, set](#CulatedProperty)
+  - [overloading ~ Failable Initializers](#overloading)
 - [상속](#상속)
-- [super](#super)
-- [override](#override)
-- [extension](#extension)
+  - [super](#super)
+  - [override](#override)
+  - [extension](#extension)
 - [접근제어](#접근제어)
 - [protocol](#protocol)
 - [enum: 열거형](#enum)
@@ -104,10 +104,10 @@
 - [func](#func)
 - [inout](#inout)
 - [Optional](#Optional)
-- [Optional unwrapping](#Optionalunwrapping)
-- [Optional Binding](#OptionalBinding)
-- [Implicitly Unwrapping](#implicitlyunwrapping)
-- [Optional Chaining](#OptionalChaining)
+  - [Optional unwrapping](#Optionalunwrapping)
+  - [Optional Binding](#OptionalBinding)
+  - [Implicitly Unwrapping](#implicitlyunwrapping)
+  - [Optional Chaining](#OptionalChaining)
 - [mutable/Immutable](#mutable)
 - [initializer](#initializer)
 - [MVC](#MVC)
@@ -431,30 +431,30 @@ View의 setNeedsDisplay () 또는 setNeedsDisplay (_ :) 메소드를 호출하�
 예시) 커스텀으로 View그리기를 예로 설명 
 ```swift
 class MyView: UIView {
-var numberOfPoints = 0 {
-didSet {
-setNeedsDisplay()
-}
-}
+    var numberOfPoints = 0 {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
 
-override func draw(_ rect: CGRect) {
-switch numberOfPoints {
-case 0:
-return
-case 1:
-drawPoint(rect)
-case 2:
-drawLine(rect)
-case 3:
-drawTriangle(rect)
-case 4:
-drawRectangle(rect)
-case 5:
-drawPentagon(rect)
-default:
-drawEllipse(rect)
-}
-}
+    override func draw(_ rect: CGRect) {
+        switch numberOfPoints {
+        case 0:
+            return
+        case 1:
+            drawPoint(rect)
+        case 2:
+            drawLine(rect)
+        case 3:
+            drawTriangle(rect)
+        case 4:
+            drawRectangle(rect)
+        case 5:
+            drawPentagon(rect)
+        default:
+            drawEllipse(rect)
+        }
+    }
 }
 ```
 - numberOfPoints가 변하면 draw(_:) 안에서 View를 그리는 방식이 달라지기 때문에 didSet 블록 안에 setNeedsDisplay를 명시적으로 호출해준 예시임.
@@ -603,8 +603,8 @@ var mynumber = 10
 
 ### Int 
 - 정수 데이터 타입 
-- 양수, 음수, 0 값을 담을 수 있는 부호 있는(sifned)정수
-- 0, 양수만 담을 수 있는 부호 없는 (unsigned)정수
+  - 양수, 음수, 0 값을 담을 수 있는 부호 있는(sifned)정수
+  - 0, 양수만 담을 수 있는 부호 없는 (unsigned)정수
 - 8비트,16비트,32비트,64비트 지원(Int8, Int16, Int32, Int64)
 - 부호없는 정수 : UInt8, UInt16, UInt32, UInt64
 - 애플은 특정 크기의 데이터 타입보다 Int데이터 타입을 권장
@@ -697,17 +697,17 @@ print(message)
 
 ### 타입어노테이션과타입추론
 - 스위프트는 타입안전(type safe) 프로그래밍 언어 
-- 변수의 데이터 타입이 식별되면 그 변수는 다른 타입의 데이터를 저장하는 데 사용될 수 없음
-- 변수가 선언된 후에도 다른 데이터 타입을 저장할 수 있는 느슨한 타입(loosely typed)의 언어와 대조적
+  - 변수의 데이터 타입이 식별되면 그 변수는 다른 타입의 데이터를 저장하는 데 사용될 수 없음
+  - 변수가 선언된 후에도 다른 데이터 타입을 저장할 수 있는 느슨한 타입(loosely typed)의 언어와 대조적
 - 상수와 변수의 타입을 식별하는 방법은 두가지.   
-- 첫번째 
-- 변수 또는 상수가 코드 내에서 선언되는 시점에 타입 어노테이션(type annitation)을 사용하는 것
-- 변수 또는 상수 이름 다음에 타입 선언을 두면됨 
-- Int타입의 userCount라는 이름의 변수를 선언
-- var userCount: Int = 10 // Int가 type annotation
-- 두번째 
-- 선언부에 타입 어노테이션이 없으면 스위프트 컴파일러는 상수 또는 변수의 타입을 식별하기 위하여 타입추론(typr inference)사용
-- 해당 상수 또는 변수에 값이 할당되는 시점에서 그 값의 타입을 확인하고 그와 같은 타입처럼 사용
+  - 첫번째 
+  - 변수 또는 상수가 코드 내에서 선언되는 시점에 타입 어노테이션(type annitation)을 사용하는 것
+  - 변수 또는 상수 이름 다음에 타입 선언을 두면됨 
+  - Int타입의 userCount라는 이름의 변수를 선언
+  - var userCount: Int = 10 // Int가 type annotation
+  - 두번째 
+  - 선언부에 타입 어노테이션이 없으면 스위프트 컴파일러는 상수 또는 변수의 타입을 식별하기 위하여 타입추론(typr inference)사용
+  - 해당 상수 또는 변수에 값이 할당되는 시점에서 그 값의 타입을 확인하고 그와 같은 타입처럼 사용
 ```
 var signalStrenght = 2.231 // var signalStrenght : Double = 2.231
 let companyName = "My Company"
@@ -770,15 +770,15 @@ print(message.message)// "Hi"
 
 - 상속 관계가 있는 클래스들끼리만 타입 캐스팅 가능
 - 자식(부모로부터 상속받아 더 많은 것을 가지고 있음)을 부모로 캐스팅하는 것은 문제가 없음
-- **as** 연산자를 이용한 타입 변환(Type casting)
-- **자식인스턴스 as 부모클래스** // upcasting 안전한 캐스팅, 자식이. 추상화됨.
-- 업캐스팅은 객체를 부모 클래스의 객체로 형 변환
-- 형 변환은 성공할 것이기 때문에 보장된 변환(guaranteed conversion)
-- UIButton은 UIControl의 자식 클래스이므로 안전하게 형 변환
-- let myButton : UIButton = UIButton()
-- let myControl = myButton as UIControl // 자식인스턴스 as 부모클래스
-- 자식인스턴스인 myButton을 부모 클래스 형으로 형 변환 
-
+  - **as** 연산자를 이용한 타입 변환(Type casting)
+  - **자식인스턴스 as 부모클래스** // upcasting 안전한 캐스팅, 자식이. 추상화됨.
+  - 업캐스팅은 객체를 부모 클래스의 객체로 형 변환
+  - 형 변환은 성공할 것이기 때문에 보장된 변환(guaranteed conversion)
+  - UIButton은 UIControl의 자식 클래스이므로 안전하게 형 변환
+  - let myButton : UIButton = UIButton()
+  - let myControl = myButton as UIControl // 자식인스턴스 as 부모클래스
+  - 자식인스턴스인 myButton을 부모 클래스 형으로 형 변환 
+   
 **형 변환(as! as?로 downcasting)**
 - 다운캐스팅은 어떤 클래스에서 다른 클래스로 변환할 때 안전한 변환을 보장할 수 없음
 - 다운 캐스팅에서 유효하지 않은 형 변환이 이뤄졌는데 컴파일러가 에러를 잡지 않았다면, 런타임에서 에러가 발생
@@ -792,12 +792,12 @@ print(message.message)// "Hi"
 ### is
 - 타입검사 (is)
 - is 키워드를 이용하여 값의 타입 검사(Type check)
-- 지정된 객체가 MYClass라는 이름의 클래스의 인스턴스인지 검사
-- 인스턴스가 해당 클래스인가?
-- 인스턴스 is 클래스
+  - 지정된 객체가 MYClass라는 이름의 클래스의 인스턴스인지 검사
+  - 인스턴스가 해당 클래스인가?
+  - 인스턴스 is 클래스
 ```
 if mtobject is MyClass {
-//myobject는 MyClass의 인스턴스이다
+  //myobject는 MyClass의 인스턴스이다
 }
 ```
 ***
@@ -831,12 +831,12 @@ x = y //y의 값을 x에 할당함, Optional(10)
 - 예외로는 값이 음수임을 가리키는 단항 마이너스 연산자(unary negative operator)인 '-'
 - var x = 10 //변수 x에 -10을 할당하기 위해 사용되는 단항 - 연산자
 - x = x - 5 //x에서 5를 빼는 뺄셈 연산자
-- -(단항) 변수 또는 표현식의 값을 음수로 만듦
-- \* 곱
-- / 나눗셈
-- \+ 덧셈
-- \- 뺄셈
-- % 나머지
+  - -(단항) 변수 또는 표현식의 값을 음수로 만듦
+  - \* 곱
+  - / 나눗셈
+  - \+ 덧셈
+  - \- 뺄셈
+  - % 나머지
 - 하나의 표현식 안에 여러 개의 연산자를 사용할 수 있음
 - x = y * 10 + x - 5 / 4 
 
@@ -1060,9 +1060,9 @@ repeat {
 
 
 var i = 10
-repeat{
-i = i - 1
-print(i) 
+ repeat{
+ i = i - 1
+ print(i) 
 }while (i>0) // 9...0
 ```
 
@@ -1076,9 +1076,9 @@ print(i)
 var j = 10
 for i in 1..<100 {
 j += j
-if j > 100 {
-break
-}
+  if j > 100 {
+  break
+  }
 print ("j = \(j)")
 }
 //j = 20
@@ -1094,9 +1094,9 @@ print ("j = \(j)")
 var i = 1
 while 1 < 20 {
 i += 1
-if (1 % 2) != 0 {
-contonue
-}
+  if (1 % 2) != 0 {
+  contonue
+  }
 print("i = \(i)") //2~20
 }
 ```
@@ -1122,12 +1122,12 @@ print("x is greater than 9!")
 ```swift
 var x = 9
 if x == 10 {
-print("x is 10")
-}else if x == 9 {
-print("x is 9")
-}else if x == 8 {
-print("x is 8")
-}
+   print("x is 10")
+ }else if x == 9 {
+   print("x is 9")
+ }else if x == 8 {
+   print("x is 8")
+ }
 }
 ```
 - 적당한 개수의 비교에는 잘 동작하지만, 너무 많은 수의 비교에는 복잡
@@ -1151,8 +1151,8 @@ guard 불리언 표현식 else {
 
 ```swift
 func multiplyByTen(value : Int? ) {
-guard let number = value, number < 10 else { //(옵셔널3)조건이 거짓일 때 실행
-print("수가 10 보다 크다")
+  guard let number = value, number < 10 else { //(옵셔널3)조건이 거짓일 때 실행
+  print("수가 10 보다 크다")
 return 
 } 
 print(number*10) //조건식이 참일 때 실행, 주의 : number를 여기서도 사용가능
@@ -1168,12 +1168,12 @@ multiplyByTen(value: 3) //30
 var index : Int?
 index = 3
 var treeArray = ["Oak","Pine","Yew","Birch"]
-if let myValue = index { //옵셔널 변수 값을 상수 myValue에 대입
-print(treeArray[myValue]) //Birch
-} else {
-print("index does not contain a value") // ⚇ 여기서 index 못씀. 
-}
-}
+  if let myValue = index { //옵셔널 변수 값을 상수 myValue에 대입
+    print(treeArray[myValue]) //Birch
+    } else {
+    print("index does not contain a value") // ⚇ 여기서 index 못씀. 
+    }
+  }
 ```
 
 ### switch
@@ -1246,10 +1246,10 @@ print("Warm and even")
 var  temperature = 54
 switch temperature {
 case 0...49 where temperature % 2 == 0 : 
-fallthrough //빠져나가지 않고 아래로 내려감
+ fallthrough //빠져나가지 않고 아래로 내려감
 print("Cold and even")
 case 50...79 where temperature % 2 == 0 :
-fallthrough
+ fallthrough
 print("Warm and even")
 (..중략)
 default : 
@@ -1296,7 +1296,7 @@ return ("\(name), \(age)")
 *정의와 호출*
 ```swift
 func satHello(){
-print("Hello")
+ print("Hello")
 }
 sayHello() //(헬로우를 프린트하는) 함수 호출
 ```
@@ -1305,7 +1305,7 @@ sayHello() //(헬로우를 프린트하는) 함수 호출
 *C에서 Swift로 함수 변경하기*
 ```swift
 int add(int x, int y) { //C, C++ //x,y는 파라메터
-return(x+y)
+ return(x+y)
 }
 add(10,20); //10,20은 아큐먼트
 
@@ -1322,7 +1322,7 @@ add(x: 10, y:20)
 func add(first x : Int, seconf y : Int) -> Int {
 //외부 내부: 자료형, 외부 내부: 자료형 -> 리턴형
 return x + y //함수 정의할 떄는 내부 매개변수명을 사용 
-//return (first+second)하게 되면 오류
+             //return (first+second)하게 되면 오류
 }
 add(first: 10, secound : 20)  // add(x:10, y:20)은 오류
 //호출시 반드시 외부 매개변수명을 사용 --> 함수바깥에서 호출할 때 사용
@@ -1390,9 +1390,9 @@ print(message) //Lee, you are customer number 50
 - 인치 단위의 수를 매개변수로 받아 야드, 센티미터, 미터로 변환하고 이 세개의 값을 하나의 튜플()에 넣어 반환 
 ```swift
 func sizeConverter(length: Float) -> (yards: Float, centimeters: Float, meters: Float){
-let yards = length * 0.02777778
-let cnetimeters = length * 2.54
-let meters = length * 0.0254 
+ let yards = length * 0.02777778
+ let cnetimeters = length * 2.54
+ let meters = length * 0.0254 
 
 retrun (yards, cnetimeters, meters)
 }
@@ -1406,9 +1406,9 @@ print(lenthTuple.meters)
 *직접해봄* 
 ```swift
 func adc(leg: Float) -> (a: Float, b:Float, c:Float) {
-let a = leg * 0.0277
-let b = leg * 2.52222
-let c = leg * 4.533
+  let a = leg * 0.0277
+  let b = leg * 2.52222
+  let c = leg * 4.533
 return (a,b,c)
 }
 
@@ -1441,10 +1441,10 @@ swift print format으로 구글링하여 소수점 원하는 만큼 출력
 - 임의의 개수의 String 값을 매개변수로 받아서 콘솔에 출력
 ```swift
 func displayStrings(strings: String...)
-{
-for string in strings {
-print(String)
-}
+ {
+ for string in strings {
+ print(String)
+ }
 }
 displayStrings(strins: "one", "two", "three", "four")
 displayStrings(strins: "one", "two")
@@ -1459,32 +1459,32 @@ add(numbers: 1,1,1,1,1,1,1,1,1,1)//10
 */
 
 func add(numbers : Int...) -> Int {
-var result = 0
-for index in numbers {
-result += index
-}
-return result
+  var result = 0
+  for index in numbers {
+    result += index
+  }
+  return result
 }
 var number = add(numbers: 1,2,3)
 print(number) //6
 
 
 func add2(numbers: Int...) -> Int {
-var result = 0
-for index in numbers {
-result += index
-}
-return result
+  var result = 0
+  for index in numbers {
+    result += index
+  }
+  return result
 }
 var number2 = add2(numbers: 2,2,2,2,2)
 print(number2) //10
 
 
 func add3(numbers : Int...) -> Int {
-var result = 0
-for index in numbers {
-result += index
-}
+  var result = 0
+  for index in numbers {
+    result += index
+  }
 return result
 }
 
@@ -1505,8 +1505,8 @@ print(number3) //10
 //2.call by reference하고 싶은 변수에 &붙여서 호출
 var myValue = 10
 func daoubleValue(value: inout Int) -> Int {
-value += value
-return(value)
+  value += value
+  return(value)
 }
 print(myValue) //10
 print(daoubleValue(value: &myValue))//20
@@ -1548,11 +1548,11 @@ return x + y
 3) 리턴값으로 사용할 수 있다. 
 ```swift
 func inchesToFeet(inches: Float) -> Float {
-return inches * 0.0873636
+ return inches * 0.0873636
 }
 
 func inchesToYarde (inches: Float) -> Float {
-return inches * 0.0277778
+ return inches * 0.0277778
 }
 let toFeet = inchesToFeet
 let toYard = inchesToYarde
@@ -1564,8 +1564,8 @@ let toYard = inchesToYarde
 ```swift
 //converterFunc: 는 (Float) -> Float 자료형만 들어갈 수 있음(위의 toFeet, toYard같은 자료형)
 func outputConversion(converterFunc: (Float) -> Float, value: Float) {
-let result = converterFunc(value)
-print("Result = \(result)")
+ let result = converterFunc(value)
+ print("Result = \(result)")
 }
 ```
 - outputConversion 함수를 호출할 때 선언된 데이터 타입과 일치하는 함수 전달
@@ -1579,11 +1579,11 @@ outputConversion(converterFunc: toYard, value: 14) //야드로 변환하는 inch
 ```swift
 //매개변수형 리턴형이 함수형 : ()가 있으면 일단 함수구나! 생각해야함 : (Float) -> Float 
 finc decideFunction(feet: Bool) -> (Float) -> Float {
-if feet {
-return toFeet //함수를 리턴
-} else {
-return toYard
-}
+ if feet {
+ return toFeet //함수를 리턴
+ } else {
+ return toYard
+ }
 }
 ```
 
@@ -1681,53 +1681,53 @@ self.isLampOn = false
 ```siwft
 /*
 보통의 예
-private let backImage : UIImageView = {
-let i = UIImageView()
-i.contentMode = .scaleAspectFill
-return i
-}()
-
-private let backImage : UIImageView = {
-$0.contentMode = .scaleAspectFill
-return $0
-
-위 형태를 then으로 처리 -> 클로져화
-*/
+ private let backImage : UIImageView = {
+   let i = UIImageView()
+   i.contentMode = .scaleAspectFill
+ return i
+ }()
+  
+  private let backImage : UIImageView = {
+     $0.contentMode = .scaleAspectFill
+   return $0
+  
+  위 형태를 then으로 처리 -> 클로져화
+ */
 
 private let backgroundImageView = UIImageView(frame: .screenBounds).then {
-$0.image = UIImage(named: "sunny")
-$0.contentMode = .scaleAspectFill
+  $0.image = UIImage(named: "sunny")
+  $0.contentMode = .scaleAspectFill
 }
 
 private let blurView = UIVisualEffectView(frame: .screenBounds).then {
-$0.effect = UIBlurEffect(style: .dark)
+  $0.effect = UIBlurEffect(style: .dark)
 }
 
 private let topInfoView = UIView()
 private let locationLabel = UILabel().then {
-$0.textColor = .white
-$0.textAlignment = .center
-$0.font = .systemFont(ofSize: 18, weight: .black)
+  $0.textColor = .white
+  $0.textAlignment = .center
+  $0.font = .systemFont(ofSize: 18, weight: .black)
 }
 private let timeLabel = UILabel().then {
-$0.textColor = .white
-$0.textAlignment = .center
-$0.font = .systemFont(ofSize: 12, weight: .black)
+  $0.textColor = .white
+  $0.textAlignment = .center
+  $0.font = .systemFont(ofSize: 12, weight: .black)
 }
 
 let reloadButton = UIButton(type: .system).then {
-$0.setTitle("↻", for: .normal)
-$0.setTitleColor(.white, for: .normal)
-$0.titleLabel?.font = .preferredFont(forTextStyle: .title1)
-$0.alpha = 0
+  $0.setTitle("↻", for: .normal)
+  $0.setTitleColor(.white, for: .normal)
+  $0.titleLabel?.font = .preferredFont(forTextStyle: .title1)
+  $0.alpha = 0
 }
 let tableView = UITableView().then {
-$0.rowHeight = Layout.currentWeatherCellHeight
-$0.tableFooterView = UIView()
-$0.backgroundColor = .clear
-$0.separatorColor = .white
-$0.allowsSelection = false
-$0.showsVerticalScrollIndicator = false
+  $0.rowHeight = Layout.currentWeatherCellHeight
+  $0.tableFooterView = UIView()
+  $0.backgroundColor = .clear
+  $0.separatorColor = .white
+  $0.allowsSelection = false
+  $0.showsVerticalScrollIndicator = false
 }
 ```
 - $0으로 view에 대한 내용 간단하게 처리 
@@ -1742,19 +1742,19 @@ protocol Then {}
 extension NSObject: Then {}
 
 extension Then where Self: AnyObject {
-func then(_ configure: (Self) -> Void) -> Self {
-configure(self) //셀프를 받아서 --> 셀프 왜써? $0임을 알려줘여하기 떄문에
-return self //셀프를 리턴
-
-//타입 : Self -> void를 뱉는 함수타입.
+  func then(_ configure: (Self) -> Void) -> Self {
+    configure(self) //셀프를 받아서 --> 셀프 왜써? $0임을 알려줘여하기 떄문에
+    return self //셀프를 리턴
+    
+    //타입 : Self -> void를 뱉는 함수타입.
+  }
 }
-}
-then은 프로토콜임
-extension으로 NSObject을 채택,
-
-//프로토콜 채택하면서도, AnyObject인 경우. AnyObject은 클래스타입임. 클래스 타입일 떄 이 작업을 해라.
-extension Then where Self: AnyObject {
-
+ then은 프로토콜임
+ extension으로 NSObject을 채택,
+ 
+ //프로토콜 채택하면서도, AnyObject인 경우. AnyObject은 클래스타입임. 클래스 타입일 떄 이 작업을 해라.
+ extension Then where Self: AnyObject {
+ 
 ```
 - 예시는 backgroundImageView로 듦.
 -  **then**을 사용시, **configure**에 **self**를 넣고, **self**를 반환한다는 뜻. 
@@ -1770,18 +1770,18 @@ extension Then where Self: AnyObject {
 
 ### Class
 *프로퍼티*
-- 저장 프로퍼티 : 인스턴스의 변수나 상수 
-- 연산 프로퍼티 : 특정 연산을 수행한 결과값을 가짐
-- 타입 프로퍼티 : 인스턴스가 아닌 타입자체에 속판 프로퍼티
-- 프로퍼티 감시자 : 프로퍼티값이 변경이되면 호출되는 메서지(willSet, didSet)
-
+  - 저장 프로퍼티 : 인스턴스의 변수나 상수 
+  - 연산 프로퍼티 : 특정 연산을 수행한 결과값을 가짐
+  - 타입 프로퍼티 : 인스턴스가 아닌 타입자체에 속판 프로퍼티
+  - 프로퍼티 감시자 : 프로퍼티값이 변경이되면 호출되는 메서지(willSet, didSet)
+  
 *메서드*
-- 인스턴스 메서드 : 특정타입에 인스턴스에 속한 메서드(일반적인)
-- 타입(클래스) 메서드 : 타입자체에서 호출이 가능한 메서드
-
+  - 인스턴스 메서드 : 특정타입에 인스턴스에 속한 메서드(일반적인)
+  - 타입(클래스) 메서드 : 타입자체에서 호출이 가능한 메서드
+  
 *접근제어* 
-- 코드끼리 상호작용할 때 파일 간 또는 모듈간에 접근을 제한 할 수 있는 기능. 접근제어를 구현은 숨기고 허용된 기능만 노출할 수 있음.
-
+  - 코드끼리 상호작용할 때 파일 간 또는 모듈간에 접근을 제한 할 수 있는 기능. 접근제어를 구현은 숨기고 허용된 기능만 노출할 수 있음.
+  
 |접근수준|키워드|접근도|범위|비고|
 |:------:|:---:|:---:|:---:|:---:|
 |개방접근|open|높음|모듈 외부까지|클래스에서만 사용|
@@ -1799,22 +1799,22 @@ extension Then where Self: AnyObject {
 - When an object is created by a constructor of the class, the resulting object is called an instance of the class.
 클래스로부터 만들어진 객체를 인스턴스라 한다. 
 - 클래스 : Dog { var 객체  ==> 인스턴스 : 멍멍이, 해피, 메리
-
-**객체지향 용어 비교**
-![](https://img1.daumcdn.net/thumb/R720x0.q80/?scode=mtistory2&fname=http%3A%2F%2Fcfile21.uf.tistory.com%2Fimage%2F213AC537551A63C0228161)
+ 
+ **객체지향 용어 비교**
+ ![](https://img1.daumcdn.net/thumb/R720x0.q80/?scode=mtistory2&fname=http%3A%2F%2Fcfile21.uf.tistory.com%2Fimage%2F213AC537551A63C0228161)
 
 *Swift*
 - **자동차**라는 **Class**에 **문,핸들,바퀴,의자** 특정 멤버변수(Mamber VarLable)는 **프로퍼티(Property)**, **움직인다,정차한다, 감속한다**는 행위의 멤버함수(Member Function)은 **메소드(Method)**
 - 캡슐화할때, 명사는 프로퍼티, 동사는 메소드로 진행됨. 프로퍼티와 메소드가지고 논다. 프로퍼티는 데이터, 처리하는 동작은 메소드
 
 *인스턴스(instance)*
-- 실제로 메모리에 할당된 객체(object)
-- In object-oriented programming(OOP), an instanc is a concrete(실체가 있는) occyrrence of any object, existing usually durinhg the runtime of a computer program. Formally, "instance" is synontmous with "object" as they are each a particular value (realization), and these may be called an instance object. "instance" emghasize the distinct identity(분명한 정체성) of the object .
-- 소프트웨어 애플리케이션을 개발하는 데 사용되는, 쉽게 사용할 수 있으며 재사용할 수 있는 기능을 가진 모듈
-- 객체의 구성
-- 데이터 변수(data variable) or 속성(property)
-- 함수 or 메서드(method)
-
+ - 실제로 메모리에 할당된 객체(object)
+ - In object-oriented programming(OOP), an instanc is a concrete(실체가 있는) occyrrence of any object, existing usually durinhg the runtime of a computer program. Formally, "instance" is synontmous with "object" as they are each a particular value (realization), and these may be called an instance object. "instance" emghasize the distinct identity(분명한 정체성) of the object .
+ - 소프트웨어 애플리케이션을 개발하는 데 사용되는, 쉽게 사용할 수 있으며 재사용할 수 있는 기능을 가진 모듈
+ - 객체의 구성
+   - 데이터 변수(data variable) or 속성(property)
+   - 함수 or 메서드(method)
+ 
 ### 클래스선언하기
 - C#과 비슷
 ```
@@ -1852,10 +1852,10 @@ var weight : Double!
 class Man {
 var age : Int = 20
 var weight : Double = 3.3
-
-func display() {
-print ("나이 = \(age), 몸무게=\(weight))
-}
+ 
+ func display() {
+ print ("나이 = \(age), 몸무게=\(weight))
+ }
 }
 
 var kim : Man = Man()
@@ -1888,18 +1888,18 @@ var kim = Man()
 class Man {
 var age : Int = 20
 var weight : Double = 3.3
-
-func display() {
-print ("나이 = \(age), 몸무게=\(weight))
-}
-
-calss func cM(){ //override가능
-print("cM은 클래스 메서드입니다.")
-}
-
-static func scM(){
-print("scM은 클래스 메서드(static)")
-}
+ 
+ func display() {
+ print ("나이 = \(age), 몸무게=\(weight))
+ }
+ 
+  calss func cM(){ //override가능
+  print("cM은 클래스 메서드입니다.")
+  }
+  
+  static func scM(){
+  print("scM은 클래스 메서드(static)")
+  }
 }
 
 var kim : Man = Man()
@@ -1919,20 +1919,20 @@ init(){
 ```
 - desiganted initaializer (데지그네이트 이니셜라이저) : 모든 프로퍼티(age, weight)를 다 초기화 시키는 생성자
 - 소멸자 
-- 인스턴스가 사라질 때 자동 호출
-- deinit { } //소괄호 없음
+  - 인스턴스가 사라질 때 자동 호출
+  - deinit { } //소괄호 없음
 
 ```swift
 class Man {
 var age : Int = 20
 var weight : Double = 3.3
 
-func display() {
-print ("나이 = \(age), 몸무게=\(weight))
-}
-init(yourAge: Int, yourWeight: Double){
-age = yourAge
-weight = yourWeight
+  func display() {
+  print ("나이 = \(age), 몸무게=\(weight))
+  }
+ init(yourAge: Int, yourWeight: Double){
+   age = yourAge
+   weight = yourWeight
 } //desiganted initaializer
 
 //var kim : Man = Man() //error
@@ -1949,22 +1949,22 @@ kim.display()
 class Man {
 var age : Int = 20
 var weight : Double = 3.3
-
-init(yourAge: Int, yourWeight: Double){
-age = yourAge //self.age = yourAge (현재 클래스 내의 age의 가르키므로 생략가능)
-weight = yourWeight
-}
+ 
+  init(yourAge: Int, yourWeight: Double){
+    age = yourAge //self.age = yourAge (현재 클래스 내의 age의 가르키므로 생략가능)
+    weight = yourWeight
+    }
 ```
 - 아래 소스에서는 매개변수와 구분하기 위해 반드시 써야함
 ```swift
 class Man {
 var age : Int = 20
 var weight : Double = 3.3
-
-init(age : Int, weight: Double){
-self.age = age  // 매개변수의 age와 프로퍼티의 age를 구분하기 위해 self붙임. (서로를 명시하기 위해)
-self.weight = weight
-}
+  
+  init(age : Int, weight: Double){
+  self.age = age  // 매개변수의 age와 프로퍼티의 age를 구분하기 위해 self붙임. (서로를 명시하기 위해)
+  self.weight = weight
+  }
 }
 var kim : Man = Man(age: 10, weight: 20.5)
 kim.display()
@@ -1979,18 +1979,18 @@ class Man {
 var age : Int = 20
 var weight : Double = 3.3
 var manAge : Int { //메서드 같지만 저장프로퍼티임 {}열어서 시작
-get {
-return age - 1
-}
+  get {
+   return age - 1
+  }
 }
 
-func display(){
-print ("나이 = \(age), 몸무게=\(weight))
-}
-init(age: Int, weight: Double){
-slef.age = age
-slef.weight = weight
-}
+ func display(){
+ print ("나이 = \(age), 몸무게=\(weight))
+ }
+ init(age: Int, weight: Double){
+ slef.age = age
+ slef.weight = weight
+ }
 }
 var kim : Man = Man(age: 10, weight : 20.5)
 kim.display()
@@ -2001,7 +2001,7 @@ print(kim.manAge) //9
 
 ```siwft
 var manAge : Int { //메서드 같지만 저장프로퍼티임 {}열어서 시작
-return age - 1
+ return age - 1
 }
 //그래서 이렇게 get을 없앨 수 있다,, get이 숨어있는 형태인 것임.
 ```
@@ -2010,21 +2010,21 @@ class Man {
 var age : Int = 20
 var weight : Double = 3.3
 var manAge : Int { //메서드 같지만 저장프로퍼티임 {}열어서 시작
-get {
-return age - 1
-}
-set (USAAge) {
-age = USAAge + 1  
-}
+  get {
+   return age - 1
+  }
+  set (USAAge) {
+  age = USAAge + 1  
+ }
 }
 
-func display(){
-print ("나이 = \(age), 몸무게=\(weight))
-}
-init(age: Int, weight: Double){
-slef.age = age
-slef.weight = weight
-}
+ func display(){
+ print ("나이 = \(age), 몸무게=\(weight))
+ }
+ init(age: Int, weight: Double){
+ slef.age = age
+ slef.weight = weight
+ }
 }
 var kim : Man = Man(age: 10, weight : 20.5)
 kim.display()
@@ -2038,15 +2038,15 @@ print(kim.age) // 4 ==> set가 동작하므로 4가됨 +1
 - 매개변수 명은 nuwValue가 기본
 ```
 set (newValue) {
-age = newValue + 1
-}
+  age = newValue + 1
+ }
 ```
 - Shorthand Setter Declaration
-- setter의 매개변수명이 newValue인 경우에만 이렇게 "(newValue)"생략 가능.
+  - setter의 매개변수명이 newValue인 경우에만 이렇게 "(newValue)"생략 가능.
 ```
-set {
-age = newValue + 1
-}
+  set {
+    age = newValue + 1
+   }
 ```  
 - getter와 setter를 갖는 계산 프로퍼티 manAge
 ```swift
@@ -2054,17 +2054,17 @@ class Man {
 var age : Int = 20
 var weight : Double = 3.3
 var manAge : Int { //메서드 같지만 저장프로퍼티임 {}열어서 시작
-get { return age - 1 }
-set { age = newValue + 1 }
+  get { return age - 1 }
+  set { age = newValue + 1 }
 }
 
-func display(){
-print ("나이 = \(age), 몸무게=\(weight))
-}
-init(age: Int, weight: Double){
-slef.age = age
-slef.weight = weight
-}
+ func display(){
+ print ("나이 = \(age), 몸무게=\(weight))
+ }
+ init(age: Int, weight: Double){
+ slef.age = age
+ slef.weight = weight
+ }
 }
 var kim : Man = Man(age: 10, weight : 20.5)
 kim.display()
@@ -2084,16 +2084,16 @@ class Man {
 var age : Int = 1
 var weight : Double = 3.3
 
-func display(){
-print ("나이 = \(age), 몸무게=\(weight))
-}
-init(age: Int, weight: Double){ //1 나이,몸무게 동시 초기화
-slef.age = age
-slef.weight = weight
-}
-init(age : Int){ //2 나이만 초기화
-self.age = age 
-}
+ func display(){
+ print ("나이 = \(age), 몸무게=\(weight))
+ }
+ init(age: Int, weight: Double){ //1 나이,몸무게 동시 초기화
+ slef.age = age
+ slef.weight = weight
+ }
+ init(age : Int){ //2 나이만 초기화
+ self.age = age 
+ }
 }
 var kim : Man = Man(age: 10, weight: 20.5) //1
 var kim2 : Man = Man(age: 10) //2
@@ -2107,16 +2107,16 @@ kim2.display()
 - var aNewUIImage = UIImage(CGImage: imageRef)
 
 1. Loaing and Caching Images  //한번 캐시를 하면 빠르게 할 수 있는 인잇 메서드
-- init?(named: String, in: Bundle?, compatibleWith: UITraitCollection?)
-- init?(named: Strinf)
-- init(imageLiteralResurecName: String)
+  - init?(named: String, in: Bundle?, compatibleWith: UITraitCollection?)
+  - init?(named: Strinf)
+  - init(imageLiteralResurecName: String)
 2. Creating and Initializing Image Objects //매번 이니셜라이저하는 인잇 메서드
-- init?(contentsOffile: String)
-- init?(data: Data)
-- init?(data: Data, scale : CGFloat)
-- init(cgImage: CGImage)
-- init(cgImage: CGImage, scale: CGFloat, orientation: UIImage.Orientation)
-- init(ciImage: CIImage, scale: CGFloat, orientation: UIImage.Orientation)
+  - init?(contentsOffile: String)
+  - init?(data: Data)
+  - init?(data: Data, scale : CGFloat)
+  - init(cgImage: CGImage)
+  - init(cgImage: CGImage, scale: CGFloat, orientation: UIImage.Orientation)
+  - init(ciImage: CIImage, scale: CGFloat, orientation: UIImage.Orientation)
 
 ... 이런식
 
@@ -2158,13 +2158,13 @@ class Man {
 var age : Int : 1
 var weight : Double = 3.5
 
-func display(){
-print("나이 = \(age), 몸무게 = \(weight)")
-}
-init(age: Int, weight: Double){
-self.age = age
-self.weight = weight
-}
+ func display(){
+ print("나이 = \(age), 몸무게 = \(weight)")
+ }
+ init(age: Int, weight: Double){
+ self.age = age
+ self.weight = weight
+ }
 }
 
 //자식 - 부모가 가진 것을 물려받아요!!
@@ -2188,26 +2188,26 @@ class Man {
 var age : Int : 1
 var weight : Double = 3.5
 
-func displayS(){
-print("나이 = \(age), 몸무게 = \(weight)")
-}
-init(age: Int, weight: Double){
-self.age = age
-self.weight = weight
-}
+ func displayS(){
+ print("나이 = \(age), 몸무게 = \(weight)")
+ }
+ init(age: Int, weight: Double){
+  self.age = age
+  self.weight = weight
+ }
 }
 
 //자식 - 부모가 가진 것을 물려받아요!!
 class Student : Man {
 var name : String = "Qussk"
 
-func display2(){
-print("이름 = \(name), 나이 = \(age), 몸무게 = \(weight)")
-}
-init(name: String, age: Int, weight: Double){
-super.init(age:age, weight: weight) //부모메서드 호출 -> 꼭 부모것을 super.init으로 호출해야함.
-self.name = name 
-}
+  func display2(){
+  print("이름 = \(name), 나이 = \(age), 몸무게 = \(weight)")
+  }
+  init(name: String, age: Int, weight: Double){
+   super.init(age:age, weight: weight) //부모메서드 호출 -> 꼭 부모것을 super.init으로 호출해야함.
+   self.name = name 
+ }
 }
 var lee : Strudent = Student(name: "안젤라", age: 20 ,weight: 65.2) //Strudent를 타입으로 해도 Man의 프로퍼티를 쓸 수 있음
 lee.display2() //안젤라, 20, 66.2
@@ -2215,8 +2215,8 @@ lee.display() //부모에 있는 함수 가져옴. // 1, 3.5 //***나이랑 몸�
 
 //보충 
 init(name: String, age2: Int, weigh2t: Double){
-super.init(age:age2, weight: weight2) //부모메서드 호출 -> 꼭 부모것을 super.init으로 호출해야함.
-self.name = name 
+ super.init(age:age2, weight: weight2) //부모메서드 호출 -> 꼭 부모것을 super.init으로 호출해야함.
+ self.name = name 
 }
 var lee : Student = Student(age2: 20, weight2: 65.2, name: "홍길동")
 ```
@@ -2227,8 +2227,8 @@ var lee : Student = Student(age2: 20, weight2: 65.2, name: "홍길동")
 ### override
 : 부모와 자식에 같은 메서드가 있으면 자식 우선
 - overoading과 override의 차이점 알아보기
-- overoading은 함수이름이 같은 init메서드 여러개 중첩하여 사용.
-- override은 부모와 자식간의 관계에서 똑같은 이름의 메서드가 있을 때, 자식쪽의 메서드를 우선적으로 호출한다. 
+  - overoading은 함수이름이 같은 init메서드 여러개 중첩하여 사용.
+  - override은 부모와 자식간의 관계에서 똑같은 이름의 메서드가 있을 때, 자식쪽의 메서드를 우선적으로 호출한다. 
 - 사전적 의미 :무엇보다도. //부모것 무시하고 자식거 먼저 해줄게~~
 - 부모와 자식에 display()라는 메서드가 있어서 Student클래스는 display()메서드가 두 개임
 - Student클래스의 인스턴스 lee가 display()를 호출할 때, 자식 클래스가 새로 만든 display() 메서드가 우선적으로 호출되려면 func 앞에 override키워드 씀
@@ -2238,26 +2238,26 @@ class Man {
 var age : Int : 1
 var weight : Double = 3.5
 
-func displayS(){
-print("나이 = \(age), 몸무게 = \(weight)")
-}
-init(age: Int, weight: Double){
-self.age = age
-self.weight = weight
-}
+ func displayS(){
+ print("나이 = \(age), 몸무게 = \(weight)")
+ }
+ init(age: Int, weight: Double){
+  self.age = age
+  self.weight = weight
+ }
 }
 
 //자식
 class Student : Man {
 var name : String = "Qussk"
 
-override func display() { //자식이 만든 새로운 display()를 먼저 호출해주세요.
-print("이름 = \(name), 나이 = \(age), 몸무게 = \(weight)")
-}
-init(age: Int, weight: Double, name: String){
-super.init(age:age, weight: weight) 
-self.name = name 
-}
+  override func display() { //자식이 만든 새로운 display()를 먼저 호출해주세요.
+  print("이름 = \(name), 나이 = \(age), 몸무게 = \(weight)")
+  }
+  init(age: Int, weight: Double, name: String){
+   super.init(age:age, weight: weight) 
+   self.name = name 
+ }
 }
 var lee : Strudent = Student(age: 20 ,weight: 65.2, name: "홍길동")
 lee.display() //20, 65.2, "홍길동"
@@ -2280,9 +2280,9 @@ extension 기존타입이름 {
 - Double형의 인스턴스 myValue를 다음과 같이 사용할 수 있다.
 ```swift
 extension Double {
-var squared : Double {
-return self * self
-}
+ var squared : Double {
+ return self * self
+ }
 }
 let isValue : Double = 3.0
 print(isValue.squared) //0.22897196
@@ -2303,12 +2303,12 @@ print(3.0.squared) //Double형 값에도 .으로 바로 사용 가능.
 
 ```swift
 extension Stack where Element: Equatable {
-func isTop(_ item: Element) -> Bool {
-guard let topItem = items.last else {
-return false
-}
-return topItem == item
-}
+    func isTop(_ item: Element) -> Bool {
+        guard let topItem = items.last else {
+            return false
+        }
+        return topItem == item
+    }
 }
 ```
 ***
@@ -2353,10 +2353,10 @@ func display(){}
 - 모듈은 하나의 앱, framework(UIKit), 외부라이브러리
 - 쉽게 말해서 import 되는 것들이 모듈.
 - open class var blue : UIColor { get }
-- open : 모듈 외부까지(클래스에만 사용) 접근 가능
-- class : 클래스 프로퍼티, 스테틱 프로퍼티
-- 읽기 쓰기 가능한 프로퍼티는 정의 뒤에 { get set }
-- 읽기만 가능한 프로퍼티는 정의 뒤에 { get }
+  - open : 모듈 외부까지(클래스에만 사용) 접근 가능
+  - class : 클래스 프로퍼티, 스테틱 프로퍼티
+  - 읽기 쓰기 가능한 프로퍼티는 정의 뒤에 { get set }
+  - 읽기만 가능한 프로퍼티는 정의 뒤에 { get }
 
 
 ***
@@ -2376,7 +2376,7 @@ func display(){}
 *기본*
 ```swift
 protocol 프로토콜이름 {
-// 프로토콜 정의
+ // 프로토콜 정의
 }
 ```
 
@@ -2384,244 +2384,244 @@ protocol 프로토콜이름 {
 ```swift
 //1. 기능추가
 extension ViewController: StartViewControllerDelegate {
-func handleDismiss() {
-let MainVC = MainViewController()
-MainVC.modalPresentationStyle = .fullScreen
-self.present(MainVC, animated: false)
-}
+  func handleDismiss() {
+    let MainVC = MainViewController()
+    MainVC.modalPresentationStyle = .fullScreen
+    self.present(MainVC, animated: false)
+  }
 }
 ```
 ```swift
 //2. 필요한 곳에 정의
 protocol StartViewControllerDelegate: class {
-func handleDismiss()
+  func handleDismiss()
 }
 
 //2-1. 변수에 담아서 사용하기
-weak var delegate: StartViewControllerDelegate?
+  weak var delegate: StartViewControllerDelegate?
 ```
 ```swift
 //3. 버튼에 사용
 @objc func setupButton(_ sender: UIButton){
-dismiss(animated: false, completion: {
-self.delegate?.handleDismiss()
-})
+  dismiss(animated: false, completion: {
+    self.delegate?.handleDismiss()
+  })
 ```
 
 *protocol은*
 - 특정 클래스와 관련없는 프로퍼티, 메서드 선언 집합 
-- 함수(메서드) 정의는 없음
-- 기능이나 속성에 대한 설계도
-- 클래스(구조체, 열거형)에서 채택(adopt)하여 **메서드를 구현해야함.**
+  - 함수(메서드) 정의는 없음
+  - 기능이나 속성에 대한 설계도
+  - 클래스(구조체, 열거형)에서 채택(adopt)하여 **메서드를 구현해야함.**
 - 자바, C#의 intetface, C++의 abstrack base calss
 - Protocol Oriented Programming(POP)
-- 프로토콜 단위로 묶어 표현하고, extension으로 기본적인 것을 구현(protocol default implementation)을 해서 단일 상속의 한계를 극복
-
-*스위프트 상속과 프로토콜 채택*
-- 부모클래스는 하나만 가능하며 여러 개라면 나머지는 프로토콜
-- class 클래스명 : 부모명, 프로토콜명 { }
-- 부모가 있으면 부모 다음에 표기
-- class 클래스명 : 부모명, 프로토콜명1, 프로토콜명2 { }
-- class 클래스명 : 프로토콜명 { }
-- 부모가 없으면 바로 표기가능
-- class 클래스명 : 프로토콜명1, 프로토콜명2{ }
-- 클래스, 구조체, 열거형에 프로토콜을 채택(adopt)할 수 있다. 
-
+  - 프로토콜 단위로 묶어 표현하고, extension으로 기본적인 것을 구현(protocol default implementation)을 해서 단일 상속의 한계를 극복
+  
+  *스위프트 상속과 프로토콜 채택*
+  - 부모클래스는 하나만 가능하며 여러 개라면 나머지는 프로토콜
+  - class 클래스명 : 부모명, 프로토콜명 { }
+    - 부모가 있으면 부모 다음에 표기
+  - class 클래스명 : 부모명, 프로토콜명1, 프로토콜명2 { }
+  - class 클래스명 : 프로토콜명 { }
+    - 부모가 없으면 바로 표기가능
+  - class 클래스명 : 프로토콜명1, 프로토콜명2{ }
+  - 클래스, 구조체, 열거형에 프로토콜을 채택(adopt)할 수 있다. 
+  
 ```
-protocol 프로토콜명 {
-프로퍼티명
-메서드 선언 //메서드는 선언만 있음
-}
-protocol 프로토콜명 : 다른 프로토콜, 다른 프로토콜2{
-//프로토콜은 다중 상속도 가능
-}
+  protocol 프로토콜명 {
+  프로퍼티명
+  메서드 선언 //메서드는 선언만 있음
+  }
+  protocol 프로토콜명 : 다른 프로토콜, 다른 프로토콜2{
+  //프로토콜은 다중 상속도 가능
+  }
 ```
+  
+  *프로토콜과 프로퍼티/메서드 선언*
+  - 이름만 있고, 기능은 없다!
+  ```swift
+  protocol SomeProtocol {
+  var x : Int { get set } //읽기와 쓰기가 가능
+  var y : Int { get } //읽기전용
+  static var tx : Int { get set } //클래스프로퍼티도 쓸 수 있음
+  static func typeMethod()  //메서드 이름만 있고 기능은 없음. (Void 형식)
+  func random() -> Double //return값 없음
+  }
+  ```
 
-*프로토콜과 프로퍼티/메서드 선언*
-- 이름만 있고, 기능은 없다!
-```swift
-protocol SomeProtocol {
-var x : Int { get set } //읽기와 쓰기가 가능
-var y : Int { get } //읽기전용
-static var tx : Int { get set } //클래스프로퍼티도 쓸 수 있음
-static func typeMethod()  //메서드 이름만 있고 기능은 없음. (Void 형식)
-func random() -> Double //return값 없음
-}
-```
+  *protocolcol채택과 준수*
+  ```swift
+  protocol Runnable {
+   var x : Int { get set }
+    func run()
+    }
+    
+  class Man : Runnable { //채택, adopt
+   var x : Int = 1      // 준수, conform
+   func run() { print(" 달린다~ ") } // 준수, conform
+  }
+  class Man에 x, run()정의 없다면 
+   - type 'Man' does not conform to protocol 'Runnable'
 
-*protocolcol채택과 준수*
-```swift
-protocol Runnable {
-var x : Int { get set }
-func run()
-}
-
-class Man : Runnable { //채택, adopt
-var x : Int = 1      // 준수, conform
-func run() { print(" 달린다~ ") } // 준수, conform
-}
-class Man에 x, run()정의 없다면 
-- type 'Man' does not conform to protocol 'Runnable'
-
-```
-*상속과 프로토콜 채택(adopt)*
-- ViewContorller클래스는 부모 UIViewController를 상속받고, 프로토콜 UIPickerViewDelegatedhk UIPickerViewDataSource를 채택했다.
-- 프로토콜 UIPickerViewDelegate와 UIPickerViewDataSource의 필수 메서드는 모두 구현해야하는 프로토콜을 준수(conform)하는 것이다.
-```swift
-class ViewController : UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
-```
-![](/image/pro.png)
+  ```
+  *상속과 프로토콜 채택(adopt)*
+  - ViewContorller클래스는 부모 UIViewController를 상속받고, 프로토콜 UIPickerViewDelegatedhk UIPickerViewDataSource를 채택했다.
+  - 프로토콜 UIPickerViewDelegate와 UIPickerViewDataSource의 필수 메서드는 모두 구현해야하는 프로토콜을 준수(conform)하는 것이다.
+  ```swift
+  class ViewController : UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+  ```
+  ![](/image/pro.png)
 
 
 ### enum
-- 열거형
-- 관련있는 데이터들이 멤버로 구성되어 있는 자료형
-- 원치 않는 값이 잘못 입력되는 것 방지
-- 입력 받을 값이 한정되어 있을 때
-- 특정 값 중 하나만 선택하게 할 때
-- 색깔
-- 빨강, 녹색, 파랑
-- 성별
-- 남, 여  
+  - 열거형
+  - 관련있는 데이터들이 멤버로 구성되어 있는 자료형
+    - 원치 않는 값이 잘못 입력되는 것 방지
+    - 입력 받을 값이 한정되어 있을 때
+    - 특정 값 중 하나만 선택하게 할 때
+  - 색깔
+    - 빨강, 녹색, 파랑
+  - 성별
+    - 남, 여  
+    
+  *열거형 정의*
+  ```
+  enum 열거형 명 {
+  열거형 정의
+  }
+  enum Planet {
+   case Mercury, Venus, Mars, Jupiter, Staturn, Uranus, Neptune
+  }//하나의 case문에 멤버들 나열하는 것도 가능
 
-*열거형 정의*
+  enum Compass {
+   case North
+   case Sousth
+   case East
+   case West
+  }
+
+  var west = Compass.West
+  print("\(type(of: west))") //Compass
+  west = .North //타입생략
+  print(west) //North
+
+  ```
+  - 문맥에서 타입의 추론이 가능한 시점(등호 좌변의 변수 타입이 확정적일 때)에는 열거형명 생략가능
+    
+  *열거형 멤버별 기능 정의*
+  ```swift
+  enum Compass {
+   case North
+   case Sousth
+   case East
+   case West
+  }
+  var direction : Compass
+  direction = .South
+  switch direction {
+   case .North : //direction이 .North이면 "북"출력
+    print("북")
+   case .South :  
+    print("남")
+   case .East : 
+    print("동")
+   case .West : 
+    print("서")
+   }
+  ```
+  
+  *열거형 멤버에는 메서드도 가능*
+  ```swift
+  enum Week : String {
+   case Mon, Tue, Wed, Thur, Fri, Sat, Sun
+    func printWeek(){ //메서드도 가능
+    switch self {
+    case .Mon, .Tue, .Wed, .Thur, .Fri : 
+    print("주중")
+    case .Sat, .Sun :
+    print("주말")
+      }
+    }
+  }
+  Week.Sun.printWeek() //주말
+  ```
+  
+  *열거형의 rawValue*
+  ```swift
+  enum Color : Int { //Hashable 프로토콜을 준수하는 기본자료형
+   case red = 0
+   case green 
+   case blue
+  }
+  print(Color.red) //red
+  print(Color.blue) //blue
+  print(Color.red.rawValue) //0
+  print(Color.blue.rawValue) //2
+  ```
+
+  *Sting형 값을 갖는 열거형의 rawValue*
+  ```swift
+  enum Week: String {
+  case Monday = "월"
+  case Tuesday = "화"
+  case Wednesday = "수"
+  case Thursdat = "목"
+  case Friday = "금"
+  case Saturday //값이 지정되지 않으면 case이름 할당됨 
+  case Sunday 
+  }
+  
+  print(Week.Monday) // Monday
+  print(Week.Monday.rawValue) // "월"
+  print(Week.Sunday) // Sunday
+  print(Week.Sunday.rawValue) // Sunday ==>String형이기 때문에 case 멤버이름 그대로 할당
+  ```
+
+  *연관 값(associated value)을 갖는 Eunm*
+  ```
+  enum Date {
+  case intDate(Int,Int,Int) 
+  case stringDate(String)
+  }
+
+  var todayDate = Date.intDate(2020,4,30)
+   todayDate = Date.stringDate("2020년 5월 20일")
+   switch todayDate {
+    case .intDate(let year, let month, let day) : 
+     print("\(year)년 \(month)월, \(day)일)"
+    case .stringDate(let date) :
+     print(date) //"2020년 5월 20일\n"
+   }
+  ```
+  
+  *옵셔널은 연관값(associated value)을 갖는 Eunm*
+  ```swift
+  let age : Int? = 30 
+  //상수인데 어떻게 case를 갖지 ??? 아래 옵셔널 작동원리 확인.
+
+  switch age {
+  case .none : //nil인 경우
+  print("나이 정보가 없습니다")
+  case .some(let a) where a < 20 :
+  print("미성년자 입니다")
+  case .some(let a) where a < 71 : //성인입니다.
+  print("성인입니다")
+  default : 
+  print("경로 우대입니다.")
+  }
+  ```
+  **옵셔널 작동원리 - 옵셔널은 어떻게 구현되어 있습니까??**
 ```
-enum 열거형 명 {
-열거형 정의
-}
-enum Planet {
-case Mercury, Venus, Mars, Jupiter, Staturn, Uranus, Neptune
-}//하나의 case문에 멤버들 나열하는 것도 가능
-
-enum Compass {
-case North
-case Sousth
-case East
-case West
-}
-
-var west = Compass.West
-print("\(type(of: west))") //Compass
-west = .North //타입생략
-print(west) //North
-
-```
-- 문맥에서 타입의 추론이 가능한 시점(등호 좌변의 변수 타입이 확정적일 때)에는 열거형명 생략가능
-
-*열거형 멤버별 기능 정의*
-```swift
-enum Compass {
-case North
-case Sousth
-case East
-case West
-}
-var direction : Compass
-direction = .South
-switch direction {
-case .North : //direction이 .North이면 "북"출력
-print("북")
-case .South :  
-print("남")
-case .East : 
-print("동")
-case .West : 
-print("서")
-}
-```
-
-*열거형 멤버에는 메서드도 가능*
-```swift
-enum Week : String {
-case Mon, Tue, Wed, Thur, Fri, Sat, Sun
-func printWeek(){ //메서드도 가능
-switch self {
-case .Mon, .Tue, .Wed, .Thur, .Fri : 
-print("주중")
-case .Sat, .Sun :
-print("주말")
-}
-}
-}
-Week.Sun.printWeek() //주말
-```
-
-*열거형의 rawValue*
-```swift
-enum Color : Int { //Hashable 프로토콜을 준수하는 기본자료형
-case red = 0
-case green 
-case blue
-}
-print(Color.red) //red
-print(Color.blue) //blue
-print(Color.red.rawValue) //0
-print(Color.blue.rawValue) //2
-```
-
-*Sting형 값을 갖는 열거형의 rawValue*
-```swift
-enum Week: String {
-case Monday = "월"
-case Tuesday = "화"
-case Wednesday = "수"
-case Thursdat = "목"
-case Friday = "금"
-case Saturday //값이 지정되지 않으면 case이름 할당됨 
-case Sunday 
-}
-
-print(Week.Monday) // Monday
-print(Week.Monday.rawValue) // "월"
-print(Week.Sunday) // Sunday
-print(Week.Sunday.rawValue) // Sunday ==>String형이기 때문에 case 멤버이름 그대로 할당
-```
-
-*연관 값(associated value)을 갖는 Eunm*
-```
-enum Date {
-case intDate(Int,Int,Int) 
-case stringDate(String)
-}
-
-var todayDate = Date.intDate(2020,4,30)
-todayDate = Date.stringDate("2020년 5월 20일")
-switch todayDate {
-case .intDate(let year, let month, let day) : 
-print("\(year)년 \(month)월, \(day)일)"
-case .stringDate(let date) :
-print(date) //"2020년 5월 20일\n"
-}
-```
-
-*옵셔널은 연관값(associated value)을 갖는 Eunm*
-```swift
-let age : Int? = 30 
-//상수인데 어떻게 case를 갖지 ??? 아래 옵셔널 작동원리 확인.
-
-switch age {
-case .none : //nil인 경우
-print("나이 정보가 없습니다")
-case .some(let a) where a < 20 :
-print("미성년자 입니다")
-case .some(let a) where a < 71 : //성인입니다.
-print("성인입니다")
-default : 
-print("경로 우대입니다.")
-}
-```
-**옵셔널 작동원리 - 옵셔널은 어떻게 구현되어 있습니까??**
-```
-public enum Optional<Wrapped> {
-case none
-case some(Wrapped)
-}
-var x : Int? = 20 //some(20)
-var y : Int? = Optional.some(10) //Optional생략하고 .some만 쓸수도 있음
-var z : Int? = Optional.none
-var x1 : Optional<Int> = 30
-print(x,y,z,x1)
-```
+  public enum Optional<Wrapped> {
+    case none
+    case some(Wrapped)
+  }
+  var x : Int? = 20 //some(20)
+  var y : Int? = Optional.some(10) //Optional생략하고 .some만 쓸수도 있음
+  var z : Int? = Optional.none
+  var x1 : Optional<Int> = 30
+  print(x,y,z,x1)
+  ```
 
 ***
 
@@ -2854,8 +2854,8 @@ return s1 + s2
 }
 
 func mathResult(mathfunction: (Int, Int) -> Int
-, s1: Int, s2: Int) -> String {
-return "Result: \(mathFunction(s1,s2))"
+                , s1: Int, s2: Int) -> String {
+                return "Result: \(mathFunction(s1,s2))"
 }
 print(mathResult(mathDunction: add, s1: 5, s2: 2)// Result: 13
 ```
@@ -2886,10 +2886,10 @@ addOrMultiply(isAdd: true)(5,10)
 ### Optional
 -  optional인 변수는 nil 값이 들어갈 수 있는 변수를 뜻함. 
 - 값을 반환할 때 오류가 발생할 가능성이 있는 값은 옵셔널 타입이라는 객체로 감싸서 반환함
-- Int("100")은 100이 아닌 Optional(100)을 리턴함, Print(Int("100")),Int형 initializer
-- Int("Hi")은 정수값을 반활할 수 없음, 아무런 값도 반환할 수 없다는 의미로 nil반환.
-- Swift에서 기본 자료형(Int,Double,String등)은 nil값을 저장할 수 없음
-- nil도 저장하려면 옵셔널 타입으로 선언해야함
+  - Int("100")은 100이 아닌 Optional(100)을 리턴함, Print(Int("100")),Int형 initializer
+  - Int("Hi")은 정수값을 반활할 수 없음, 아무런 값도 반환할 수 없다는 의미로 nil반환.
+  - Swift에서 기본 자료형(Int,Double,String등)은 nil값을 저장할 수 없음
+  - nil도 저장하려면 옵셔널 타입으로 선언해야함
 - 옵셔널 타입은 변수 또는 상수에 아무런 값이 할당되지 않는 상황을 안전하게 처리하기 위한 방법 제공
 - 개발자가 여기는 값이 없을 수 있다고 "?"로 명시.
 - var index : Int? 처럼 옵셔널 "?"을 붙여주어서 optional 변수로 만듦.
@@ -2900,13 +2900,13 @@ addOrMultiply(isAdd: true)(5,10)
 - 옵셔널 타입만이 값을 갖지 않는다는 의미의 nil값을 가질 수 있음
 - You set an optional variable to a nalueless state by assihning it the  special value nil.
 - nil값을 옵셔널이 아닌 변수나 상수에 할당 할 수 없음
-- var myInt = nil //error
-- var myInt : Int? = nil // Ok
-- var myInt : Int? // Ok
-- 옵셔널 변수는 초기화하지 않으면 자동으로 nil로 초기화
-- var myString: String = nil //유효하지 않은 코드
-- let myConstant = nil //유효하지 않은 코드
-
+   - var myInt = nil //error
+   - var myInt : Int? = nil // Ok
+   - var myInt : Int? // Ok
+   - 옵셔널 변수는 초기화하지 않으면 자동으로 nil로 초기화
+   - var myString: String = nil //유효하지 않은 코드
+   - let myConstant = nil //유효하지 않은 코드
+   
 ### Optionalunwrapping
 - 옵셔널 변수에 값이 있으면 옵셔널로 "래핑되었다(wrapped)라고 함"
 - 옵셔널에 래핑된 값은 강제 언래핑(forced unwrapping)으로 풀어줌
@@ -3089,10 +3089,10 @@ qussk.house?.printRegion() // "Seuol"
 
 ### initializer
 swift의 객체는 사용하기 전 모든 저장 프로퍼티에 대해 초기화 필수
-- 초기값 지정
-- 옵셔널 타입 - nil값으로 초기화
-- 초기값이 없고, 옵셔널 타입이 아닌 프로퍼티에 대해서는 초기화 메서드에서 설정 
-
+  - 초기값 지정
+  - 옵셔널 타입 - nil값으로 초기화
+  - 초기값이 없고, 옵셔널 타입이 아닌 프로퍼티에 대해서는 초기화 메서드에서 설정 
+  
 **designated initializer(지정생성자)**
 
 모든 프로퍼티(객체)를 초기화 시키는 생성자
@@ -3142,7 +3142,7 @@ init?(name: String, age: Int){
 guard age > 0 else {return nil} //실패하면 nil반환
 self.name = name                //성공하면 초기화
 self.age = age
-}
+ }
 }
 
 //failable initializer
@@ -3216,7 +3216,7 @@ self.name = "홍길동"
 }
 init(name : String){
 self.name = name
-}
+ }
 }
 
 class Student : Human { //자식 //1-1.Student가 Human을 상속받고 있으니까. 그냥 init쓰면 위 부모의 designated와 충돌함.  
@@ -3225,9 +3225,9 @@ var school: String
 //1-0.override init 쓰는 이유 
 override init() {
 self.school = "University"
-
-super.init() //두 개의 지정 생성자 중 하나 호출
-//super.init(name:"이순신")
+  
+ super.init() //두 개의 지정 생성자 중 하나 호출
+ //super.init(name:"이순신")
 }
 
 //각각하기.
@@ -3243,7 +3243,7 @@ convenience override init(name:String) {  //2-0.똑같은 이름의 생성자를
 self.init(school: "Univ")
 self.name = name //2-2.name은 덮어 쓰고 있는 구조. 
 //2-3. 많이 쓰이는 구조는 아님 ㅎㅎ..
-}
+ }
 }
 
 let student1 = Student()
@@ -3307,9 +3307,9 @@ let path: Bundle.main.path(forResource: "CafeList", ofType: "json")
 ***
 
 ### Nib와Xib
-**nib** : Next Interface Builder의 약자 (바이너리 binary)
-
-**xib** : Xml Interface Builder의 약자 (xml기반)
+ **nib** : Next Interface Builder의 약자 (바이너리 binary)
+ 
+ **xib** : Xml Interface Builder의 약자 (xml기반)
 - nib와 xib는 기능적으로 거의 동일함.
 - xib가 "플랫파일"에 저장된다는 점이 다름
 (flat file: 플랫파일은 아무런 구조적 상호관계가 없는 레코드들이 들어 있는 파일)
@@ -3350,11 +3350,11 @@ API는 소프트웨어 프로그램이 서로 상호 작용할 수있는 인터�
 
 ```swift
 @objc func basicDebugging(_ sender: UIButton){
-var sum = 0
-for i in 0...100{
-sum += i
-}
-print(sum)    
+  var sum = 0
+  for i in 0...100{
+    sum += i
+  }
+  print(sum)    
 }
 ```
 
@@ -3387,19 +3387,19 @@ e
 3  $myView.frame = .init(x: 100, y: 100, width: 100, height: 100)
 4 self.view.addSubview($myView)
 5
-c
-c(컨티뉴로 완성)
+  c
+  c(컨티뉴로 완성)
 ```
 - 임의의 View를 만들 수 있음. (색변경, 오토레이아웃 등 가능)
 
 **Veiw주소값을 통해 조회 [ Obj-C ], [ Swift ] 버전.** 
 ```
 [ Obj-C ]
-(lldb) e ((UIButton *)0x7fea7d30af20).backgroundColor = [UIColor redColor]
+  (lldb) e ((UIButton *)0x7fea7d30af20).backgroundColor = [UIColor redColor]
 
-[ Swift ]
-(lldb) e -l swift -- import UIKit
-(lldb) e -l swift -- unsafeBitCast(0x7fea7d30af20, to: UIButton.self).backgroundColor = .blue
+  [ Swift ]
+  (lldb) e -l swift -- import UIKit
+  (lldb) e -l swift -- unsafeBitCast(0x7fea7d30af20, to: UIButton.self).backgroundColor = .blue
 ```
 ***
 
@@ -3410,7 +3410,7 @@ c(컨티뉴로 완성)
 [ 링크 : SwiftUI 레퍼지토리로 이동 ](https://github.com/Qussk/SwiftUI)
 
 *swiftUI소개*
-[ https://developer.apple.com/kr/xcode/swiftui/](https://developer.apple.com/kr/xcode/swiftui/)
+ [ https://developer.apple.com/kr/xcode/swiftui/](https://developer.apple.com/kr/xcode/swiftui/)
 
 *튜토리얼*
 [https://developer.apple.com/tutorials/swiftui/tutorials](https://developer.apple.com/tutorials/swiftui/tutorials)
@@ -3445,91 +3445,91 @@ Text(“ASDR")
 import SwiftUI
 
 struct Ex01_Text: View {
-var body: some View {
-//2.someView를반환하는 연산프로퍼티라서 그냥 여기다가 갖다 씀
-example05  //<- 함수 호출하듯이 이곳에 해당하는 someView호출.
-}
-
-//error = Compiling failed: extra tokens at the end of #sourceLocation directive
-
-
-var example01: some View {
-
-//1.swiftUI는 대 부분의 retrun이 생략되어 있음(보통 View를 표현할때는 생략)
-
-Text("Hello, SwiftUI")
-//  .font(.headline)
-.fontWeight(.light)
-.foregroundColor(Color.purple)
-// .font(.system(size: 40, weight: .light))
-.font(.custom("AppleGothic", size: 40))
-.blur(radius: 3.0)
-
-// cmd+shif+L 로 끌어와서 쓸수도 있음. 
-
-}
-
-
-// (텍스트간의 합성 용의)
-var example02: some View {
-Text("Hello").font(.headline)
-.foregroundColor(.blue)
-.italic()
-+
-Text("SwiftUI").font(.largeTitle)
-.foregroundColor(.green)
-.baselineOffset(8)
-
-}
-//밑줄 긋기등
-var example03: some View {
-
-Text("Hellow, Qussk")
-.font(.title)
-.kerning(5)
-.underline(true, color: .orange)
-.strikethrough(true, color: .blue)
-}
-
-
-//중요!: 수식어 적용시 순서 주의.
-var example04: some View {
-Text("Qussk")
-.font(.largeTitle) //Text
-.bold() //Text
-.background(Color.yellow)
-//View
-
-
-//    Text("Qussk")
-//        .font(.largeTitle) //View - 알아서 속성이 바뀜.
-//        .background(Color.yellow) //Veiw
-//        .bold() => text가 가진 속성 //Text
-//       -background가 가진 속성은 View~ 반환타입도 View이기 때문에 bold()를 쓸수 없음.
-}
-
-
-//내용은 같은데 순서가 다르다. why?
-var example05: some View {
-VStack(spacing: 20) {
-//spacing: 뷰간의 간격
-Text("🐰🦊🐻🐼").font(.largeTitle)
-.padding()
-.background(Color.yellow)
-//뷰의 크기만큼 배경색을 주느냐,
-
-Text("🐶🐱🐭🐹").font(.largeTitle)
-.background(Color.green)
-//백그라운드 색을 주고, 뷰 크기를 결정하느냐
-.padding()
-
-}
-}
+  var body: some View {
+    //2.someView를반환하는 연산프로퍼티라서 그냥 여기다가 갖다 씀
+    example05  //<- 함수 호출하듯이 이곳에 해당하는 someView호출.
+  }
+  
+  //error = Compiling failed: extra tokens at the end of #sourceLocation directive
+  
+  
+  var example01: some View {
+    
+    //1.swiftUI는 대 부분의 retrun이 생략되어 있음(보통 View를 표현할때는 생략)
+    
+    Text("Hello, SwiftUI")
+      //  .font(.headline)
+      .fontWeight(.light)
+      .foregroundColor(Color.purple)
+      // .font(.system(size: 40, weight: .light))
+      .font(.custom("AppleGothic", size: 40))
+      .blur(radius: 3.0)
+    
+    // cmd+shif+L 로 끌어와서 쓸수도 있음. 
+    
+  }
+  
+  
+  // (텍스트간의 합성 용의)
+  var example02: some View {
+    Text("Hello").font(.headline)
+      .foregroundColor(.blue)
+      .italic()
+      +
+      Text("SwiftUI").font(.largeTitle)
+        .foregroundColor(.green)
+        .baselineOffset(8)
+    
+  }
+  //밑줄 긋기등
+  var example03: some View {
+    
+    Text("Hellow, Qussk")
+      .font(.title)
+      .kerning(5)
+      .underline(true, color: .orange)
+      .strikethrough(true, color: .blue)
+  }
+  
+  
+  //중요!: 수식어 적용시 순서 주의.
+  var example04: some View {
+    Text("Qussk")
+      .font(.largeTitle) //Text
+      .bold() //Text
+      .background(Color.yellow)
+    //View
+    
+    
+    //    Text("Qussk")
+    //        .font(.largeTitle) //View - 알아서 속성이 바뀜.
+    //        .background(Color.yellow) //Veiw
+    //        .bold() => text가 가진 속성 //Text
+    //       -background가 가진 속성은 View~ 반환타입도 View이기 때문에 bold()를 쓸수 없음.
+  }
+  
+  
+  //내용은 같은데 순서가 다르다. why?
+  var example05: some View {
+    VStack(spacing: 20) {
+      //spacing: 뷰간의 간격
+      Text("🐰🦊🐻🐼").font(.largeTitle)
+        .padding()
+        .background(Color.yellow)
+      //뷰의 크기만큼 배경색을 주느냐,
+      
+      Text("🐶🐱🐭🐹").font(.largeTitle)
+        .background(Color.green)
+        //백그라운드 색을 주고, 뷰 크기를 결정하느냐
+        .padding()
+      
+    }
+  }
 }
 /*
-기본적으로 가운데 정렬함.
-
-*/아래처럼 여러개를 한 꺼번에 볼 수 도 있음. 
+ 기본적으로 가운데 정렬함.
+ 
+ */아래처럼 여러개를 한 꺼번에 볼 수 도 있음. 
 
 //이것 때문에 Preview가 나올 수 있음.
 //struct Ex01_Text_Previews: PreviewProvider {
@@ -3555,10 +3555,10 @@ Text("🐶🐱🐭🐹").font(.largeTitle)
 
 //}
 struct Ex01_Text_Previews2: PreviewProvider {
-static var previews: some View {
-Ex01_Text()
-.preferredColorScheme(.light)
-}
+  static var previews: some View {
+    Ex01_Text()
+    .preferredColorScheme(.light)
+  }
 }
 ```
 
