@@ -100,6 +100,7 @@
 - [protocol](#protocol)
 - [enum: 열거형](#enum)
 - [struct](#struct)
+- [클래스/구조체,열거형 비교](#비교)
 - [메모리 구조&관리](#메모리구조)
 - [func](#func)
 - [inout](#inout)
@@ -2625,7 +2626,157 @@ protocol StartViewControllerDelegate: class {
 
 ***
 
+### struct
 
+- 구조체/enum의 인스턴스는 값 타입, 클래스의 인스턴스는 참조타입
+- 구조체는 상속불가
+```swift
+struct Recolution{ //구조체 정의
+var width = 1024 //프로퍼티
+var height = 76
+}
+let myComputer = Resolution() //인스턴스 생성
+print(myComputer.width) //프로퍼티 접근 1024
+```
+- 사용방법은 클래스와 동일
+
+*Maemberwise Initializer(멤버와이즈 이니셜라이저)*
+```swift
+struct Recolution{ 
+var width = 1024 
+var height = 76
+} //init()메서드 생략 !!
+let myComputer = Resolution(width: 1000, height: 200)
+//Maemberwise Initializer
+print(myComputer.width) // 1000
+```
+- 구조체 특징 ==> 눈에 안보이는 멤버와이즈 이니셜라이저가 자동으로 만들어짐. 초기화하는 init메서드 만들 필요없어짐 
+
+
+*클래스 내에 구조체*
+```
+struct Resolution {
+var width = 1024 
+var height = 76
+}
+class VideoMode {
+var resolution = Resolution()
+var frameRate = 0.0
+}
+let myVideo = VideoMode() //상수 인스턴스
+print(myVideo.resolution.width) //접근
+
+
+```
+*Swift의 기본 데이터 타입은 모두 구조체(쇼킹!!)*
+- public struct Int 
+- public struct Double 
+- public struct String 
+- public struct Array<Element>
+
+### 비교
+
+클래스/구조체/열거형 비교
+**공통점:**
+ - 프로퍼티와 메서드를 정의할 수 있다.
+ - [ ]를 사용해 첨자(subscript)문법으로 내부의 값을 액세스 할 수 있는 첨자를 정의할 수 있다.
+ - 초기 상태 설정을 위한 init()을 정의할 수 있다
+ - extension을 통해 새로운 기능을 추가할 수 있다.
+ - 프로토콜을 사용할 수 있다.
+
+**클래스만 더 가지는 특징 :**
+- **상속**이 가능하다.
+- 타입 캐스팅(is, **as**)을 통해 실행 시점에 클래스 인스턴스의 타입을 해석하고 검사할 수 있다. //런타임에서 검사해줌.
+- deinit함수를 사용해 사용한 자원을 반환할 수 있다
+- 참조 카운팅을 통해 한 클래스 인스턴스를 여러 곳에서 참조(사용)할 수 있다. //콜 바이 레퍼런스 (참조타입특)
+
+**구조체는 값타입(Value type), 클래스는 참조타입(reference type)입니다,**
+
+*예제1*
+```swift
+//구조체 - 값타입
+struct Human {
+var age : Int = 1
+}
+var kim = Human()
+var lee = kim //값타입 - kim의 값을 lee에 할당
+print(kim.age, lee.age) // 1, 1
+lee.age = 20
+print(kim.age, lee.age) // 1, 20
+kim.age = 30
+print(kim.age, lee.age) // 30, 20
+
+//값 타입은 복사할 때 새로운 데이터가 하나 더 생김
+```
+
+```swift
+//클래스 - 참조타입
+class Human {
+var age : Int = 1
+}
+var kim = Human()
+var lee = kim //참조타입 - kim의 주소를 lee에 할당 
+print(kim.age, lee.age) // 1, 1
+lee.age = 20
+print(kim.age, lee.age) // 20, 20
+kim.age = 30
+print(kim.age, lee.age) // 30, 30
+
+//참조 타입은 복사할 때 주소를 복사해서 한 데이터의 reference가 2개 생김.
+```
+`var lee = kim //참조타입 - kim의 주소를 lee에 할당 `
+- kim이 바뀌면 lee도 바뀜..
+- lee도 kim과 같은 주소를 가지고 있기 때문.(하나가 바뀌면 계속 바뀌어 나감)
+
+*예제2*
+```swift
+struct Resolution {
+  var width = 0
+  var height = 0
+}
+class VideoMode {
+  var resolution = Resolution()
+  var frameRate = 0
+  var name : String?
+}
+
+var hd = Resolution(width: 1920, height : 1080)
+//Memberwise Initializer 
+//그냥 var hd = Resolution()으로 했으면 0, 0임 (지정해놓은 초깃값)
+var highDef = hd
+//구조체는 값타입(value type)
+
+print(hd.width, highDef.width) //1920, 1920
+hd.width = 1024
+print(hd.width, highDef.width) //1024, 1920
+
+var xMonitor = VideoMode()
+xMonitor.resolution = hd //var hd = Resolution(width: 1920, height : 1080) 이 값이 들어가 있음
+xMonitor.name = "LG"
+xMonitor.frameRate = 30
+print(xMonitor.frameRate) //30
+
+var yMonitor = xMonitor
+//클래스는 참조타입 
+yMonitor.frameRate = 25
+print(yMonitor.frameRate) //25
+print(xMonitor.frameRate) //25 //xMonitor값이 변경된 적 없으나 yMonitor와 동일한 주소를 가지고 있기 때문에 값이 참조됨. 
+```
+- call bu value vs call by regerence
+- Swift에서 제공하는 Int, Strinf, Array, Dictionary등 기본 자료형들은 구조체로 만들어져 있어서 call by value방식이다
+- enum 도 call by value방식이다
+- 클래스는 call by regerence방식이다.
+
+**언제 클래스를 쓰고 언제 구조체를 쓰나?**
+  - 구조체는 간단한 데이터 값들을 한데 묶어서 사용하는 경우
+  - 전체 덩어리 크기가 작은 경우, 복사를 통해 전달해도 좋은 경우 구조체
+  - 멀티 쓰레드 환경이라면 구조체가 더 안전하다
+  - 구조체는 기존 타입의 특성을 상속할 필요가 없다.
+    - 너비, 높이를 표현하는 기하학적 모양을 처리할 경우
+    - 좌표 시스템의 각 좌표등
+    - 간단한 것들은 클래스로 만들 필요는 없음. 
+    
+***
 
 ### 메모리구조
 
