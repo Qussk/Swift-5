@@ -102,6 +102,7 @@
 - [struct](#struct)
 - [클래스/구조체,열거형 비교](#비교)
 - [메모리 구조&관리](#메모리구조)
+- [print](#print)
 - [func](#func)
 - [inout](#inout)
 - [Optional](#Optional)
@@ -2866,8 +2867,40 @@ Xcode -> Build Settings > Apple LLVM 9.0 - Language - Objective C > Objective -C
 
 [참고 : https://www.clien.net/service/board/cm_app/1254304](https://www.clien.net/service/board/cm_app/1254304)
 
+***
+### print
+
+- [https://developer.apple.com/documentation/swift/1641736-print](https://developer.apple.com/documentation/swift/1641736-print)
+- print의 매개변수는 3개 (이제까지 안썻던 것)
+```
+func print<Target>(_ items: Any..., separator: String = " ", terminator: String = "\n", to output: inout Target) where Target : TextOutputStream
+```
+-  items : Any... items가 몇개인지 알 수 없다...
+- `separator : String  = " "` , `terminator: String = "\n"` 디폴트인자 = > 없어도 됨.
+- 출력하는 것에 공백주고 싶으면 `separator : String  = " "` 
+- 모든 아이템이 출력된 이후에 실행 `terminator: String = "\n"` (다음줄로 내려감)
+
+*띄어쓰기가 모두 존재함.*
+```swift
+print("일 이 삼")
+print("1 2 3") // 1 2 3
+print(1, 2, 3) // 1 2 3
+print(1.0, 2.0, 3.0) //1.0 2.0 3.0
+print(1, 2, 3, separator: "HHH")//1HHH2HHH3HHH
+for n in 1...3 {
+print(n)
+}
+//1
+//2
+//3
+for n in 1...3 {
+print(n, terminator: " ")
+}
+// 1 2 3
+```
 
 ***
+
 ### func
 - [https://docs.swift.org/swift-book/LanguageGuide/Functions.html#//apple_ref/doc/uid/TP40014097-CH10-ID158](https://docs.swift.org/swift-book/LanguageGuide/Functions.html#//apple_ref/doc/uid/TP40014097-CH10-ID158)
 - 수학에서 y = x +1 과 같은 공식들을 함수라고 칭함.
@@ -3059,6 +3092,7 @@ addOrMultiply(isAdd: true)(5,10)
    - let myConstant = nil //유효하지 않은 코드
    
 ### Optionalunwrapping
+- 옵셔널 언래핑
 - 옵셔널 변수에 값이 있으면 옵셔널로 "래핑되었다(wrapped)라고 함"
 - 옵셔널에 래핑된 값은 강제 언래핑(forced unwrapping)으로 풀어줌
 - optional로 선언된 변수에 nil이 아니라 값이 분명히 들어있다고 확신하는 경우 !사용(언래핑 키워드 = !)하여 값을 꺼냄.
@@ -3068,16 +3102,23 @@ var x : Int? // 옵셔널 정수형 변수 x선언
 x = 10
 print(x) // Optional(10)
 print(x!) // forced unwrapping해서 정수 10이 나옴
-// ?는 자료형 뒤, !는 변수명 뒤
 ```
 ```swift
 var x : Int?
 x = 10
-if x != nil {
-print(x!)
-}else{
-print("nil")
-}
+if x != nil { print(x!) } else { print ("nil") }
+
+var x1 : Int? //==> 초깃값 없으면 무조건 nil
+x1 != nil { print(x1!) } else { print("nil") }
+```
+- var x : Int?  // 옵셔널 정수형 변수 x 선언
+- x = 10 //주석처리하면 ? 
+- print(x) //Optional(10)
+- print(x!) //forced unweapping해서 10이 나옴
+- 옵셔널 변수가 nil값일 때 강제 언래핑하면 crash나서, nil이 아닐 때만 언래핑 해야함. 
+```
+?는 자료형 뒤
+!는 변수명 뒤
 ```
 
 ***
@@ -3098,33 +3139,32 @@ if var variableName = optionalName{
 }
 ```
 ```swift
-var x : Int?
+var x : Int? 
 x = 10
-if let xx = x {
-print(xx)
-}else{
-print("nil")
-} //xx는 if문안에서만 쓸 수 있는 것
+if let xx = x { print(xx) } else { print("nil") } //10
 var x1 : Int?
-if let xx = x1 {
-print(xx)
-}else{
-print("nil")
+if let xx = x1 { print(xx) } else { print("nil") }//nil
 }
+//xx는 IF문 안에서만 쓸 수 있음
 ```
+- `if let xx = x `에서 x가 xx에 대입되는 순간, 옵셔널x가 아니라 그냥 x로 바뀜
+- `if 문이 참이 돼서 print(xx)`실행
+
 *여러 옵셔널을 언래핑*
 여러 옵셔널 변수를 한번에 언래핑하는 방법은 콤마(,) 사용
 ```swift
-var pet1: String?
-var pet2: String?
-pet1 = "cat"
-pet2 = "dog"
-if let firstPet = per1, let secondPet = pet2{ //옵셔널 풀림
-print(firstPet, secondPet) //cat, dog
+var pet1 : String?
+var pet2 : String?
+pet1 = "cat" //Optional("cat")
+pet2 = "dog" //Optional("dog")
+if let firstPet = pet1, let secondPet = pet2 {
+  print(firstPet, secondPet) // cat dog
 }else{
-print("nil")
+  print("nil")
 }
 ```
+- 옵셔널 값이었다가 상수에 대입하여 옵셔널 풀림.
+
 ```swift
 var x : Int?
 var v : Int?
