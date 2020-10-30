@@ -3197,6 +3197,33 @@ print(x,y) // Optional(10), Optional(20)
 //Swift4버전까지 y는 그냥 20이 나왔음. Swift5부터는 Optional(20)
 ```
 
+*암묵적 언래핑 옵셔널(implicitly unweapped optional)을 사용하는 경우*
+- 인스턴스를 만들 때 프로퍼티를 초기화 할 수 없는 경우
+- Interface Builder outlet(IB outlet)은 항상 아울렛의 대상을 찾은 후(프로퍼티와 연결되어)초기화 됨
+- 인터페이스 빌더에서 Outlet이 nil이 아니라는 것을 사용 전에 보장할 수 있음
+
+
+**(중요!)옵셔널을 언래핑하는 여러가지 방법**
+```
+var x : String? = "Hi" 
+//1.Forced unwrapping - unsage. 
+x! 
+//==> 가장간단한 방법 : 강제로 언래핑 - 하지만 값이 nil일 경우 크래쉬가 남. 안전한 방법이 아님
+//2. Optional binding - safe
+  if let a = x {
+  print(a)
+  }
+//==> 옵셔널 바인딩으로 a라는 변수,상수에 옵셔널을 대입하여 옵셔널을 풀리게함
+//3.Optional chaining - safe
+let b = x?.count 
+print(b)//상수,변수에 대입했을 지언정, Optional(2), !써야 2나옴
+//==> ?로 접근하면 전체값이 옵셔널 값으로 나옴 
+
+//4.Nil coalescing operator - safe //스위프트에만 있는 연산자
+let c = x ?? ""
+//==> nil일 경우 ""값으로 대치, nil이아니면 x인데, 옵셔널이 풀려서 들어감.
+```
+
 ***
 ### OptionalChaining
 - [https://docs.swift.org/swift-book/LanguageGuide/OptionalChaining.html#//apple_ref/doc/uid/TP40014097-CH21-ID245](https://docs.swift.org/swift-book/LanguageGuide/OptionalChaining.html#//apple_ref/doc/uid/TP40014097-CH21-ID245)
@@ -3204,7 +3231,107 @@ print(x,y) // Optional(10), Optional(20)
 - 각 값들 뒤에 **?** 를 붙이면서 이어가게 됨.(instance.property?.method?.property?등으로 이어진 구조로 좌에서 우로 이동하면서 값이 nil이 아닌지 판별. 
 - 그 중 하나라도 nil로 판명된다면 이동을 멈추고 바로 체인 전체의 결과값이 nil이됨. 
 -  언래핑과 달리, 체이닝은 런타임 에러 대신 nil 값을 반환하는 특징(그래서 체이닝의 결과는 항상 옵셔널임)
-예시) get으로 활용된 예시
+
+*옵셔널형의 프로퍼티나 메서드 호출 뒤에 "?"사용*
+- 선언할 떄는 자료형 뒤에 ?함(Int)
+- (pLocation?.coordinate.latitude)!
+- tabBarController?.selectedIndex = 1
+- cell.textLabel?.text = items[(indexPath as NSIndexPath).row]
+- rectahleAdView?.delegate = self
+- audioPlayer?.volume = volumeControl.value
+- audioRecoder?.recording
+- audioRecoder?.record()
+- locationManager?.requestWhenInUseAuthoriazation()
+
+*옵셔널 체이닝을 쓰는 이유*
+- 옵셔널 타입으로 정의된 값이 프로퍼티나 메서드를 가지고 있을 때, 다중 if를 쓰지 않고 간결하게 코드를 작성하기 위해
+- 옵셔널 타입의 데이터는 연산이 불가능하다
+- 연산을 하기 위해서는 옵셔널을 해제 해야 하는데, 많은 양의 옵셔널 타입의 데이터의 경우 다시 한번 옵셔널 타입으로 변경을 하면서 해제를 시켜줌
+
+```swift
+//옵셔널 안에 옵셔널이 있고 그러면 if를 반복해야함.ㅜ
+if let s = p.sns { //타고들어가고..
+ if let f = s.fb { //타고들어가고..
+  print("\(f.account)")
+  }
+} //==> 이 과정이 귀찮기 때문에
+print("\(p.sns!.fb!.account)") ==> 이렇게 쭉 써주는 방법도 있음.하지만 nil값이 하나라도 있다면 크래쉬남.
+print("\(p.sns?.fb?.account)") ==> 그래서 옵셔널 체인을 사용.//만약 nil이 하나라도 있다면 전체가 nil값으로 리턴 ~ 적어도 크래쉬는 일어나지 않음.
+```
+
+*옵셔널 체이닝 예시*
+- 옵셔널 요소 내부의 프로퍼티로 옵셔널이 연속적으로 연결되는 경우 유용
+- 클래스나 구조체 안에 또다른 클래스나 구조체 인스턴스가 있을 떄 인스턴스를 점으로 연속해서 접근
+- 프로퍼티가 옵셔널인 경우 nil인지 아닌지 매법 체크를 해야하므로 번거로움
+
+*예시1*
+```swift
+class Person{
+var age: Int = 1
+var addr: Address?
+}
+class Address {
+var city = "Seoul"
+}
+let kim = Person() //kim의 addr은 nil로 초기화
+//print(kim.addr!.city) //error, 강제 언래핑
+print(kim.addr?.city) //nil, 옵셔널 체이닝하면 최종 결과가 옵셔널로 나옴, 결과가 없으면 nil
+```
+- 값을 넣는 다면,
+```swift
+let kim = Person()
+kim.addr = Address() //주석처리하면 실행결과 
+print(kim.addr?.city) //Optional("Seoul")
+print((kim.addr?.city)!) // Seoul
+```
+```swift
+if let pcity = kim.addr?.city { //(kim.addr?.city)!가 됨 ==> 옵셔널 체이닝의 결과응 옵셔널 값이므로, 옵셔널바인딩 해서 사용함
+  print(pcity) //Seoul
+}else{
+  print("도시가 지정되지 않았습니다.")
+}
+```
+
+*예시2*
+```swift
+class Person {
+ var name: String?
+ var age: Int?
+ var sns: SNS? = SNS()
+}
+class SNS {
+var fb : FaceBook? = FaceBook()
+var tt : Twitter?
+}
+class FaceBook {
+var account: String = "aaa@bbb.com"
+}
+class Twitter {
+var account: String = ""
+}
+
+let p = Person()
+ if let s = p.sns { 
+  if let f = s.fb {
+  print("1: \(f.account)") //"1: aaa@bbb.com\n"
+  }
+}
+ if let account = p.sns?.fb?.account {
+ print("2: \(account)") //"2: aaa@bbb.com\n"
+}
+print("3: \((p.sns?.fb?.account)!)") //옵셔널 체이닝 //"3: aaa@bbb.com\n"
+print("4: \(p.sns!.fb!.account)") //옵셔널체이닝 아님//"4: aaa@bbb.com\n"
+
+//print("5: \(p.sns?.tt?.account)") //nil
+//print("5: \(p.sns!.tt!.account)") //error
+```
+- 옵셔널 체인의 특성은
+옵셔널 체인으로 클래스나 구조체의 프로퍼티를 참조할 경우 클래스의 값이 nil이어도 오류가 발생하지 않는 다는 것과 옵셔널 체인으로 읽어낸 마지막 값이 일반 타입이라도 모두 옵셔널 타입으로 리턴된다는 것이다.
+- 메서드의 경우 괄호 다음에 ?함 p.getM()?
+- 결과값을 옵셔널 체인으로 사용
+
+
+*get으로 활용된 예시*
 ```swift
 class Person { 
 var residence: Residence?
@@ -3223,7 +3350,8 @@ john.residence?.numberOfRooms // Optional(1)
 ```
 - 첫번째 시도. residence가 셋팅되지 않아 nil값 가져옴. 
 - residence프로퍼티 유무에 따라 전체 체인의 값이 달라지게 됨. 
-- 예시2) set으로 활용된 예시
+
+*set으로 활용된 예시*
 ```swift
 class Person {
 var name : String
@@ -3255,8 +3383,6 @@ qussk.house?.printRegion() // "Seuol"
 ```
 
 ***
-
-
 
 ### mutable
 
