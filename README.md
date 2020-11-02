@@ -110,6 +110,11 @@
   - [Optional Binding](#OptionalBinding)
   - [Implicitly Unwrapping](#implicitlyunwrapping)
   - [Optional Chaining](#OptionalChaining)
+- [오류처리](#오류처리)
+  - [throwing function](#throwingfunction)
+  - [do~try~catch](#dotrycatch)
+  - [Result](#Result)
+- [Generic](#Generic)  
 - [mutable/Immutable](#mutable)
 - [initializer](#initializer)
 - [MVC](#MVC)
@@ -3381,6 +3386,257 @@ qussk.house = House()
 qussk.house?.printRegion() // "Seuol"
 
 ```
+
+***
+### 오류처리
+: Error Handing
+- 예외처리 (exeption handing)
+- **런타임** 시 오류를 발견하여 응답하고 복구하는 과정
+- Swift에서는 optional을 사용하여 값의 유무를 전달함으로써 작업의 성공/실패 유무를 판단할 수 있지만 작업이 실패할 때 코드가 적절히 응답할 수 있도록 함으로써 오류의 원인을 이해하는 데 도움을 줄 수 있다,
+- 디스크상의 파일을 읽어서 처리하는작업에서 발생할 수 있는 오류는 '존재하지 않는 파일', '읽기 권한 없음','호환되는 형식이 아님'등 다양
+  - 오류의 원인에 따라 다양한 대응이 필요한 경우, 오류의 정보를 정확히 전달함으로 써 오류를 복구하는데 도움을 줄 수 있음
+  - Swift 2.0이후부터는 error handling 도입
+  
+
+### throwingfunction
+: throwing function
+- 매개변수 괄호 다음에 throws라는 키워드가 있는 함수는 그냥 사용할 수 없고 error handing 해야함 //안하면 에러남
+- func can() throws
+- func canTrowErrors() throws -> String
+  - error handing을 해야하는 함수
+- func cannotThrowErrors() -> String
+  - error handing할수 없는 함수
+
+![](/image/init.png)
+
+- 함수에서 이런식으로 사용됨
+
+### dotrycatch
+: do~try~catch 
+```swift
+do {
+audioPlayer = try AVAudioPlayer(contentsOf: audioFile)
+} catch let error as NSError {
+print("Error-initPlay : \(error)") 
+}
+```
+- AVAudioPlayer(contentsOf: audioFile)의 init메서드를 호출하는데 throws가 달린 경우 에러처리를 해줘야함.
+- do 로 묶어준다음 함수 앞에 에러가 발생하는지 체크하기위해 try 입력
+- catch블락은 에러시 어떤 에러가 났는지 프린트
+`AVAudioPlayer(contentsOf: audioFile)` => 이렇게 호출할 수 는 없음
+- do ~ try ~ catch로 error handig해야함 
+  - 하지 않으면 Call can throw, but it is not marked with 'try' and the error is not handled 오류 발생
+
+*do~try catch를 이용한 error handling*
+```
+do {
+  try 오류발생코드
+  오류가 발생하지 않으면 실행할 코드
+ } catch 오류패턴1 {
+ 처리코드
+ } catch 오류패턴2 wherw 조건 {
+ 처리코드
+ } catch {
+ 처리코드
+ }
+```
+
+### Result
+- swift 5 부터 등장
+```swift
+//1.에러정의
+enum APIError2 : Error {
+  case aError
+  case bError
+  case cError
+}
+
+func plusFunction() -> Result<Int, APIError2> { //정상적인 경우엔 Int, 에러인 경우 Error
+  if true {
+    return Result.success(10) //성공케이스
+  }
+  if true {
+    return Result.failure(APIError2.bError) //에러케이스
+  }
+}
+
+plusFunction()
+```
+- Result<Int, APIError2> 는 제네릭 형식이다. 제네릭을 쓴 이유는 모든 자료형을 처리하기 위해 쓴다. 성공케이스가 Int이든, 에러케이스가 에러타입의 열거형이든 한 함수로 묶을 수 있게 된다.
+- 실행후, 결론적으로 plusFunction() 은 Result타입이 되어, 우의 do-catch, try 쓸 필요가 없게 된다. Result의 가장 큰 장점은 do catch, try 를 쓰지 않아도 되는 점. 코드 길이!
+
+### Generic
+: <>
+- [https://developer.apple.com/videos/play/wwdc2018/406/](https://developer.apple.com/videos/play/wwdc2018/406/)
+- [https://docs.swift.org/swift-book/LanguageGuide/Generics.html](https://docs.swift.org/swift-book/LanguageGuide/Generics.html)
+```
+override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
+```
+- 어떤 자료형을 실제로 가지고 놀때 자료형을 결정하겠다. 가지고 놀때 <UITouch>형으로 가지고 놀겠다.
+
+*기능은 가고 매개변수형만 다른 함수*
+```swift
+//값을 서로 변경하는 인티저 함수
+func swapInt(_ a: inout Int, _ b: inout Int) {
+ let temp = a
+ a = b
+ b = temp
+}
+var x = 10
+var y = 20
+swapInt(&x,&y)
+print(x,y) //10 20
+
+//값을 서로 변경하는 더블형 함수
+func swapDouble(_ a: inout Double, _ b: inout Double){
+  let temp = a
+  a = b
+  b = temp
+}
+var xd = 10.3
+var yd = 20.7
+swapDouble(&xd, &yd)
+print(xd, yd) // 20.7 10.3
+
+//값을 서로 변경하는 스트링 함수
+func swapSting(_ a: inout String, _ b: inout String){
+  let temp = a
+  a = b
+  b = temp
+}
+var xs = "Hi"
+var ys = "Hello"
+swapSting(&xs, &ys)
+print(xs, ys) // Hello Hi
+
+```
+- 문제 : 동일한 기능임에도 묶지 못하고 타입마다 나눠서 씀!! ==> 코드중복, 번거로움
+
+*제네릭으로 변경하면*
+```swift
+func swapAny<T>(_ a: inout T, _ b: inout T){
+  let temp = a
+  a = b
+  b = temp
+} //T는 타입이름
+var x = 10
+var y = 20       
+swapAny(&x,&y)
+print(x,y)
+
+var xd = 10.3
+var yd = 20.7
+swapAny(&xd, &yd)
+print(xd, yd) 
+
+var xs = "Hi"
+var ys = "Hello"
+swapAny(&xs, &ys)
+print(xs, ys) 
+/*
+20 10
+20.7 10.3
+Hello Hi
+*/
+```
+- <T>결정되지 않은 자료형
+- 어떤 자료형을 넘기느냐에 따라서 함수로 찍어낼 수있음
+- 호출할 때 결정하겠다
+
+*Int형스택 구조체*
+```swift
+struct IntStack {
+var items = [Int]()
+ mutating func push(_ item : Int) {
+  return items.append(item)
+  }
+  mutating func pop() -> Int {
+  return items.removeLast()
+  }
+}
+
+//구조체는 value타입이라 메서드 안에서 프로퍼티 값 변경불가
+//mutating 키워드를 쓰면 변경가능
+
+var stackOfInt = IntStack()
+print(stackOfInt.items) //[]
+stackOfInt.push(1)
+print(stackOfInt.items) // [1]
+stackOfInt.push(2)
+print(stackOfInt.items) // [1, 2]
+stackOfInt.push(3)
+print(stackOfInt.items) // [1,2,3]
+print(stackOfInt.pop()) //3
+print(stackOfInt.items) // [1,2]
+print(stackOfInt.pop()) //2
+print(stackOfInt.items) // [1]
+...
+```
+- 하지만 위의 방법은 Int만 가져올 수 있고 Double이나 float은 가져올 수 없음
+
+*일반 구조체 vs generic구조체*
+
+```swift
+//일반 구조체
+struct IntStack {
+ var items = [Int]()
+ mutating func push(_ item: Int) {
+ return items.append(item)
+ }
+ mutating func pop() -> Int {
+  return items.removeLast()
+ }
+}
+
+//generic구조체
+struct Stack<T>{
+  var items = [T]()
+  mutating func push(_ item: T) {
+   return items.append(item)
+  }
+  mutating func pop() -> T {
+    return items.removeLast()
+  }
+}
+var stackOfInt = Stack<Int>() //이런식 => 결정되지 않은 자료형
+print(stackOfInt.items) //[]
+stackOfInt.push(1)
+print(stackOfInt.items) // [1]
+stackOfInt.push(2)
+print(stackOfInt.items) // [1, 2]
+stackOfInt.push(3)
+print(stackOfInt.items) // [1,2,3]
+print(stackOfInt.pop()) //3
+print(stackOfInt.items) // [1,2]
+print(stackOfInt.pop()) //2
+print(stackOfInt.items) // [1]
+
+var stackOfString = Stack<String>() //이런식 => 결정되지 않은 자료형
+stackOfString.push("일")
+print(stackOfString.items) // ["일"]
+stackOfString.push("이")
+print(stackOfString.items) // ["일","이"]
+stackOfString.pop()
+print(stackOfString.items) // ["일"]
+
+```
+- 이렇게 다양한 타입을 가지고 push, pop 함수를 가지고 놀 수 있게 됨. 
+
+
+*Swift의 배열도 genaric구조체*
+- var x : [Int] = []  //빈배열
+- var y = [Int]()
+- var z : Array<Int> = []
+
+- var a : [Int] = [1,2,3,4]
+- var b : Array<Int> : [1,2,3,4]
+- var c : Attay<Double> = [1.2, 2.3, 3.5, 4.1]
+
+- @frozen struct Array<Element>
+- @frozen은 저장프로퍼티 추가, 삭제 불가
+
+
+
 
 ***
 
