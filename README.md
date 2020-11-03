@@ -32,7 +32,7 @@
 - []
 
 ## Swift 
-- [](#)
+
 - [Objective-C 와swift차이](#Objective-C와swift차이 )
 - [AppDelegate](#AppDelegate)
 - [iOS Application State](#iOSApplicationState)
@@ -45,6 +45,7 @@
 - [CoreAnimation](#CoreAnimation)
 - [CALayer](#CALayer)
 - [iOS UIClassDiagram](#UIClassDiagram)
+
 **[문법]**
 - [데이터 타입](#데이터타입)
   - [Int](#Int)
@@ -112,13 +113,19 @@
   - [Optional Chaining](#OptionalChaining)
 - [오류처리](#오류처리)
   - [throwing function](#throwingfunction)
-  - [do~try~catch](#dotrycatch)
+  - [do~try catch](#dotrycatch)
   - [Result](#Result)
 - [Generic](#Generic)
 - [Delegate](#Delegate)
-  - [UIPickerViewDelegate로 든 예제](#UIPickerViewDelegate) 
+  - [UIPickerViewDelegate로 든 예제](#UIPickerViewDelegate)
+  - [UITableViewDataSource](#UITableViewDataSource)
+  - [UITableViewDelegate](#UITableViewDelegate)
 - [mutable/Immutable](#mutable)
 - [initializer](#initializer)
+  - [designated initializer](#designatedinitializer)
+  - [convenience initializer](#convenienceinitializer)
+  - [failableinitializer](#failableinitializer)
+  - [SuperClass Initializing](#SuperClassInitializing)
 - [MVC](#MVC)
 - [bundle](#bundle) 
 - [Nib/Xib](#Nib와Xib)
@@ -3638,6 +3645,147 @@ print(stackOfString.items) // ["일"]
 - @frozen은 저장프로퍼티 추가, 삭제 불가
 
 
+***
+### Delegate
+- 사전적의미 :  대표자(명사), 위임하다(동사)
+- Delegation is design pattern that enable a class or structe to hand off (or delegate) some of its responsibilities to an instance of another type.
+- This design pattern is implemented by defining a protocol that encapsulates the delegated responsivilities, such that a conforming type(know as a delegate) is guaranteed to provide the functionality that has been delegated.
+- Delegation can be used to respond to a particular action, or to retrieve data from an external source without needing to know the underlying type of that source.
+- Delegation(위임)은 클래스나 구조체가 **일부 책임을 다른 유형의 인스턴스로 전달(또는 위임)**할 수 있도록 하는 디자인 패턴이다.
+- **위임된 기능은 프로토콜에서 정의하며, delegate가 위임된 기능을 제공**한다
+- 위임은 특정 작업에 응답하거나외부에서 데이터를 가져오는 데 사용할 수 있다.
+//일부 책임을 델리게이트에게 넘긴다.
+- 대리자, 조력자
+- 이런 일이 있을 때 delegate너가 좀 전담해줘
+  - delegate로 선언된 (보통 내가 만든 클래스의) 객체는 자신을 임명한 객체(테이블뷰, 피커뷰등)가 일을 도와달라고 하면 지정된 메서드를 통하여 처리해줌
+- 델리게이트 패턴
+   - 하나의 객체가 모든 일을 처리하는 것이 아니라 처리해야할 일 중 일부를 다른 객체에 넘기는 것
+- 보통 프로토콜을 사용 (델리게이트와 프로토콜 뗄수 없는 관계)
+
+### UIPickerViewDelegate
+
+*protocol정의,채택, 준수*
+```
+protocol Runnable {
+var x : Int { get set }
+func run()
+}
+// 대리하고 싶은 함수 목록 작성
+//읽기 쓰기기능 프로퍼티
+// 메서드는 선언만 있음
+
+class Man : Runnable { //채택, adopt
+var x : Int = 1       //준수, conform
+func run() { print("달린다~~") }//준수, conform
+}
+class Man에 x, run()정의 없다면
+  - type 'Man' doed not conform to protocol 'Runnable'
+
+```
+*1. protocol 채택(adopt)*
+- ViewController 클래스는 부모 UIViewController를 상속받고, UIPickerView형의 인스턴스 PickerImage를 선언
+```swift
+class ViewController : UIViewController {
+
+@IBOutlet var pickerImage: UIPickerView! //!로 만들어야함. 초깃값있어야하니깐
+}
+```
+- 피커뷰 인스턴스를 사용하기 위해 프로토콜 UIPickerViewDelegate와 UIPickerViewDataSource를 채택
+```swift
+class ViewController : UIViewController, UIPikerViewDelegate, UIPickerViewDataSource {
+}
+```
+- 프로토콜 UIPickerViewDelegate와 UIPickerViewDataSource의 필수 메서드는 모두 구현해야 프로토콜을 준수(conform)
+
+*2.protocol 채택(adopt)하고 위임*
+
+`pickerView(_:rowHeightDorComponent:)`
+- optional func ==> 프로토콜의 메서드들은 네가 필요한거 알아서 구현해!
+
+`numberOfComponents(in:)`
+- Required ==> 키워드가 붙은 메서드들은 반드시 구현해! (필수사항)
+
+
+*UIPikerViewDelegate*
+- UIPikerView에 대한 프로토콜
+- 나는 protocol이야. 널 도와줄 조력자야. 피커쥬야, 너 혼자 많은 일하기 바쁘지? 내 안에 피커뷰 너에게 어떤 일이 일어났을 때 하고 싶은 일ㅇ들이 메서드 목록(선언)이 되어 있어. 피커뷰를 사용하는 클래스에서는 우선 나(피커뷰 델리게이트)를 채택해. 채택한 클래스에서는 자신이 델리게이트라 지정하는 것 일지 말고
+`pikerimage.delegate = self`
+- 구현한 기능은 iOS프레임워크 내부적으로 원하는 시점에 피커뷰가 호출(callback)해 
+- 그 시점에 하고 싶은 일만 메서드 내부에 구현해 
+
+*UIPickerViewDataSource의 필수 메서드는 반드시 구현해야 함*
+```
+func numberOfComponents(in pickerView : UIPickerView) -> Int {
+return 1
+}
+func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+return Array.count
+}
+```
+- ~DataSource는 데이터를 받아 뷰를 그려주는 역할
+- 피커뷰 사용하는 클래스(ViewController)
+- **피커뷰 델리게이트 프로토콜 : 어떤 행동에 대한 반응 동작 메서드 목록
+(채택하더라도 반드시 구현할 필요는 없음)**
+- **피커뷰 데이터소스 프로토콜 : 데이터를 받아 피커뷰를 그려주는 메서드 목록
+(채택하면 반드시 구현해야함)**
+
+
+### UITableViewDataSource
+- 필수 메서드 2개
+```swift
+// Retrurn the number of rows for the table
+override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+return items.count
+}
+// Provide a cell object for each row
+override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IntdexPath) -> UITableViewCell {
+//Fetch a cell of the approriate type
+cell.textLabel!.text = "Cell text"
+return cell
+}
+
+```
+```swift
+override func tableView(in tableView: UITableView) -> Int {
+return 1
+
+override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+return items.count
+```
+
+### UITableViewDelegate
+- header, footerview를 만들고 관리 / 행 , header, footer 높이 지정
+- 스무스한 스크롤링을 위해 높이 추정치 제공
+- 행 선택시 하고 싶은 작업
+- 스와이프시 작업
+- 테이블 내용 편집 지원
+```swift
+//지정된 행을 선택하려고 대리인에게 알림
+func tableView(UITableView, willDelectRowAt: IndexPath) -> IndexPath?
+
+//지정된 행이 이제 선택되었음을 대리인에게 알림
+func tableView(UITableView, didSelecRowAt: IndexPath)
+
+//지정된 행을 선택 해제하려고한다는 것을 대리인에게 알림
+func tableView(UITableView, wilDeselectRowAt: IndexPath)-> IndexPath?
+
+//지정된 행이 선택 해제되었음을 딜리게이트에게 알림
+func tableView(UITableView, didDeselectRowAt: IndexPath) 
+```
+*UIViewControllerdhk UITableViewController*
+- UITableView클래스를 상속받는다면 ?
+
+```
+class ViewController : UITableViewController {
+}
+```
+- //UITableViewDelagate,UITableViewDataSource
+- 프로토콜이 정의한 메소드들도 자동으로 오버라이딩 되거나 주석처리되서 만들어짐
+- 테이블뷰 컨트롤러를 사용하면 어느정도는 비슷한 동작을 추구하기 때문에Xcode에서 프로그래머가 사용할 것으로 예상되는 함수를 주석처리하여 제공함. 덧붙이면 뷰 컨트롤러에서는 너무 다양한 동작을 하므로 주석처리한 함수는 제공하지않고 몇몇 특정 컨트롤러에서만 제공됨.
+```
+class ViewController : UIViewController, UITableViewDelagate,UITableViewDataSource {
+}
+```
 
 
 ***
@@ -3667,21 +3815,225 @@ swift의 객체는 사용하기 전 모든 저장 프로퍼티에 대해 초기�
   - 초기값 지정
   - 옵셔널 타입 - nil값으로 초기화
   - 초기값이 없고, 옵셔널 타입이 아닌 프로퍼티에 대해서는 초기화 메서드에서 설정 
-  
-**designated initializer(지정생성자)**
+  - [https://docs.swift.org/swift-book/LanguageGuide/Initialization.html](https://docs.swift.org/swift-book/LanguageGuide/Initialization.html)
 
+  *designated initializers and convenience initializers*
+  - **Designated initializers are the primary initializers** for a class. A designated initializer **fully initializes all** properties introduced by that class and calls an appropriate superclass initializer to continue the initialization process up the superclass chain
+  - Designated initializers는 우선적인 이니셜라이저다, 프로퍼티를 모두 초기화 할 수 있는 기본적인 이니셜라이저.
+  - **Every class must have at least one designated initializer.** In some cases, this requirement is satisfied by inheriting one or more designated initializers form a superclass, as described in Automaic initiailzer
+  - 모두 하나의 Designated initializers를 가져야한다. 물론 초기화가 다 되어있으면 필요없음. 
+  - **Convaenience initalizers ares secondaty, supporting initializers** for a class. You cas define a convenience initinalizer to call a designated initializer from the same class as the convenience initializer with some of the desinated initializer's parameters set to degauly values.You can also define a convenience initializer to creat an instance of that class for that class for a spectific use case or input vlaue type.
+  - Convaenience initalizers는 있어도 되고 없어도 되고. 이니셜라이즈를 서포팅하는 정도.
+  - **You do not have to probide convenience initializers** if yout class does not require them. Create convenience initalizers whenever a shorcut to a common initialization pattern will save time or make initailzation of the class clearer in intent. 
+
+  *클래스의 프로퍼티는 초기값이 있거나 옵셔널 변수(상수)로 선언*
+  ```swift
+  class Man {
+  var age : Int = 1
+  var weight : Double = 3.5
+  }
+  calss Man {
+  var age : Int?
+  var weight : Doble!
+  }
+  ```
+  *인스턴스 생성불가(초기값 없음)*
+  ```swift
+  class Man {
+  var age : Int
+  var weight : Double
+  func display(){
+  print("나이 = \(age), 몸무게 = \(weight)")
+   }
+  }
+  var kim : Man = Man() //에러남 : 이니셜라이저 만들었어야지.
+  kim.display()
+  ```
+  *인스턴스 초기화하기: init()*
+  ```swift
+  class Man {
+   var age : Int
+   var weight : Double
+    func display(){
+    print("나이 = \(age), 몸무게 = \(weight)")
+    }
+    init(){  //func를 쓰지않고 init을 쓴다.
+    age = 1
+    weight = 3.5
+    }
+  }
+  var kim : Man = Man() //인스턴스가 만들어지면서, init 자동호출됨.
+  kim.display()
+  ```
+
+### designatedinitializer
+: 지정생성자
 모든 프로퍼티(객체)를 초기화 시키는 생성자
 - 클래스에 반드시 1개이상 필요
 - 단독으로 초기화 가능 
 - (모든 초기화값을 끝낸다)
+- 클래스, 구조체, 열거형(enum)인스턴스가 생성되는 시점에서 해야할 초기화작업
+- 인스턴스가 만들어지면서 자동호출됨
+- init 메서드(생성자)
+```swift
+init(){  //이게 designated initializer
+age = 1
+weight = 3.5
+}
+```
+- designated initializer 
+  - 모든 프로퍼티(age, weight)를 다 초기화시키는 생성자
+  - 초기화되지 않은 프로퍼티가 있을 경우 클래스에 반드시 1개 이상 필요
+- 주의: 초기화가 끝나기 전에 다른 메소드 호출은 불가능
+- 소멸자 
+  - 인스턴스가 사라질 떄 자동 호출
+  - deinit{ } 
+  
+```swift
+class Man {
+ var age : Int
+ var weight : Double
+  func display(){
+  print("나이 = \(age), 몸무게 = \(weight)")
+  }
+  init(yourAge: Int, yourWeight: Double){
+  age = yourAge
+  weight = yourWeight 
+  } // designated initializer
+}
+//var kim : Man = Man() //오류
+var kim : Man = Man(yourAge: 10, yourWeight: 20.5)
+kim.display()
+```
 
-**convenience initializer(편의생성자)**
+*designated initializer와 self*
+- 현재 클래스 내 메서드나 프로퍼티를 가리킬 때 메서드나 프로퍼티 앞에 self.을 붙임
+- 위의 소스에서는 구분되어 self 생략해도됨.
+- 아래 소스에서는 매개변수과 구분하기 위해 반드시 써야함. 
+```swift
+class Man {
+ var age : Int
+ var weight : Double
+  func display(){
+  print("나이 = \(age), 몸무게 = \(weight)")
+  }
+  init(age: Int, weight: Double){
+  self.age = age
+  self.weight = weight 
+  } // designated initializer
+}
+var kim : Man = Man(age: 10, weight: 20.5)
+kim.display()
+```
+- designated initializer는 구조체에서는 자동적으로 만들어짐 :) ==> **[멤버와이즈 이니셜라이저](#struct)**
 
+*잘못된 이니셜라이저*
+- 프로퍼티 하나를 제외하면 error : return form initalizer without initalizinh all stored propertyes. 'self.age' not initialized
+- 반드시 빠뜨리지 않고 모두 초기화해야함
+
+*init() overloading*
+```swift
+class Man {
+ var age : Int
+ var weight : Double
+  func display(){
+  print("나이 = \(age), 몸무게 = \(weight)")
+  }
+  init(){ // 1.designated initializer
+  age = 1
+  weight = 3.5 
+  }
+  init(age: Int, weight: Double) { //2.designated initializer
+  self.age = age
+  self.weight = weight
+  }
+}
+var kim : Man = Man() //1
+kim.display()
+var lee : Man = Man(age: 10, weight: 20.5) //2
+lee.display()
+```
+
+### convenienceinitializer
+:편의생성자
 일부만 처리한 뒤 다른 생성자에게 나머지 부분 위임
+- 보조 이니셜라이저
+- 일부 프로퍼티만 초기화(단독으로 초기화 불가능)
+- 다른 이니셜라이저를 이용해서 초기화(initalizer delegation)
+  - self.init()
+- 다양한 방법으로 객체 만들 수 있도록 편의를 제공하려면 init를 오버로딩 해야하고 코드 중복이 발생
+- 코드 중복 방지
 - 단독으로 모두 초기화 불가
-- 중복되는 초기화 코드 줄이기위해 사용
 - 초기화가 끝나야만 접근가능(designated initialize인 self.init() )아래에 작성
 - (모든 초기화값을 끝내지는 않음. 하지만 최종적으로 designated에 접근(프로퍼티 불러와)하여 마무리지음.)
+
+```swift
+class Man {
+ var age : Int
+ var weight : Double
+  func display(){
+  print("나이 = \(age), 몸무게 = \(weight)")
+  }
+  init(age: Int, weight: Double){
+  self.age = age
+  self.weight = weight 
+  } 
+  convenience init(age: Int) {
+  self.init(age: age, weight: 3.5)
+}//convenience 
+}
+var kim : Man = Man(age: 10, weight: 20.5)
+kim.display()
+var lee : Man = Man(age : 1)
+lee.display()
+//나이 = 10, 몸무게 = 20.5
+//나이 = 1, 몸무게 = 3.5
+```
+
+*여러개의 convenience initializer*
+```swift
+class Man {
+ var age : Int
+ var weight : Double
+  func display(){
+  print("나이 = \(age), 몸무게 = \(weight)")
+  }
+  //designated
+  init(age: Int, weight: Double){ //1. 매개변수 2개
+  self.age = age
+  self.weight = weight 
+  } 
+  //convenience
+  convenience init(age: Int) { //2. 매개변수 1개
+  self.init(age: age, weight: 3.5)
+ }
+  convenience init(){ //3. 매개변수 0개
+  self.init(age:20, weight: 60.5) 
+ }
+}
+var kim : Man = Man(age: 10, weight: 20.5) //1
+kim.display()
+var lee : Man = Man(age : 1) //2
+lee.display()
+var han : Man = Man() //3
+han.display()
+//나이 = 10, 몸무게 = 20.5  //1
+//나이 = 1, 몸무게 = 3.5    //2
+//나이 = 20, 몸무게 = 60.5  //3
+```
+*순서주의*
+```swift
+convenience init(age:Int) { //3
+self.init() // initailzer delegation
+self.age = age // 자신의 초기화 코드
+}
+/*
+convenience init(매개변수){
+//초기화 위임, slef. init()
+//자신의 초기화 코드
+}
+*/
+```
 
 *convenience init -> designated init -> overwrite*
 ```swift
@@ -3704,10 +4056,105 @@ self.init(width: 20, height: 20, cornerRadius: cornerRadius)
 ```
 - 초기화 과정은 (convenience -> convenience -> ... -> designated (최종) 순서로 동작. designated -> designated는 호출불가)
 
-**failable initializer**
-- 생성시 실패할 수도 있음. 
+### failableinitializer
+: 실패가능한 생성자:init? init!
+- init다음에 "?"나 "!"하며 옵셔널이 값이 리턴됨
+- 오류 상황에 nil을 리턴하는 조건문이 있음
+  - return nil
+- init? , init!  
 - 인스턴스 생성시 특정 조건을 만족하지 않으면 객체를 생성하지 않음.
 - 생성이 되면 옵셔널 타입을 반환, 생성실패시 nil반환
+
+```swift
+class Man {
+ var age : Int
+ var weight : Double
+  func display(){
+  print("나이 = \(age), 몸무게 = \(weight)")
+  }
+  init?(age: Int, weight: Double){
+    if age <= 0 {
+    return nil
+  } else {
+   self.age = age
+  }
+   self.weight = weight
+  }// failavle initialize
+}
+var kim : Man = Man(age: 10, weight: 20.5)!
+kim.display()
+var lee : Man = Man(age: 0, weight: 3.5)! //line23
+lee.display()
+```
+- 나이 = 10, 몸무게 = 20.5
+- Fatal error: Unexpectedly found nil while unwrapping an Optional value: file __lldb_expr_23/마구마구.playground, line 23
+- Playground execution failed:
+
+- error: Execution was interrupted, reason: EXC_BAD_INSTRUCTION (code=EXC_I386_INVOP, subcode=0x0).
+- The process has been left at the point where it was interrupted, use "thread return -x" to return to the state before expression evaluation.
+
+*failable initialize가 있는 클래스의 인스턴스 생성*
+```swift
+class Man {
+ var age : Int
+ var weight : Double
+  func display(){
+  print("나이 = \(age), 몸무게 = \(weight)")
+  }
+  init?(age: Int, weight: Double){
+    if age <= 0 {
+    return nil
+  } else {
+   self.age = age
+  }
+   self.weight = weight
+  }// failavle initialize
+}
+var kim : Man? = Man(age: 1, weight: 3.5)
+//1-1.옵셔널 형으로 선언
+if let kim1 = kim { //1-2.옵셔널 바인딩
+  kim1.display()
+}
+
+//2.인스턴스 생성과 동시에 옵셔널 바인딩
+if let kim2 = Man(age:2, weight: 5.5) {
+  kim2.display()
+}
+
+//3.인스턴스 생성하면서 바로 강제 언래핑
+var kim3: Man = Man(age: 0, weight: 7.5)!
+kim3.display() // ==> crach
+
+//4.옵셔널 인스턴스를 사용시 강제 언래핑
+var kim4 : Man? = Man(age: 4, weight: 10.5)
+kim4!.display()
+```
+- 1. 옵셔널 바인딩 하여 처리 (제일좋은 방법)
+- 2. 선언하지 않고 바로 대입하여 풀리게. (1.의 축약)
+- 3. !사용 - 강제 언래핑
+- 4. kim4를 !로 - 강제언래핑
+
+*crash시 발생하는 오류와 .so파일*
+- .so나 .dylib //에스오, 다이나믹 라이브러리
+  - shared object 
+  - shared library
+  - 윈도우의 dll
+  - 동적 링크 라이브러리(프로그램 실행시 필요한 것들을 연결)
+- .a
+  - archive library
+  - 정적 링크 라이브러리
+  - 컴파일 시 포함됨
+
+*failable initializer(실패 가능한 생성자 :init?)*
+- [https://developer.apple.com/documentation/uikit/uiimage/1624146-init](https://developer.apple.com/documentation/uikit/uiimage/1624146-init)
+- let myImage: UIImage(?) = UIImage(name: "apple.png")!
+  - 타입에 ?넣거나 변수에 !넣거나
+- apple.png파일이 없으면 인스턴스를 만들 수 없고 nil
+- nil값도 저장할 수 있으려면 init다음에 옵셔널 "?"를 하며 옵셔널 값이 리턴됨
+- init?(name name : String) //fatilable initializers
+- init?로 만든 인스턴스는 옵셔널형으로 만들어져서, 사용하려면 옵셔널을 언래핑 해야해서 위의 예제에서 제일 마지막이 "!"가 있음
+
+*다른 예제*
 ```swift
 class Person{
 let name: String 
@@ -3731,7 +4178,7 @@ person
 "Failed"
 }//Failed
 ```
-**Super class initializing**
+### SuperClassInitializing
 자식클래스에서 부모클래스를 호출할때는 designated를 써야함
 - 서브 클래스는 자기 자신 이외에 수퍼 클래스의 저장 프로퍼티까지 초기화 해야함
 - 서브 클래스는 수퍼 클래스의 지정 생성자(designated initializer) 호출 필요 (convenience는 호출 불가)
@@ -3778,7 +4225,7 @@ self.height = height
 ```
 - 자식클래스(Rectangle)에는 designated가 잘 되어있으나, 부모클래스(Base)인 someProperty에 대한 designated가 없음. 그럼에도 오류나지 않는 이유는? 어차피 생성자가 1개 이기 때문.. 1개 인경우 **super.init()** 가 자동 호출되어 표현할 필요 없음. 부모클래스에서 init이 여러 개인 경우 자식 쪽에 super.init() 써줘야함.   
 
-**override init**
+*override init*
 
 - 생성자도 일반 함수처럼 override이용하여 덮어 쓸 수 있음. 
 ```swift
@@ -3832,8 +4279,6 @@ seudent1.name    //홍길동
 ```
 - 자기 자신부터 초기화 하는 건 항상 같음. 
 - 상속받았을 때, 생성자의 같은 이름을 가진 생성자를 바꿔주고 싶을때는 override를 해줘야함. 
-
-
 
 
 
