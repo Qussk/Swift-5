@@ -126,6 +126,8 @@
   - [convenience initializer](#convenienceinitializer)
   - [failableinitializer](#failableinitializer)
   - [SuperClass Initializing](#SuperClassInitializing)
+  - [initalizer의 상속](#initalizer상속)
+  - [required initializer](#requiredinitializer)
 - [MVC](#MVC)
 - [bundle](#bundle) 
 - [Nib/Xib](#Nib와Xib)
@@ -592,12 +594,11 @@ class MyView: UIView {
 
 ***
 
-### UIClassDiagram(iOS)
+### UIClassDiagram
 
 ![](http://3.bp.blogspot.com/-1M6XDhL2AB8/VS4U4OPVPHI/AAAAAAAAA1c/iVG1jYr26pM/s1600/uikit_classes.jpg)
 
-
-
+- NSObject : 스티브잡스가 자기가 만든 회사에서 쫒겨남. 80년 중반. => 독을 품고 새로운 회사 만듦 => 넥스트 OS => 10년만에 대박 터트림. => 넥스트 기술로 맥, 애플에 다시 들어감.
 
 ***
 ## 기초문법
@@ -4281,9 +4282,177 @@ seudent1.name    //홍길동
 - 상속받았을 때, 생성자의 같은 이름을 가진 생성자를 바꿔주고 싶을때는 override를 해줘야함. 
 
 
+### initalizer상속
+
+*init()도 상속이 될까?*
+```swift
+class Man {
+ var age : Int
+ var weight : Double
+  func display(){
+    print("나이 = \(age), 몸무게 = \(weight)")
+  }
+  init(age: Int, weight: Double) {
+    self.age = age
+    self.weight = weight
+  }
+}
+
+class Student : Man {
+  //비어있지만 Man의 모든 것을 가지고 있음
+}
+var kim : Man = Man(age: 10, weight: 20.5)
+kim.display()
+var lee : Student = Student(age: 20, weight: 65.2)
+lee.display()
+print(lee.age)
+
+//잘 실행되는 것으로 보아 init도 상속이 된다 ?
+```
+
+*initalizer가 상속되는 경우*
+- designated initializer와 convenience initializer 모두 상속
+  - **자식 클래스에 designated initializer가 없는 경우**
+  - **자식 클래스에 초기화가 필요한 프로퍼티가 없을 경우**
+- convenience initializer만 상속되는 경우
+  - 자식 클래스에서 부모 클래스의 designated initializer를 override하는 경우
+  
+```swift
+class Man {
+ var age : Int
+ var weight : Double
+  func display(){
+    print("나이 = \(age), 몸무게 = \(weight)")
+  }
+  init(age: Int, weight: Double) {
+    self.age = age
+    self.weight = weight
+  }
+convenience init(age: Int){
+  self.init(age:age, weight: 3.5)
+ }
+}
+var kim : Man = Man(age: 10, weight: 20.5)
+kim.display()
+var lee : Man = Man(age: 1)
+lee.display()
+
+class Student : Man {
+  //비어있다
+}
+var kim1: Student = Student(age: 20, weight: 65.5)
+kim1.display()
+var lee1: Student = Student(age: 2)
+lee1.display()
+
+//자식 클래스(Student)에 designated initializer가 없는 경우
+//자식 클래스에 초기화가 필요한 프로퍼티가 없을 경우
+
+//나이 = 10, 몸무게 = 20.5
+//나이 = 1, 몸무게 = 3.5
+//나이 = 20, 몸무게 = 65.5
+//나이 = 2, 몸무게 = 3.5
+```
+
+*자식 클래스의 designated initalizer*
+- 자식 클래스의 init 메서드
+```
+init(매개변수) {
+//자식 클래스의 프로퍼티 초기화
+//부모클래스의 designated initalizer에 위임, super.init()
+//나머지 초기화 소스
+}
+```
+**자식클래스에서 designated initalizer를 만들면 부모 init()상속 안됨**
+- 예시) error
+```swift
+class Man {
+ var age : Int
+ var weight : Double
+  func display(){
+    print("나이 = \(age), 몸무게 = \(weight)")
+  }
+  init(age: Int, weight: Double) {
+    self.age = age
+    self.weight = weight
+  }
+convenience init(age: Int){
+  self.init(age:age, weight: 3.5)
+ }
+}
+var kim : Man = Man(age: 10, weight: 20.5)
+kim.display()
+var lee : Man = Man(age: 1)
+lee.display()
+
+//자식
+class Student : Man {
+  var name : String
+  init(name: String){
+    self.name = name
+  }
+}
+var kim1: Student = Student(age: 20, weight: 65.5)
+kim1.display()
+//에러남. error : 'super.init' isn't called on all paths nefore returning from initializer
+
+//자식 클래스에서 designated initializer를 만들면 부모의 init()이 상속 안됨.
+```
+**부모것을 init하겠다고 override init과 super.init사용해야 함**
+```swift
+class Man {
+ var age : Int
+ var weight : Double
+  func display(){
+    print("나이 = \(age), 몸무게 = \(weight)")
+  }
+  init(age: Int, weight: Double) {
+    self.age = age
+    self.weight = weight
+  }
+convenience init(age: Int){
+  self.init(age:age, weight: 3.5)
+ }
+}
+var kim : Man = Man(age: 10, weight: 20.5)
+kim.display()
+var lee : Man = Man(age: 1)
+lee.display()
+
+class Student : Man {
+  var name : String
+  override init(age: Int, weight: Double){ //=>부모것을 init한다고 써야함
+    self.name = "Kim" //자기 것은 kim으로 초기화하고
+    super.init(age: age, weight: weight) //age와 weight를 받아서 kim1에 활용
+  }
+}
+var kim1: Student = Student(age: 20, weight: 65.5)
+kim1.display()
+var lee1: Student = Student(age: 5) //convenience initializer오버라이드 하면 상속이 되기때문에 weight 3.5로 자동으로 들어감
+lee1.display()
+
+//부모 클래스의 convenience initializer만 상속
+
+나이 = 10, 몸무게 = 20.5
+나이 = 1, 몸무게 = 3.5
+나이 = 20, 몸무게 = 65.5
+나이 = 5, 몸무게 = 3.5
+```
+
+![](image/super.png)
+
+
+### requiredinitializer
+- 부모클래스의 init메서드
+```
+required init() {
+}
+```
+- **자식 클래스에서 반드시 required 키워드로 재 작성해야함**
+
+
 
 ***
-
 ### MVC 
 
 Model View Controller 
