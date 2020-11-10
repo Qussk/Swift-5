@@ -24,6 +24,9 @@
 - [Apple ID](https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/AppID.html#//apple_ref/doc/uid/TP40008195-CH64-SW1)
 - [Apple Update News](https://developer.apple.com/kr/news/)
 - [Apple Human-interface ](https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/)
+- [iOS버전기록](https://en.wikipedia.org/wiki/IOS_version_history)
+
+
 
 ## WWDC 2020
 
